@@ -6,32 +6,26 @@ using System.Threading.Tasks;
 
 namespace FatCat.OneOff
 {
-    public static class Program
-    {
-        private static readonly ManualResetEvent stopEvent = new ManualResetEvent(false);
+	public static class Program
+	{
+		private static readonly ManualResetEvent stopEvent = new ManualResetEvent(false);
 
-        public static async Task Main(string[] args)
-        {
-            Console.CancelKeyPress += OnCancel;
+		public static async Task Main(string[] args)
+		{
+			Console.CancelKeyPress += OnCancel;
 
+			WaitForExit();
+		}
 
-            WaitForExit();
-        }
+		private static void OnCancel(object sender, ConsoleCancelEventArgs e) { stopEvent.Set(); }
 
-        private static void OnCancel(object sender, ConsoleCancelEventArgs e)
-        {
-            stopEvent.Set();
-        }
+		private static void WaitForExit()
+		{
+			Console.WriteLine("Press Control-C to exit . . .");
 
-        private static void WaitForExit()
-        {
-            Console.WriteLine("Press Control-C to exit . . .");
+			while (!stopEvent.WaitOne(10)) { }
 
-            while (!stopEvent.WaitOne(10))
-            {
-            }
-
-            Console.WriteLine("Exiting . . . .");
-        }
-    }
+			Console.WriteLine("Exiting . . . .");
+		}
+	}
 }
