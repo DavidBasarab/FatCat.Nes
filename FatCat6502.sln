@@ -1,0 +1,18 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.7
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FatCat.OneOff", "FatCat.OneOff\FatCat.OneOff.csproj", "{0AC5A979-9945-4D93-90D9-9F9E906BAC2D}"
+EndProject
+Global
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0AC5A979-9945-4D93-90D9-9F9E906BAC2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AC5A979-9945-4D93-90D9-9F9E906BAC2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AC5A979-9945-4D93-90D9-9F9E906BAC2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AC5A979-9945-4D93-90D9-9F9E906BAC2D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+EndGlobal
