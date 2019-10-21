@@ -50,9 +50,7 @@ namespace FatCat.OneOff
 
 		private static void PrintAddress(int address)
 		{
-			IntPtr temp = IntPtr.Zero;
-			
-			var highAddress = address & 0xFF00;
+			var highAddress = address >> 8;
 			var lowAddress = address & 0x00FF;
 			
 			Log.Info(new string('-', 150));
