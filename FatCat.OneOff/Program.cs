@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace FatCat.OneOff
 {
@@ -8,21 +7,15 @@ namespace FatCat.OneOff
 	{
 		private static readonly ManualResetEvent stopEvent = new ManualResetEvent(false);
 
-		public static async Task Main(string[] args)
+		public static void Main(string[] args)
 		{
 			Console.CancelKeyPress += OnCancel;
 
-			WaitForExit();
-
-			await Task.Delay(100);
-			
-			Console.WriteLine("After Stuff");
+			//WaitForExit();
 		}
 
 		private static void OnCancel(object sender, ConsoleCancelEventArgs e)
 		{
-			Console.WriteLine("Got Cancel Event");
-			
 			stopEvent.Set();
 
 			e.Cancel = true;
