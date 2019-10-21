@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using FatCat.OneOff.Common;
 
 namespace FatCat.OneOff
 {
@@ -10,6 +11,8 @@ namespace FatCat.OneOff
 		public static void Main(string[] args)
 		{
 			Console.CancelKeyPress += OnCancel;
+			
+			Log.Info("Going to Play around with some concepts that I will need for the 6502");
 
 			//WaitForExit();
 		}
@@ -23,11 +26,11 @@ namespace FatCat.OneOff
 
 		private static void WaitForExit()
 		{
-			Console.WriteLine("Press Control-C to exit . . .");
+			Log.Debug("Press Control-C to exit . . .");
 
 			stopEvent.WaitOne(-1);
 
-			Console.WriteLine("Exiting . . . .");
+			Log.Warn("Exiting . . . . .");
 		}
 	}
 }
