@@ -8,9 +8,19 @@ namespace FatCat.Nes.Tests
 {
 	public class HookUp
 	{
+		private static int timesCalled = 0;
+		
 		private readonly ITestOutputHelper outputHelper;
 
-		public HookUp(ITestOutputHelper outputHelper) { this.outputHelper = outputHelper; }
+		public HookUp(ITestOutputHelper outputHelper)
+		{
+			this.outputHelper = outputHelper;
+
+			timesCalled++;
+		}
+
+		[Fact]
+		public void WillSeeAboutThis() { timesCalled.Should().Be(3); }
 		
 		[Fact]
 		public void SimpleFailing()
