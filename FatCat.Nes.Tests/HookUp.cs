@@ -1,20 +1,32 @@
+using System;
+using System.Diagnostics;
 using FluentAssertions;
-using NUnit.Framework;
+using Xunit;
+using Xunit.Abstractions;
 
 namespace FatCat.Nes.Tests
 {
-	[TestFixture]
 	public class HookUp
 	{
-		[Test]
+		private readonly ITestOutputHelper outputHelper;
+
+		public HookUp(ITestOutputHelper outputHelper) { this.outputHelper = outputHelper; }
+		
+		[Fact]
 		public void SimpleFailing()
 		{
+			outputHelper.WriteLine("Can I write this!!!!!!!!!!!");
+			
+			// TestContext.Out.WriteLine("Can I write something in tests?");
+			//
+			Console.WriteLine("Can I write something in the tests?");
+			
 			var result = 1 + 3;
 
-			result.Should().Be(2);
+			result.Should().Be(3);
 		}
 
-		[Test]
+		[Fact]
 		public void SimpleTest()
 		{
 			var result = 1 + 1;
