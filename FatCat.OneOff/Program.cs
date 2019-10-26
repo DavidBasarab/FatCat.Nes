@@ -11,15 +11,24 @@ namespace FatCat.OneOff
 		public static void Main(string[] args)
 		{
 			Console.CancelKeyPress += OnCancel;
-			
+
 			var random = new Random();
 
-			for (var i = 0; i < 12; i++)
-			{
-				var address = random.Next(0XFFFF);
-				
-				PrintAddress(address);
-			}
+			// for (var i = 0; i < 12; i++)
+			// {
+			// 	var address = random.Next(0XFFFF);
+			//
+			// 	PrintAddress(address);
+			// }
+
+			var startingAddress = 0x7d8d;
+			
+			PrintAddress(startingAddress);
+			
+			// Zero Page 
+			var zeroPageAddress = startingAddress & 0x00ff;
+
+			PrintAddress(zeroPageAddress);
 
 			//PlayingWithBitShifting();
 
@@ -50,14 +59,9 @@ namespace FatCat.OneOff
 
 		private static void PrintAddress(int address)
 		{
-			var highAddress = address >> 8;
-			var lowAddress = address & 0x00FF;
-			
 			Log.Info(new string('-', 150));
-			
+
 			Log.Info($"Int := {address}  | Hex := {address:x8} | Binary := {Convert.ToString(address, 2)}");
-			Log.Info($"    ==> HighAddress | Int := {highAddress}  | Hex := {highAddress:x8} | Binary := {Convert.ToString(highAddress, 2)}");
-			Log.Info($"    ==> LowAddress  | Int := {lowAddress}  | Hex := {lowAddress:x8} | Binary := {Convert.ToString(lowAddress, 2)}");
 		}
 
 		private static void WaitForExit()
