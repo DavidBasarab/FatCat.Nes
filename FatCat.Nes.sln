@@ -4,12 +4,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26403.7
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FatCat.OneOff", "FatCat.OneOff\FatCat.OneOff.csproj", "{0AC5A979-9945-4D93-90D9-9F9E906BAC2D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FatCat.Nes", "FatCat.Nes\FatCat.Nes.csproj", "{205944EA-43F7-47CF-8BF5-6AD4D9B598EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FatCat.Nes.Tests", "FatCat.Nes.Tests\FatCat.Nes.Tests.csproj", "{92CE66CE-DDBD-4AD8-B07E-D17C9E03B1EF}"
+EndProject
 Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0AC5A979-9945-4D93-90D9-9F9E906BAC2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0AC5A979-9945-4D93-90D9-9F9E906BAC2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AC5A979-9945-4D93-90D9-9F9E906BAC2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AC5A979-9945-4D93-90D9-9F9E906BAC2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{205944EA-43F7-47CF-8BF5-6AD4D9B598EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{205944EA-43F7-47CF-8BF5-6AD4D9B598EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{205944EA-43F7-47CF-8BF5-6AD4D9B598EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{205944EA-43F7-47CF-8BF5-6AD4D9B598EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92CE66CE-DDBD-4AD8-B07E-D17C9E03B1EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92CE66CE-DDBD-4AD8-B07E-D17C9E03B1EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92CE66CE-DDBD-4AD8-B07E-D17C9E03B1EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92CE66CE-DDBD-4AD8-B07E-D17C9E03B1EF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
