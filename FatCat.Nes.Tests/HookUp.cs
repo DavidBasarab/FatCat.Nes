@@ -6,6 +6,16 @@ using Xunit.Abstractions;
 
 namespace FatCat.Nes.Tests
 {
+	public class TestFixture : IDisposable
+	{
+		public TestFixture(ITestOutputHelper outputHelper)
+		{
+			
+		}
+		
+		public void Dispose() { }
+	}
+	
 	public class HookUp
 	{
 		private static int timesCalled = 0;
