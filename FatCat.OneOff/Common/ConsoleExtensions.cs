@@ -50,6 +50,8 @@ namespace FatCat.OneOff.Common
 
 				WriteExceptionToConsole(currentExpection, level);
 
+				if (currentExpection.InnerException == null) break;
+
 				currentExpection = currentExpection.InnerException;
 			}
 

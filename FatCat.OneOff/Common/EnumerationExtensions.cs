@@ -18,6 +18,8 @@ namespace FatCat.OneOff.Common
 			var type = value.GetType();
 			var name = Enum.GetName(type, value);
 
+			if (name == null) return string.Empty;
+
 			var field = type.GetField(name);
 
 			if (field != null)
@@ -37,6 +39,8 @@ namespace FatCat.OneOff.Common
 			var type = typeof(T);
 
 			var name = Enum.GetName(type, value);
+
+			if (name == null) return string.Empty;
 
 			var field = type.GetField(name);
 
