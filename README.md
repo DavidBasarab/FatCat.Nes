@@ -8,6 +8,8 @@ C++ to C# Bytes
 
 https://stopbyte.com/t/whats-the-equivalent-of-c-uint8-t-type-in-c/335/2
 
+http://www.6502.org/tutorials/6502opcodes.html
+
 This is based on tutorial by 
 
 David Barr, aka javidx9, �OneLoneCoder 2019
