@@ -23,9 +23,14 @@ namespace FatCat.Nes.Tests
 		public BusTests() => bus = new Bus();
 
 		[Fact]
-		public void AllRamSetToZero()
+		public void AllRamSetToZero() => VerifyAllMemoryIsZero();
+		
+		[Fact]
+		public void IfAWriteIsMoreThan64KThenTheMemoryIsNotChanged()
 		{
-			foreach (var data in bus.Ram) data.Should().Be(0x00);
+			bus.Write(65011, 0x11);
+			
+			VerifyAllMemoryIsZero();
 		}
 
 		[Theory]
@@ -46,6 +51,15 @@ namespace FatCat.Nes.Tests
 
 		[Theory]
 		[MemberData(nameof(MemoryTestData), MemberType = typeof(BusTests))]
+		public void WillReadDataFromCorrectLocationInMemory(ushort address, byte data)
+		{
+			bus.Ram[address] = data;
+
+			bus.Read(address).Should().Be(data);
+		}
+
+		[Theory]
+		[MemberData(nameof(MemoryTestData), MemberType = typeof(BusTests))]
 		public void WillWriteDataToCorrectLocationInMemory(ushort address, byte data)
 		{
 			bus.Write(address, data);
@@ -63,6 +77,11 @@ namespace FatCat.Nes.Tests
 			var currentMemory = bus.Read(address);
 
 			currentMemory.Should().Be(secondData);
+		}
+
+		private void VerifyAllMemoryIsZero()
+		{
+			foreach (var data in bus.Ram) data.Should().Be(0x00);
 		}
 	}
 }

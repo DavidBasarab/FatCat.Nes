@@ -4,20 +4,8 @@ namespace FatCat.Nes
 	{
 		internal byte[] Ram { get; } = new byte[64 * 1024];
 
-		public byte Read(ushort address)
-		{
-			return tempData;
+		public byte Read(ushort address) => Ram[address];
 
-			//return Ram[address];
-		}
-
-		private byte tempData;
-
-		public void Write(ushort address, byte data)
-		{
-			tempData = data;
-			
-			Ram[address] = data;
-		}
+		public void Write(ushort address, byte data) => Ram[address] = data;
 	}
 }
