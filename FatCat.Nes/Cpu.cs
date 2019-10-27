@@ -5,11 +5,6 @@ namespace FatCat.Nes
 		private readonly IBus bus;
 
 		/// <summary>
-		///  Represents the working input value to the ALU
-		/// </summary>
-		private byte fetched;
-
-		/// <summary>
 		///  Is the instruction byte
 		/// </summary>
 		private byte opCode;
@@ -33,6 +28,11 @@ namespace FatCat.Nes
 		///  Counts how many cycles the instruction has remaining
 		/// </summary>
 		public int Cycles { get; set; }
+
+		/// <summary>
+		///  Represents the working input value to the ALU
+		/// </summary>
+		public byte Fetched { get; set; }
 
 		/// <summary>
 		///  Program Counter
@@ -98,6 +98,9 @@ namespace FatCat.Nes
 
 			AbsoluteAddress = 0x0000;
 			RelativeAddress = 0x0000;
+			Fetched = 0x00;
+
+			Cycles = 8;
 		}
 
 		public void SetFlag(CpuFlag cpuFlag) => StatusRegister |= cpuFlag;

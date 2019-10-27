@@ -17,6 +17,7 @@ namespace FatCat.Nes.Tests.CpuTests
 			cpu.ProgramCounter = 0x7834;
 			cpu.Cycles = 3482;
 			cpu.ClockCount = 9003;
+			cpu.Fetched = 0x67;
 		}
 
 		[Fact]
@@ -63,6 +64,22 @@ namespace FatCat.Nes.Tests.CpuTests
 			cpu.Reset();
 
 			cpu.ProgramCounter.Should().Be(0x2211);
+		}
+		
+		[Fact]
+		public void FetchedWillBeSetToZero()
+		{
+			cpu.Reset();
+
+			cpu.Fetched.Should().Be(0x00);
+		}
+		
+		[Fact]
+		public void ResetTakes8Cycles()
+		{
+			cpu.Reset();
+
+			cpu.Cycles.Should().Be(8);
 		}
 
 		[Fact]
