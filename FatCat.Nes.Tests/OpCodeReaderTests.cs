@@ -112,6 +112,11 @@ namespace FatCat.Nes.Tests
 			var opCode = JsonSerializer.Deserialize<OpCode>(json);
 
 			opCode.Value.Should().Be(0xB0);
+			opCode.Cycles.Should().Be(2);
+			opCode.Mode.Should().Be("Relative");
+			opCode.Name.Should().Be("BCS");
+			opCode.Bytes.Should().Be(2);
+			opCode.Description.Should().Be("Branch if Carry Set");
 		}
 
 		[Theory]
