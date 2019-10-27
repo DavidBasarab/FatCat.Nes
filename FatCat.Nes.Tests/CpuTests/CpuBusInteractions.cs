@@ -1,22 +1,8 @@
 using FluentAssertions;
-using Moq;
 using Xunit;
 
 namespace FatCat.Nes.Tests.CpuTests
 {
-	public abstract class CpuBaseTests
-	{
-		protected readonly Mock<IBus> bus;
-		protected readonly Cpu cpu;
-		
-		public CpuBaseTests()
-		{
-			bus = new Mock<IBus>();
-
-			cpu = new Cpu(bus.Object);
-		}
-	}
-	
 	public class CpuBusInteractions : CpuBaseTests
 	{
 		[Fact]
