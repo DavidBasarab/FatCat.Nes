@@ -4,4 +4,9 @@
         <TargetFramework>netcoreapp3.0</TargetFramework>
     </PropertyGroup>
 
+    <ItemGroup>
+      <None Remove="OpCodes.json" />
+      <EmbeddedResource Include="OpCodes.json" />
+    </ItemGroup>
+
 </Project>

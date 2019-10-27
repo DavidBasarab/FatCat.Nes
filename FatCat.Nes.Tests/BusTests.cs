@@ -24,14 +24,6 @@ namespace FatCat.Nes.Tests
 
 		[Fact]
 		public void AllRamSetToZero() => VerifyAllMemoryIsZero();
-		
-		[Fact]
-		public void IfAWriteIsMoreThan64KThenTheMemoryIsNotChanged()
-		{
-			bus.Write(65011, 0x11);
-			
-			VerifyAllMemoryIsZero();
-		}
 
 		[Theory]
 		[InlineData(0x0000, 0x7f)]
