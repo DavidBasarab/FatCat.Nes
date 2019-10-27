@@ -120,8 +120,13 @@ namespace FatCat.Nes.Tests
 		}
 
 		[Theory]
-		[MemberData(nameof(TestOpCodes), MemberType = typeof(OpCodeReaderTests), Skip = "Need to refactor OpCode byte")]
-		public void CanReturnOpCodeByAddress(OpCode opCode) { true.Should().BeFalse(); }
+		[MemberData(nameof(TestOpCodes), MemberType = typeof(OpCodeReaderTests))]
+		public void CanReturnOpCodeByAddress(OpCode opCode)
+		{
+			var returnedOpCode = opCodeReader.Get(opCode.Value);
+
+			returnedOpCode.Should().BeEquivalentTo(opCode);
+		}
 
 		[Fact]
 		public void WillBeEmbeddedInTheNesDll()

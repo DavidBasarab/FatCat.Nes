@@ -1,26 +1,19 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 
 namespace FatCat.Nes.OpCodes
 {
 	public class OpCodeReader
 	{
-		private List<OpCode> OpCodes { get; set; }
-		
-		public List<OpCode> GetAll()
-		{
-			return OpCodes ??= LoadOpCodes();
-		}
+		private static List<OpCode> OpCodes { get; } = LoadOpCodes();
 
-		private List<OpCode> LoadOpCodes()
-		{
-			var opCodeJson = GetOpCodeJson();
+		public OpCode Get(byte value) => OpCodes.FirstOrDefault(i => i.Value == value);
 
-			return JsonSerializer.Deserialize<List<OpCode>>(opCodeJson);
-		}
+		public List<OpCode> GetAll() => OpCodes;
 
-		private string GetOpCodeJson()
+		private static string GetOpCodeJson()
 		{
 			var nesAssembly = typeof(OpCodeReader).Assembly;
 
@@ -28,6 +21,13 @@ namespace FatCat.Nes.OpCodes
 			using var reader = new StreamReader(stream);
 
 			return reader.ReadToEnd();
+		}
+
+		private static List<OpCode> LoadOpCodes()
+		{
+			var opCodeJson = GetOpCodeJson();
+
+			return JsonSerializer.Deserialize<List<OpCode>>(opCodeJson);
 		}
 	}
 }
