@@ -32,6 +32,14 @@ namespace FatCat.Nes.Tests.CpuTests
 
 			bus.Verify(v => v.Read(0xfffc));
 		}
+		
+		[Fact]
+		public void WillResetYRegister()
+		{
+			cpu.Reset();
+
+			cpu.YRegister.Should().Be(0);
+		}
 
 		[Fact]
 		public void WillSetAccumulatorTo0()

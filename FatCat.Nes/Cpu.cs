@@ -92,6 +92,7 @@ namespace FatCat.Nes
 
 			Accumulator = 0x00;
 			XRegister = 0x00;
+			YRegister = 0x00;
 		}
 
 		public void SetFlag(CpuFlag cpuFlag) => StatusRegister |= cpuFlag;
