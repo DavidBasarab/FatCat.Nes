@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Text.Json;
 using FatCat.Nes.OpCodes;
 using FluentAssertions;
 using Xunit;
@@ -21,7 +22,7 @@ namespace FatCat.Nes.Tests
 									Description = "Add with Carry",
 									Mode = "Absolute",
 									Name = "ADC",
-									Value = "$6D"
+									Value = 0x6D
 								}
 							};
 
@@ -34,7 +35,7 @@ namespace FatCat.Nes.Tests
 									Description = "Logical Inclusive OR",
 									Mode = "Absolute",
 									Name = "ORA",
-									Value = "$0D"
+									Value = 0x0D
 								}
 							};
 
@@ -47,7 +48,7 @@ namespace FatCat.Nes.Tests
 									Description = "Arithmetic Shift Left",
 									Mode = "Absolute",
 									Name = "ASL",
-									Value = "$0E"
+									Value = 0x0E
 								}
 							};
 
@@ -60,7 +61,7 @@ namespace FatCat.Nes.Tests
 									Description = "Clear Overflow Flag",
 									Mode = "Implied",
 									Name = "CLV",
-									Value = "$B8"
+									Value = 0xB8
 								}
 							};
 
@@ -73,7 +74,7 @@ namespace FatCat.Nes.Tests
 									Description = "Logical AND",
 									Mode = "Absolute,Y",
 									Name = "AND",
-									Value = "$39"
+									Value = 0x39
 								}
 							};
 
@@ -86,7 +87,7 @@ namespace FatCat.Nes.Tests
 									Description = "Branch if Carry Clear",
 									Mode = "Relative",
 									Name = "BCC",
-									Value = "$90"
+									Value = 0x90
 								}
 							};
 			}
@@ -95,6 +96,27 @@ namespace FatCat.Nes.Tests
 		private readonly OpCodeReader opCodeReader;
 
 		public OpCodeReaderTests() => opCodeReader = new OpCodeReader();
+
+		[Fact]
+		public void CanConvertFromJsonToOpCode()
+		{
+			var json = @"{
+			""cycles"" : ""2(+1ifbranchsucceeds+2iftoanewpage)"",
+			""opcode"" : ""$B0"",
+			""mode"" : ""Relative"",
+			""name"" : ""BCS"",
+			""bytes"" : ""2"",
+			""description"" : ""Branch if Carry Set""
+			}";
+
+			var opCode = JsonSerializer.Deserialize<OpCode>(json);
+
+			opCode.Value.Should().Be(0xB0);
+		}
+
+		[Theory]
+		[MemberData(nameof(TestOpCodes), MemberType = typeof(OpCodeReaderTests), Skip = "Need to refactor OpCode byte")]
+		public void CanReturnOpCodeByAddress(OpCode opCode) { true.Should().BeFalse(); }
 
 		[Fact]
 		public void WillBeEmbeddedInTheNesDll()

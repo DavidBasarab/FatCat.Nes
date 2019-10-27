@@ -22,6 +22,7 @@ namespace FatCat.Nes.OpCodes
 		public string Name { get; set; }
 
 		[JsonPropertyName("opcode")]
-		public string Value { get; set; }
+		[JsonConverter(typeof(JsonConverterOpCodeByteCode))]
+		public byte Value { get; set; }
 	}
 }
