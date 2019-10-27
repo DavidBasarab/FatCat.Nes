@@ -32,7 +32,7 @@ namespace FatCat.Nes.Tests.CpuTests
 
 			bus.Verify(v => v.Read(0xfffc));
 		}
-		
+
 		[Fact]
 		public void WillResetYRegister()
 		{
@@ -48,6 +48,14 @@ namespace FatCat.Nes.Tests.CpuTests
 
 			cpu.Accumulator.Should().Be(0);
 		}
+		
+		[Fact]
+		public void WillSetStatusRegisterToUnused()
+		{
+			cpu.Reset();
+
+			cpu.StatusRegister.Should().HaveFlag(CpuFlag.Unused);
+		}
 
 		[Fact]
 		public void WillSetProgramCounterToAddressRead()
@@ -61,6 +69,14 @@ namespace FatCat.Nes.Tests.CpuTests
 			cpu.Reset();
 
 			cpu.ProgramCounter.Should().Be(0x2211);
+		}
+
+		[Fact]
+		public void WillSetTheStackPointTo253()
+		{
+			cpu.Reset();
+
+			cpu.StackPointer.Should().Be(0xfd);
 		}
 
 		[Fact]
