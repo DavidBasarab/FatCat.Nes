@@ -7,7 +7,32 @@ namespace FatCat.Nes
 		/// <summary>
 		///  All used memory addresses end up in here
 		/// </summary>
-		public ushort AbsoluteAddress { get; set; }
+		private ushort absoluteAddress;
+
+		/// <summary>
+		///  A global accumulation of the number of clocks
+		/// </summary>
+		private int clockCount;
+
+		/// <summary>
+		///  Counts how many cycles the instruction has remaining
+		/// </summary>
+		private int cycles;
+
+		/// <summary>
+		///  Represents the working input value to the ALU
+		/// </summary>
+		private byte fetched;
+
+		/// <summary>
+		///  Is the instruction byte
+		/// </summary>
+		private byte opCode;
+
+		/// <summary>
+		///  Represents absolute address following a branch
+		/// </summary>
+		private ushort relativeAddress;
 
 		/// <summary>
 		///  Accumulator Register
@@ -15,34 +40,9 @@ namespace FatCat.Nes
 		public byte Accumulator { get; set; }
 
 		/// <summary>
-		///  A global accumulation of the number of clocks
-		/// </summary>
-		public int ClockCount { get; set; }
-
-		/// <summary>
-		///  Counts how many cycles the instruction has remaining
-		/// </summary>
-		public int Cycles { get; set; }
-
-		/// <summary>
-		///  Represents the working input value to the ALU
-		/// </summary>
-		public byte Fetched { get; set; }
-
-		/// <summary>
-		///  Is the instruction byte
-		/// </summary>
-		public byte OpCode { get; set; }
-
-		/// <summary>
 		///  Program Counter
 		/// </summary>
 		public ushort ProgramCounter { get; set; }
-
-		/// <summary>
-		///  Represents absolute address following a branch
-		/// </summary>
-		public ushort RelativeAddress { get; set; }
 
 		/// <summary>
 		///  Stack Pointer (points to location on bus)
@@ -71,6 +71,17 @@ namespace FatCat.Nes
 		public byte Read(ushort address) => bus.Read(address);
 
 		public void RemoveFlag(CpuFlag cpuFlag) => StatusRegister &= ~cpuFlag;
+
+		/// <summary>
+		///  Forces the 6502 into a known state. This is hard-wired inside the CPU. The
+		///  registers are set to 0x00, the status register is cleared except for unused
+		///  bit which remains at 1. An absolute address is read from location 0xFFFC
+		///  which contains a second address that the program counter is set to. This
+		///  allows the programmer to jump to a known and programmable location in the
+		///  memory to start executing from. Typically the programmer would set the value
+		///  at location 0xFFFC at compile time.
+		/// </summary>
+		public void Reset() { }
 
 		public void SetFlag(CpuFlag cpuFlag) => StatusRegister |= cpuFlag;
 
