@@ -89,6 +89,9 @@ namespace FatCat.Nes
 			var highAddress = Read((ushort)(absoluteAddress + 1));
 
 			ProgramCounter = (ushort)((highAddress << 8) | lowAddress);
+
+			Accumulator = 0x00;
+			XRegister = 0x00;
 		}
 
 		public void SetFlag(CpuFlag cpuFlag) => StatusRegister |= cpuFlag;

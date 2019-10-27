@@ -16,35 +16,51 @@ namespace FatCat.Nes.Tests.CpuTests
 			cpu.Cycles = 3482;
 			cpu.ClockCount = 9003;
 		}
-		
-		[Fact]
-		public void WillReadLowAddress()
-		{
-			cpu.Reset();
-			
-			bus.Verify(v => v.Read(0xfffc));
-		}
-		
+
 		[Fact]
 		public void WillReadHighAddress()
 		{
 			cpu.Reset();
-			
+
 			bus.Verify(v => v.Read(0xfffd));
 		}
-		
+
+		[Fact]
+		public void WillReadLowAddress()
+		{
+			cpu.Reset();
+
+			bus.Verify(v => v.Read(0xfffc));
+		}
+
+		[Fact]
+		public void WillSetAccumulatorTo0()
+		{
+			cpu.Reset();
+
+			cpu.Accumulator.Should().Be(0);
+		}
+
 		[Fact]
 		public void WillSetProgramCounterToAddressRead()
 		{
 			byte lowAddress = 0x11;
 			byte highAddress = 0x22;
-			
+
 			bus.Setup(v => v.Read(0xfffc)).Returns(lowAddress);
 			bus.Setup(v => v.Read(0xfffd)).Returns(highAddress);
-			
+
 			cpu.Reset();
 
 			cpu.ProgramCounter.Should().Be(0x2211);
+		}
+
+		[Fact]
+		public void WillSetXRegisterToZero()
+		{
+			cpu.Reset();
+
+			cpu.XRegister.Should().Be(0);
 		}
 	}
 }
