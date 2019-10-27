@@ -4,18 +4,21 @@ using Xunit;
 
 namespace FatCat.Nes.Tests.CpuTests
 {
-	public class CpuBusInteractions
+	public abstract class CpuBaseTests
 	{
-		private readonly Mock<IBus> bus;
-		private readonly Cpu cpu;
-
-		public CpuBusInteractions()
+		protected readonly Mock<IBus> bus;
+		protected readonly Cpu cpu;
+		
+		public CpuBaseTests()
 		{
 			bus = new Mock<IBus>();
 
 			cpu = new Cpu(bus.Object);
 		}
-
+	}
+	
+	public class CpuBusInteractions : CpuBaseTests
+	{
 		[Fact]
 		public void WillReadFromBus()
 		{
