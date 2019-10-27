@@ -17,7 +17,7 @@ namespace FatCat.Nes.OpCodes
 		{
 			var nesAssembly = typeof(OpCodeReader).Assembly;
 
-			using var stream = nesAssembly.GetManifestResourceStream("FatCat.Nes.OpCodes.json");
+			using var stream = nesAssembly.GetManifestResourceStream("FatCat.Nes.OpCodes.OpCodes.json");
 			using var reader = new StreamReader(stream);
 
 			return reader.ReadToEnd();

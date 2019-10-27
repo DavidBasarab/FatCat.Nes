@@ -6,7 +6,10 @@
 
     <ItemGroup>
       <None Remove="OpCodes.json" />
-      <EmbeddedResource Include="OpCodes.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="OpCodes\OpCodes.json" />
     </ItemGroup>
 
 </Project>

@@ -101,7 +101,7 @@ namespace FatCat.Nes.Tests
 		{
 			var nesAssembly = typeof(OpCodeReader).Assembly;
 
-			using var stream = nesAssembly.GetManifestResourceStream("FatCat.Nes.OpCodes.json");
+			using var stream = nesAssembly.GetManifestResourceStream("FatCat.Nes.OpCodes.OpCodes.json");
 			using var reader = new StreamReader(stream);
 
 			var embeddedJson = reader.ReadToEnd();
