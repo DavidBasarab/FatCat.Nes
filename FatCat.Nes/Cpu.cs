@@ -5,11 +5,6 @@ namespace FatCat.Nes
 		private readonly IBus bus;
 
 		/// <summary>
-		///  All used memory addresses end up in here
-		/// </summary>
-		private ushort absoluteAddress;
-
-		/// <summary>
 		///  Represents the working input value to the ALU
 		/// </summary>
 		private byte fetched;
@@ -20,9 +15,9 @@ namespace FatCat.Nes
 		private byte opCode;
 
 		/// <summary>
-		///  Represents absolute address following a branch
+		///  All used memory addresses end up in here
 		/// </summary>
-		private ushort relativeAddress;
+		public ushort AbsoluteAddress { get; set; }
 
 		/// <summary>
 		///  Accumulator Register
@@ -43,6 +38,11 @@ namespace FatCat.Nes
 		///  Program Counter
 		/// </summary>
 		public ushort ProgramCounter { get; set; }
+
+		/// <summary>
+		///  Represents absolute address following a branch
+		/// </summary>
+		public ushort RelativeAddress { get; set; }
 
 		/// <summary>
 		///  Stack Pointer (points to location on bus)
@@ -83,10 +83,10 @@ namespace FatCat.Nes
 		/// </summary>
 		public void Reset()
 		{
-			absoluteAddress = 0xfffc;
+			AbsoluteAddress = 0xfffc;
 
-			var lowAddress = Read(absoluteAddress);
-			var highAddress = Read((ushort)(absoluteAddress + 1));
+			var lowAddress = Read(AbsoluteAddress);
+			var highAddress = Read((ushort)(AbsoluteAddress + 1));
 
 			ProgramCounter = (ushort)((highAddress << 8) | lowAddress);
 
@@ -95,6 +95,9 @@ namespace FatCat.Nes
 			YRegister = 0x00;
 			StackPointer = 0xfd;
 			StatusRegister = CpuFlag.Unused;
+
+			AbsoluteAddress = 0x0000;
+			RelativeAddress = 0x0000;
 		}
 
 		public void SetFlag(CpuFlag cpuFlag) => StatusRegister |= cpuFlag;

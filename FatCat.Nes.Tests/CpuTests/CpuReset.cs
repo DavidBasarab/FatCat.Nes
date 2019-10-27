@@ -7,6 +7,8 @@ namespace FatCat.Nes.Tests.CpuTests
 	{
 		public CpuReset()
 		{
+			cpu.AbsoluteAddress = 0x2010;
+			cpu.RelativeAddress = 0x1191;
 			cpu.Accumulator = 0x78;
 			cpu.XRegister = 0x12;
 			cpu.YRegister = 0x56;
@@ -48,14 +50,6 @@ namespace FatCat.Nes.Tests.CpuTests
 
 			cpu.Accumulator.Should().Be(0);
 		}
-		
-		[Fact]
-		public void WillSetStatusRegisterToUnused()
-		{
-			cpu.Reset();
-
-			cpu.StatusRegister.Should().HaveFlag(CpuFlag.Unused);
-		}
 
 		[Fact]
 		public void WillSetProgramCounterToAddressRead()
@@ -69,6 +63,30 @@ namespace FatCat.Nes.Tests.CpuTests
 			cpu.Reset();
 
 			cpu.ProgramCounter.Should().Be(0x2211);
+		}
+
+		[Fact]
+		public void WillSetRelativeAddressTo0()
+		{
+			cpu.Reset();
+
+			cpu.RelativeAddress.Should().Be(0x0000);
+		}
+
+		[Fact]
+		public void WillSetStatusRegisterToUnused()
+		{
+			cpu.Reset();
+
+			cpu.StatusRegister.Should().HaveFlag(CpuFlag.Unused);
+		}
+
+		[Fact]
+		public void WIllSetTheAbsoluteAddressTo0()
+		{
+			cpu.Reset();
+
+			cpu.AbsoluteAddress.Should().Be(0x0000);
 		}
 
 		[Fact]
