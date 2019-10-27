@@ -1,6 +1,13 @@
 namespace FatCat.Nes
 {
-	public class Bus
+	public interface IBus
+	{
+		byte Read(ushort address);
+
+		void Write(ushort address, byte data);
+	}
+
+	public class Bus : IBus
 	{
 		internal byte[] Ram { get; } = new byte[64 * 1024];
 
