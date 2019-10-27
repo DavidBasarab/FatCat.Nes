@@ -16,7 +16,7 @@ namespace FatCat.Nes.Tests
 								new OpCode
 								{
 									Bytes = 3,
-									Cycles = 4,
+									Cycles = "4",
 									Description = "Add with Carry",
 									Mode = "Absolute",
 									Name = "ADC",
@@ -29,11 +29,11 @@ namespace FatCat.Nes.Tests
 								new OpCode
 								{
 									Bytes = 3,
-									Cycles = 4,
-									Description = "Add with Carry",
+									Cycles = "4",
+									Description = "Logical Inclusive OR",
 									Mode = "Absolute",
-									Name = "ADC",
-									Value = "$6D"
+									Name = "ORA",
+									Value = "$0D"
 								}
 							};
 				
@@ -42,7 +42,7 @@ namespace FatCat.Nes.Tests
 								new OpCode
 								{
 									Bytes = 3,
-									Cycles = 6,
+									Cycles = "6",
 									Description = "Arithmetic Shift Left",
 									Mode = "Absolute",
 									Name = "ASL",
@@ -54,12 +54,12 @@ namespace FatCat.Nes.Tests
 							{
 								new OpCode
 								{
-									Bytes = 3,
-									Cycles = 4,
-									Description = "Add with Carry",
-									Mode = "Absolute",
-									Name = "ADC",
-									Value = "$6D"
+									Bytes = 1,
+									Cycles = "2",
+									Description = "Clear Overflow Flag",
+									Mode = "Implied",
+									Name = "CLV",
+									Value = "$B8"
 								}
 							};
 			}
@@ -82,6 +82,15 @@ namespace FatCat.Nes.Tests
 			embeddedJson.Should().NotBeEmpty();
 		}
 
+		[Theory]
+		[MemberData(nameof(TestOpCodes), MemberType = typeof(OpCodeReaderTests))]
+		public void WillConvertToOpCodeCorrectly(OpCode expectedOpCode)
+		{
+			var opCodes = opCodeReader.GetAll();
+
+			opCodes.Should().ContainEquivalentOf(expectedOpCode);
+		}
+		
 		[Fact]
 		public void WillReturn150OpCodes()
 		{
