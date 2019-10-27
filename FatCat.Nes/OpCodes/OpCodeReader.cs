@@ -6,7 +6,14 @@ namespace FatCat.Nes.OpCodes
 {
 	public class OpCodeReader
 	{
+		private List<OpCode> OpCodes { get; set; }
+		
 		public List<OpCode> GetAll()
+		{
+			return OpCodes ??= LoadOpCodes();
+		}
+
+		private List<OpCode> LoadOpCodes()
 		{
 			var opCodeJson = GetOpCodeJson();
 
