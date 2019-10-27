@@ -4,8 +4,7 @@ using System.Buffers.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace FatCat.Nes
-{
+namespace FatCat.Nes.OpCodes {
 	public class JsonConverterStringToInt : JsonConverter<int>
 	{
 		public override int Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options)
@@ -26,27 +25,5 @@ namespace FatCat.Nes
 		}
 
 		public override void Write(Utf8JsonWriter writer, int value, JsonSerializerOptions options) => writer.WriteStringValue(value.ToString());
-	}
-
-	public class OpCode
-	{
-		[JsonPropertyName("bytes")]
-		[JsonConverter(typeof(JsonConverterStringToInt))]
-		public int Bytes { get; set; }
-
-		[JsonPropertyName("cycles")]
-		public string Cycles { get; set; }
-
-		[JsonPropertyName("description")]
-		public string Description { get; set; }
-
-		[JsonPropertyName("mode")]
-		public string Mode { get; set; }
-
-		[JsonPropertyName("name")]
-		public string Name { get; set; }
-
-		[JsonPropertyName("opcode")]
-		public string Value { get; set; }
 	}
 }
