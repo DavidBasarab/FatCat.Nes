@@ -10,16 +10,6 @@ namespace FatCat.Nes
 		private ushort absoluteAddress;
 
 		/// <summary>
-		///  A global accumulation of the number of clocks
-		/// </summary>
-		private int clockCount;
-
-		/// <summary>
-		///  Counts how many cycles the instruction has remaining
-		/// </summary>
-		private int cycles;
-
-		/// <summary>
 		///  Represents the working input value to the ALU
 		/// </summary>
 		private byte fetched;
@@ -38,6 +28,16 @@ namespace FatCat.Nes
 		///  Accumulator Register
 		/// </summary>
 		public byte Accumulator { get; set; }
+
+		/// <summary>
+		///  A global accumulation of the number of clocks
+		/// </summary>
+		public int ClockCount { get; set; }
+
+		/// <summary>
+		///  Counts how many cycles the instruction has remaining
+		/// </summary>
+		public int Cycles { get; set; }
 
 		/// <summary>
 		///  Program Counter
@@ -81,7 +81,15 @@ namespace FatCat.Nes
 		///  memory to start executing from. Typically the programmer would set the value
 		///  at location 0xFFFC at compile time.
 		/// </summary>
-		public void Reset() { }
+		public void Reset()
+		{
+			absoluteAddress = 0xfffc;
+
+			var lowAddress = Read(absoluteAddress);
+			var highAddress = Read((ushort)(absoluteAddress + 1));
+
+			ProgramCounter = (ushort)((highAddress << 8) | lowAddress);
+		}
 
 		public void SetFlag(CpuFlag cpuFlag) => StatusRegister |= cpuFlag;
 
