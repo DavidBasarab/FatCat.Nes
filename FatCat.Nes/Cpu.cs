@@ -15,5 +15,7 @@ namespace FatCat.Nes
 		public void SetFlag(CpuFlag cpuFlag) => flag |= cpuFlag;
 
 		public void Write(ushort address, byte data) => bus.Write(address, data);
+
+		public void RemoveFlag(CpuFlag cpuFlag) => flag &= ~cpuFlag;
 	}
 }
