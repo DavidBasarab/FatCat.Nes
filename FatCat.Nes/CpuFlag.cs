@@ -3,7 +3,7 @@ using System;
 namespace FatCat.Nes
 {
 	[Flags]
-	internal enum Flags
+	public enum CpuFlag
 	{
 		None = 0,
 		CarryBit = 1,
@@ -13,6 +13,6 @@ namespace FatCat.Nes
 		Break = 16,
 		Unused = 32,
 		Overflow = 64,
-		Negative = 126
+		Negative = 128
 	}
 }

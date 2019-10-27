@@ -4,7 +4,8 @@ using System.Buffers.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace FatCat.Nes.OpCodes {
+namespace FatCat.Nes.OpCodes
+{
 	public class JsonConverterStringToInt : JsonConverter<int>
 	{
 		public override int Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options)
