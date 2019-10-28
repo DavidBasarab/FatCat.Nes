@@ -29,7 +29,10 @@ namespace FatCat.Nes.Tests.CpuTests
 		}
 
 		[Fact]
-		public void WillReadLowMemory() => bus.Verify(v => v.Read(0xfffe));
+		public void WillReadLowCounterFromBus() => bus.Verify(v => v.Read(0xfffe));
+		
+		[Fact]
+		public void WillReadHighCounterFromBus() => bus.Verify(v => v.Read(0xffff));
 
 		[Fact]
 		public void WillReduceTheStackPointer() => cpu.StackPointer.Should().Be(0xde);

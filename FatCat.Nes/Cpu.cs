@@ -94,7 +94,10 @@ namespace FatCat.Nes
 			
 			PushToStack((byte)StatusRegister);
 
-			var lowCounter = bus.Read(0xfffe);
+			AbsoluteAddress = 0xfffe;
+
+			var lowCounter = bus.Read(AbsoluteAddress);
+			var highCounter = bus.Read((ushort)(AbsoluteAddress + 1));
 		}
 
 		public byte Read(ushort address) => bus.Read(address);
@@ -114,10 +117,10 @@ namespace FatCat.Nes
 		{
 			AbsoluteAddress = 0xfffc;
 
-			var lowAddress = Read(AbsoluteAddress);
-			var highAddress = Read((ushort)(AbsoluteAddress + 1));
+			var lowCounter = Read(AbsoluteAddress);
+			var highCounter = Read((ushort)(AbsoluteAddress + 1));
 
-			ProgramCounter = (ushort)((highAddress << 8) | lowAddress);
+			ProgramCounter = (ushort)((highCounter << 8) | lowCounter);
 
 			Accumulator = 0x00;
 			XRegister = 0x00;
