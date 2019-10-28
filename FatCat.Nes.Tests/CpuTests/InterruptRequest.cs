@@ -17,6 +17,9 @@ namespace FatCat.Nes.Tests.CpuTests
 			cpu.ProgramCounter = StartingProgramCounter;
 			cpu.StatusRegister = CpuFlag.Negative | CpuFlag.Zero | CpuFlag.Break;
 
+			bus.Setup(v => v.Read(0xfffe)).Returns(0x21);
+			bus.Setup(v => v.Read(0xffff)).Returns(0x11);
+
 			cpu.Irq();
 		}
 
@@ -29,13 +32,16 @@ namespace FatCat.Nes.Tests.CpuTests
 		}
 
 		[Fact]
-		public void WillReadLowCounterFromBus() => bus.Verify(v => v.Read(0xfffe));
-		
-		[Fact]
 		public void WillReadHighCounterFromBus() => bus.Verify(v => v.Read(0xffff));
 
 		[Fact]
+		public void WillReadLowCounterFromBus() => bus.Verify(v => v.Read(0xfffe));
+
+		[Fact]
 		public void WillReduceTheStackPointer() => cpu.StackPointer.Should().Be(0xde);
+
+		[Fact]
+		public void WillSetTheProgramCounterFromValuesReadFromBus() => cpu.ProgramCounter.Should().Be(EndingProgramCounter);
 
 		[Fact]
 		public void WillWriteHighMemoryToStack() => bus.Verify(v => v.Write(0x0100 + StartingStackPointer, 0xd1));

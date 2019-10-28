@@ -87,17 +87,19 @@ namespace FatCat.Nes
 		{
 			PushToStack((byte)((ProgramCounter >> 8) & 0x00ff));
 			PushToStack((byte)(ProgramCounter & 0x00ff));
-			
+
 			RemoveFlag(CpuFlag.Break);
 			SetFlag(CpuFlag.Unused);
 			SetFlag(CpuFlag.DisableInterrupts);
-			
+
 			PushToStack((byte)StatusRegister);
 
 			AbsoluteAddress = 0xfffe;
 
 			var lowCounter = bus.Read(AbsoluteAddress);
 			var highCounter = bus.Read((ushort)(AbsoluteAddress + 1));
+			
+			SetProgramCounter(highCounter, lowCounter);
 		}
 
 		public byte Read(ushort address) => bus.Read(address);
@@ -120,7 +122,7 @@ namespace FatCat.Nes
 			var lowCounter = Read(AbsoluteAddress);
 			var highCounter = Read((ushort)(AbsoluteAddress + 1));
 
-			ProgramCounter = (ushort)((highCounter << 8) | lowCounter);
+			SetProgramCounter(highCounter, lowCounter);
 
 			Accumulator = 0x00;
 			XRegister = 0x00;
@@ -145,5 +147,7 @@ namespace FatCat.Nes
 
 			StackPointer -= 1;
 		}
+
+		private void SetProgramCounter(byte highCounter, byte lowCounter) => ProgramCounter = (ushort)((highCounter << 8) | lowCounter);
 	}
 }
