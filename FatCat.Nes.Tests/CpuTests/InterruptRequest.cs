@@ -5,17 +5,31 @@ namespace FatCat.Nes.Tests.CpuTests
 {
 	public class InterruptRequest : CpuBaseTests
 	{
-		private const int ProgramCounter = 0xd1b2;
+		private const int EndingProgramCounter = 0x1121;
+
+		private const int StartingProgramCounter = 0xd1b2;
+
 		private const int StartingStackPointer = 0xe1;
 
 		public InterruptRequest()
 		{
 			cpu.StackPointer = StartingStackPointer;
-			cpu.ProgramCounter = ProgramCounter;
+			cpu.ProgramCounter = StartingProgramCounter;
 			cpu.StatusRegister = CpuFlag.Negative | CpuFlag.Zero | CpuFlag.Break;
 
 			cpu.Irq();
 		}
+
+		[Fact]
+		public void WillPushTheStatusRegisterOnTheStack()
+		{
+			var expectedStatusRegister = CpuFlag.Negative | CpuFlag.Zero | CpuFlag.Unused | CpuFlag.DisableInterrupts;
+
+			bus.Verify(v => v.Write(0x0100 + (StartingStackPointer - 2), (byte)expectedStatusRegister));
+		}
+
+		[Fact]
+		public void WillReadLowMemory() => bus.Verify(v => v.Read(0xfffe));
 
 		[Fact]
 		public void WillReduceTheStackPointer() => cpu.StackPointer.Should().Be(0xde);
@@ -25,13 +39,5 @@ namespace FatCat.Nes.Tests.CpuTests
 
 		[Fact]
 		public void WillWriteLowMemoryToStack() => bus.Verify(v => v.Write(0x0100 + (StartingStackPointer - 1), 0xb2));
-		
-		[Fact]
-		public void WillPushTheStatusRegisterOnTheStack()
-		{
-			var expectedStatusRegister = CpuFlag.Negative | CpuFlag.Zero | CpuFlag.Unused | CpuFlag.DisableInterrupts;
-			
-			bus.Verify(v => v.Write(0x0100 + (StartingStackPointer - 2), (byte)expectedStatusRegister));
-		}
 	}
 }

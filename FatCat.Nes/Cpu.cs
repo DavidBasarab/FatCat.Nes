@@ -93,6 +93,8 @@ namespace FatCat.Nes
 			SetFlag(CpuFlag.DisableInterrupts);
 			
 			PushToStack((byte)StatusRegister);
+
+			var lowCounter = bus.Read(0xfffe);
 		}
 
 		public byte Read(ushort address) => bus.Read(address);
