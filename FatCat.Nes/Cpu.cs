@@ -100,6 +100,8 @@ namespace FatCat.Nes
 			var highCounter = bus.Read((ushort)(AbsoluteAddress + 1));
 			
 			SetProgramCounter(highCounter, lowCounter);
+
+			Cycles = 7;
 		}
 
 		public byte Read(ushort address) => bus.Read(address);

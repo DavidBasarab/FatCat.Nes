@@ -24,6 +24,9 @@ namespace FatCat.Nes.Tests.CpuTests
 		}
 
 		[Fact]
+		public void InterruptRequestTakesCycles() => cpu.Cycles.Should().Be(7);
+
+		[Fact]
 		public void WillPushTheStatusRegisterOnTheStack()
 		{
 			var expectedStatusRegister = CpuFlag.Negative | CpuFlag.Zero | CpuFlag.Unused | CpuFlag.DisableInterrupts;
