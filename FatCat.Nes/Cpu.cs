@@ -87,21 +87,10 @@ namespace FatCat.Nes
 		{
 			if (GetFlag(CpuFlag.DisableInterrupts)) return;
 
-			PushToStack((byte)((ProgramCounter >> 8) & 0x00ff));
-			PushToStack((byte)(ProgramCounter & 0x00ff));
-
-			RemoveFlag(CpuFlag.Break);
-			SetFlag(CpuFlag.Unused);
-			SetFlag(CpuFlag.DisableInterrupts);
-
-			PushToStack((byte)StatusRegister);
-
-			AbsoluteAddress = 0xfffe;
-
-			SetProgramCounter();
-
-			Cycles = 7;
+			RunInterrupt(0xfffe, 7);
 		}
+
+		public void Nmi() => RunInterrupt(0xfffa, 8);
 
 		public byte Read(ushort address) => bus.Read(address);
 
@@ -144,6 +133,24 @@ namespace FatCat.Nes
 			Write((ushort)(0x0100 + StackPointer), data);
 
 			StackPointer -= 1;
+		}
+
+		private void RunInterrupt(ushort programCounterLocation, int cycles)
+		{
+			PushToStack((byte)((ProgramCounter >> 8) & 0x00ff));
+			PushToStack((byte)(ProgramCounter & 0x00ff));
+
+			RemoveFlag(CpuFlag.Break);
+			SetFlag(CpuFlag.Unused);
+			SetFlag(CpuFlag.DisableInterrupts);
+
+			PushToStack((byte)StatusRegister);
+
+			AbsoluteAddress = programCounterLocation;
+
+			SetProgramCounter();
+
+			Cycles = cycles;
 		}
 
 		private void SetProgramCounter()
