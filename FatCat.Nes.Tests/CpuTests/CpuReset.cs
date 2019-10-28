@@ -5,6 +5,9 @@ namespace FatCat.Nes.Tests.CpuTests
 {
 	public class CpuReset : CpuBaseTests
 	{
+		private const int ClockCount = 9003;
+		private const int OpCode = 0xb1;
+
 		public CpuReset()
 		{
 			cpu.AbsoluteAddress = 0x2010;
@@ -16,8 +19,41 @@ namespace FatCat.Nes.Tests.CpuTests
 			cpu.StatusRegister = CpuFlag.Break | CpuFlag.Overflow | CpuFlag.CarryBit;
 			cpu.ProgramCounter = 0x7834;
 			cpu.Cycles = 3482;
-			cpu.ClockCount = 9003;
+			cpu.ClockCount = ClockCount;
 			cpu.Fetched = 0x67;
+			cpu.OpCode = OpCode;
+		}
+
+		[Fact]
+		public void ClockCountWillNotChange()
+		{
+			cpu.Reset();
+
+			cpu.ClockCount.Should().Be(ClockCount);
+		}
+
+		[Fact]
+		public void FetchedWillBeSetToZero()
+		{
+			cpu.Reset();
+
+			cpu.Fetched.Should().Be(0x00);
+		}
+
+		[Fact]
+		public void OpCodeWillNotChange()
+		{
+			cpu.Reset();
+
+			cpu.OpCode.Should().Be(OpCode);
+		}
+
+		[Fact]
+		public void ResetTakes8Cycles()
+		{
+			cpu.Reset();
+
+			cpu.Cycles.Should().Be(8);
 		}
 
 		[Fact]
@@ -64,22 +100,6 @@ namespace FatCat.Nes.Tests.CpuTests
 			cpu.Reset();
 
 			cpu.ProgramCounter.Should().Be(0x2211);
-		}
-		
-		[Fact]
-		public void FetchedWillBeSetToZero()
-		{
-			cpu.Reset();
-
-			cpu.Fetched.Should().Be(0x00);
-		}
-		
-		[Fact]
-		public void ResetTakes8Cycles()
-		{
-			cpu.Reset();
-
-			cpu.Cycles.Should().Be(8);
 		}
 
 		[Fact]

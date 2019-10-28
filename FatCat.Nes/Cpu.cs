@@ -1,13 +1,10 @@
+using System;
+
 namespace FatCat.Nes
 {
 	public class Cpu
 	{
 		private readonly IBus bus;
-
-		/// <summary>
-		///  Is the instruction byte
-		/// </summary>
-		private byte opCode;
 
 		/// <summary>
 		///  All used memory addresses end up in here
@@ -33,6 +30,11 @@ namespace FatCat.Nes
 		///  Represents the working input value to the ALU
 		/// </summary>
 		public byte Fetched { get; set; }
+
+		/// <summary>
+		///  Is the instruction byte
+		/// </summary>
+		public byte OpCode { get; set; }
 
 		/// <summary>
 		///  Program Counter
@@ -101,6 +103,26 @@ namespace FatCat.Nes
 			Fetched = 0x00;
 
 			Cycles = 8;
+		}
+		
+		/// <summary>
+		/// Interrupt requests are a complex operation and only happen if the
+		/// "disable interrupt" flag is 0. IRQs can happen at any time, but
+		/// you dont want them to be destructive to the operation of the running 
+		/// program. Therefore the current instruction is allowed to finish
+		/// (which I facilitate by doing the whole thing when cycles == 0) and 
+		/// then the current program counter is stored on the stack. Then the
+		/// current status register is stored on the stack. When the routine
+		/// that services the interrupt has finished, the status register
+		/// and program counter can be restored to how they where before it 
+		/// occurred. This is implemented by the "RTI" instruction. Once the IRQ
+		/// has happened, in a similar way to a reset, a programmable address
+		/// is read form hard coded location 0xFFFE, which is subsequently
+		/// set to the program counter.
+		/// </summary>
+		public void Irq()
+		{
+			Write((ushort)(0x0100 + StackPointer), (byte)((ProgramCounter >> 8) & 0x00ff));
 		}
 
 		public void SetFlag(CpuFlag cpuFlag) => StatusRegister |= cpuFlag;
