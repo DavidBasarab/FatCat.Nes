@@ -85,6 +85,8 @@ namespace FatCat.Nes
 		/// </summary>
 		public void Irq()
 		{
+			if (GetFlag(CpuFlag.DisableInterrupts)) return;
+
 			PushToStack((byte)((ProgramCounter >> 8) & 0x00ff));
 			PushToStack((byte)(ProgramCounter & 0x00ff));
 

@@ -1,4 +1,5 @@
 using FluentAssertions;
+using Moq;
 using Xunit;
 
 namespace FatCat.Nes.Tests.CpuTests
@@ -6,6 +7,7 @@ namespace FatCat.Nes.Tests.CpuTests
 	public class InterruptRequest : CpuBaseTests
 	{
 		private const int EndingProgramCounter = 0x1121;
+		private const int StartingCpuCycles = 14;
 
 		private const int StartingProgramCounter = 0xd1b2;
 
@@ -13,14 +15,35 @@ namespace FatCat.Nes.Tests.CpuTests
 
 		public InterruptRequest()
 		{
-			cpu.StackPointer = StartingStackPointer;
-			cpu.ProgramCounter = StartingProgramCounter;
-			cpu.StatusRegister = CpuFlag.Negative | CpuFlag.Zero | CpuFlag.Break;
+			SetUpStartingCpuData();
 
 			bus.Setup(v => v.Read(0xfffe)).Returns(0x21);
 			bus.Setup(v => v.Read(0xffff)).Returns(0x11);
 
 			cpu.Irq();
+		}
+
+		[Fact]
+		public void IfFlagDisableInterruptIsSetThenNoCpuDataIsChanged()
+		{
+			SetUpForDisableInterrupts();
+
+			cpu.Irq();
+
+			cpu.ProgramCounter.Should().Be(StartingProgramCounter);
+			cpu.StackPointer.Should().Be(StartingStackPointer);
+			cpu.Cycles.Should().Be(StartingCpuCycles);
+		}
+
+		[Fact]
+		public void IfFlagDisableInterruptIsSetThenNoReadsAndWritesAreDoneToTheBus()
+		{
+			SetUpForDisableInterrupts();
+
+			cpu.Irq();
+
+			bus.Verify(v => v.Write(It.IsAny<ushort>(), It.IsAny<byte>()), Times.Never);
+			bus.Verify(v => v.Read(It.IsAny<ushort>()), Times.Never);
 		}
 
 		[Fact]
@@ -51,5 +74,22 @@ namespace FatCat.Nes.Tests.CpuTests
 
 		[Fact]
 		public void WillWriteLowMemoryToStack() => bus.Verify(v => v.Write(0x0100 + (StartingStackPointer - 1), 0xb2));
+
+		private void SetUpForDisableInterrupts()
+		{
+			bus.Reset();
+
+			SetUpStartingCpuData();
+
+			cpu.SetFlag(CpuFlag.DisableInterrupts);
+		}
+
+		private void SetUpStartingCpuData()
+		{
+			cpu.StackPointer = StartingStackPointer;
+			cpu.ProgramCounter = StartingProgramCounter;
+			cpu.StatusRegister = CpuFlag.Negative | CpuFlag.Zero | CpuFlag.Break;
+			cpu.Cycles = StartingCpuCycles;
+		}
 	}
 }
