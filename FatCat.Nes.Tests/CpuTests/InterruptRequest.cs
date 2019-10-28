@@ -12,22 +12,26 @@ namespace FatCat.Nes.Tests.CpuTests
 		{
 			cpu.StackPointer = StartingStackPointer;
 			cpu.ProgramCounter = ProgramCounter;
+			cpu.StatusRegister = CpuFlag.Negative | CpuFlag.Zero | CpuFlag.Break;
+
+			cpu.Irq();
 		}
 
 		[Fact]
-		public void WillReduceTheStackPointerBy1WhenHighMemoryWritten()
-		{
-			cpu.Irq();
-
-			cpu.StackPointer.Should().Be(0xe0);
-		}
+		public void WillReduceTheStackPointer() => cpu.StackPointer.Should().Be(0xde);
 
 		[Fact]
-		public void WillWriteHighMemoryToStack()
-		{
-			cpu.Irq();
+		public void WillWriteHighMemoryToStack() => bus.Verify(v => v.Write(0x0100 + StartingStackPointer, 0xd1));
 
-			bus.Verify(v => v.Write(0x0100 + StartingStackPointer, 0xd1));
+		[Fact]
+		public void WillWriteLowMemoryToStack() => bus.Verify(v => v.Write(0x0100 + (StartingStackPointer - 1), 0xb2));
+		
+		[Fact]
+		public void WillPushTheStatusRegisterOnTheStack()
+		{
+			var expectedStatusRegister = CpuFlag.Negative | CpuFlag.Zero | CpuFlag.Unused | CpuFlag.DisableInterrupts;
+			
+			bus.Verify(v => v.Write(0x0100 + (StartingStackPointer - 2), (byte)expectedStatusRegister));
 		}
 	}
 }

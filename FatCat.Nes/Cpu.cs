@@ -85,9 +85,14 @@ namespace FatCat.Nes
 		/// </summary>
 		public void Irq()
 		{
-			Write((ushort)(0x0100 + StackPointer), (byte)((ProgramCounter >> 8) & 0x00ff));
-
-			StackPointer -= 1;
+			PushToStack((byte)((ProgramCounter >> 8) & 0x00ff));
+			PushToStack((byte)(ProgramCounter & 0x00ff));
+			
+			RemoveFlag(CpuFlag.Break);
+			SetFlag(CpuFlag.Unused);
+			SetFlag(CpuFlag.DisableInterrupts);
+			
+			PushToStack((byte)StatusRegister);
 		}
 
 		public byte Read(ushort address) => bus.Read(address);
@@ -128,5 +133,12 @@ namespace FatCat.Nes
 		public void SetFlag(CpuFlag cpuFlag) => StatusRegister |= cpuFlag;
 
 		public void Write(ushort address, byte data) => bus.Write(address, data);
+
+		private void PushToStack(byte data)
+		{
+			Write((ushort)(0x0100 + StackPointer), data);
+
+			StackPointer -= 1;
+		}
 	}
 }
