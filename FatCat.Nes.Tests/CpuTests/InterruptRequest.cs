@@ -1,3 +1,4 @@
+using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
@@ -30,13 +31,13 @@ namespace FatCat.Nes.Tests.CpuTests
 
 			cpu.Irq();
 
-			bus.Verify(v => v.Write(It.IsAny<ushort>(), It.IsAny<byte>()), Times.Never);
-			bus.Verify(v => v.Read(It.IsAny<ushort>()), Times.Never);
+			A.CallTo(() => bus.Write(A<ushort>.Ignored, A<byte>.Ignored)).MustNotHaveHappened();
+			A.CallTo(() => bus.Read(A<ushort>.Ignored)).MustNotHaveHappened();
 		}
 
 		private void SetUpForDisableInterrupts()
 		{
-			bus.Reset();
+			Fake.ClearRecordedCalls(bus);
 
 			SetUpStartingCpuData();
 

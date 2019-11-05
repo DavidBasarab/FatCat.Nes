@@ -1,3 +1,4 @@
+using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
@@ -21,8 +22,8 @@ namespace FatCat.Nes.Tests.CpuTests
 		{
 			SetUpStartingCpuData();
 
-			bus.Setup(v => v.Read(LowCounterLocation)).Returns(0x21);
-			bus.Setup(v => v.Read((ushort)(LowCounterLocation + 1))).Returns(0x11);
+			A.CallTo(() => bus.Read(LowCounterLocation)).Returns((byte)0x21);
+			A.CallTo(() => bus.Read((ushort)(LowCounterLocation + 1))).Returns((byte)0x11);
 		}
 
 		[Fact]
@@ -33,14 +34,14 @@ namespace FatCat.Nes.Tests.CpuTests
 		{
 			var expectedStatusRegister = CpuFlag.Negative | CpuFlag.Zero | CpuFlag.Unused | CpuFlag.DisableInterrupts;
 
-			bus.Verify(v => v.Write(0x0100 + (StartingStackPointer - 2), (byte)expectedStatusRegister));
+			A.CallTo(() => bus.Write(0x0100 + (StartingStackPointer - 2), (byte)expectedStatusRegister)).MustHaveHappened();
 		}
 
 		[Fact]
-		public void WillReadHighCounterFromBus() => bus.Verify(v => v.Read((ushort)(LowCounterLocation + 1)));
+		public void WillReadHighCounterFromBus() { A.CallTo(() => bus.Read((ushort)(LowCounterLocation + 1))).MustHaveHappened(); }
 
 		[Fact]
-		public void WillReadLowCounterFromBus() => bus.Verify(v => v.Read(LowCounterLocation));
+		public void WillReadLowCounterFromBus() => A.CallTo(() => bus.Read(LowCounterLocation)).MustHaveHappened();
 
 		[Fact]
 		public void WillReduceTheStackPointer() => cpu.StackPointer.Should().Be(0xde);
@@ -49,10 +50,10 @@ namespace FatCat.Nes.Tests.CpuTests
 		public void WillSetTheProgramCounterFromValuesReadFromBus() => cpu.ProgramCounter.Should().Be(EndingProgramCounter);
 
 		[Fact]
-		public void WillWriteHighMemoryToStack() => bus.Verify(v => v.Write(0x0100 + StartingStackPointer, 0xd1));
+		public void WillWriteHighMemoryToStack() => A.CallTo(() => bus.Write(0x0100 + StartingStackPointer, 0xd1)).MustHaveHappened();
 
 		[Fact]
-		public void WillWriteLowMemoryToStack() => bus.Verify(v => v.Write(0x0100 + (StartingStackPointer - 1), 0xb2));
+		public void WillWriteLowMemoryToStack() => A.CallTo(() => bus.Write(0x0100 + (StartingStackPointer - 1), 0xb2)).MustHaveHappened();
 
 		protected void SetUpStartingCpuData()
 		{
