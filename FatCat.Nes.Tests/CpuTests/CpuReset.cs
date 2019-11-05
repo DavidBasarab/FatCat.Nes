@@ -1,3 +1,4 @@
+using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
@@ -61,7 +62,7 @@ namespace FatCat.Nes.Tests.CpuTests
 		{
 			cpu.Reset();
 
-			bus.Verify(v => v.Read(0xfffd));
+			A.CallTo(() => bus.Read(0xfffd)).MustHaveHappened();
 		}
 
 		[Fact]
@@ -69,7 +70,7 @@ namespace FatCat.Nes.Tests.CpuTests
 		{
 			cpu.Reset();
 
-			bus.Verify(v => v.Read(0xfffc));
+			A.CallTo(() => bus.Read(0xfffc)).MustHaveHappened();
 		}
 
 		[Fact]
@@ -94,8 +95,8 @@ namespace FatCat.Nes.Tests.CpuTests
 			byte lowAddress = 0x11;
 			byte highAddress = 0x22;
 
-			bus.Setup(v => v.Read(0xfffc)).Returns(lowAddress);
-			bus.Setup(v => v.Read(0xfffd)).Returns(highAddress);
+			A.CallTo(() => bus.Read(0xfffc)).Returns(lowAddress);
+			A.CallTo(() => bus.Read(0xfffd)).Returns(highAddress);
 
 			cpu.Reset();
 

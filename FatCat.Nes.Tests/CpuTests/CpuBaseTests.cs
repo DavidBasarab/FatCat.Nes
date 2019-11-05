@@ -1,17 +1,17 @@
-using Moq;
+using FakeItEasy;
 
 namespace FatCat.Nes.Tests.CpuTests
 {
 	public abstract class CpuBaseTests
 	{
-		protected readonly Mock<IBus> bus;
+		protected readonly IBus bus;
 		protected readonly Cpu cpu;
 
 		protected CpuBaseTests()
 		{
-			bus = new Mock<IBus>();
+			bus = A.Fake<IBus>();
 
-			cpu = new Cpu(bus.Object);
+			cpu = new Cpu(bus);
 		}
 	}
 }

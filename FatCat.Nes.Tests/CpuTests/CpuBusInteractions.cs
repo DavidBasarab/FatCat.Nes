@@ -1,3 +1,4 @@
+using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
@@ -12,7 +13,7 @@ namespace FatCat.Nes.Tests.CpuTests
 
 			cpu.Read(address);
 
-			bus.Verify(v => v.Read(address));
+			A.CallTo(() => bus.Read(address)).MustHaveHappened();
 		}
 
 		[Fact]
@@ -22,7 +23,7 @@ namespace FatCat.Nes.Tests.CpuTests
 
 			ushort address = 0x98bc;
 
-			bus.Setup(v => v.Read(address)).Returns(result);
+			A.CallTo(() => bus.Read(address)).Returns(result);
 
 			var cpuResult = cpu.Read(address);
 
@@ -37,7 +38,7 @@ namespace FatCat.Nes.Tests.CpuTests
 
 			cpu.Write(address, data);
 
-			bus.Verify(v => v.Write(address, data));
+			A.CallTo(() => bus.Write(address, data)).MustHaveHappened();
 		}
 	}
 }
