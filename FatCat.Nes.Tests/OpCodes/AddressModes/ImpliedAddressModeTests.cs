@@ -1,3 +1,4 @@
+using FakeItEasy;
 using FatCat.Nes.OpCodes;
 using FluentAssertions;
 using Moq;
@@ -11,9 +12,9 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 		public ImpliedAddressModeTests()
 		{
-			var bus = new Mock<IBus>();
+			var bus = A.Fake<IBus>();
 			
-			var cpu = new Cpu(bus.Object);
+			var cpu = new Cpu(bus);
 			
 			addressMode = new ImpliedAddressMode(cpu);
 		}
