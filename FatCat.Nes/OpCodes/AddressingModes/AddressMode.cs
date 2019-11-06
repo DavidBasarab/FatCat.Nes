@@ -1,4 +1,4 @@
-namespace FatCat.Nes.OpCodes
+namespace FatCat.Nes.OpCodes.AddressingModes
 {
 	public abstract class AddressMode
 	{
