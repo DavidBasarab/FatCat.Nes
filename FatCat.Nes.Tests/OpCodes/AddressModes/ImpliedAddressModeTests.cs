@@ -1,27 +1,21 @@
-using FakeItEasy;
-using FatCat.Nes.OpCodes;
+using FatCat.Nes.OpCodes.AddressingModes;
 using FluentAssertions;
 using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes.AddressModes
 {
-	public class ImpliedAddressModeTests
+	public class ImpliedAddressModeTests : AddressModeTests
 	{
 		private const int AccumulatorValue = 0x52;
-		private readonly ImpliedAddressMode addressMode;
-		private readonly ICpu cpu;
+
+		protected override string ExpectedName => "Implied";
 
 		public ImpliedAddressModeTests()
 		{
-			cpu = A.Fake<ICpu>();
-
 			addressMode = new ImpliedAddressMode(cpu);
 
 			cpu.Accumulator = AccumulatorValue;
 		}
-
-		[Fact]
-		public void WillHaveNameOfImplied() => addressMode.Name.Should().Be("Implied");
 
 		[Fact]
 		public void WillReturn0Cycles() => addressMode.Run().Should().Be(0);
