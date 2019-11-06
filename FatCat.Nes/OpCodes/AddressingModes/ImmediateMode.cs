@@ -4,7 +4,7 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 	{
 		public ImmediateMode(ICpu cpu) : base(cpu) { }
 
-		public override string Name { get; }
+		public override string Name => "Immediate";
 
 		public override int Run() => throw new System.NotImplementedException();
 	}
