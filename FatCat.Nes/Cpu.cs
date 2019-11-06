@@ -1,6 +1,109 @@
 namespace FatCat.Nes
 {
-	public class Cpu
+	public interface ICpu
+	{
+		/// <summary>
+		///  All used memory addresses end up in here
+		/// </summary>
+		ushort AbsoluteAddress { get; set; }
+
+		/// <summary>
+		///  Accumulator Register
+		/// </summary>
+		byte Accumulator { get; set; }
+
+		/// <summary>
+		///  A global accumulation of the number of clocks
+		/// </summary>
+		int ClockCount { get; set; }
+
+		/// <summary>
+		///  Counts how many cycles the instruction has remaining
+		/// </summary>
+		int Cycles { get; set; }
+
+		/// <summary>
+		///  Represents the working input value to the ALU
+		/// </summary>
+		byte Fetched { get; set; }
+
+		/// <summary>
+		///  Is the instruction byte
+		/// </summary>
+		byte OpCode { get; set; }
+
+		/// <summary>
+		///  Program Counter
+		/// </summary>
+		ushort ProgramCounter { get; set; }
+
+		/// <summary>
+		///  Represents absolute address following a branch
+		/// </summary>
+		ushort RelativeAddress { get; set; }
+
+		/// <summary>
+		///  Stack Pointer (points to location on bus)
+		/// </summary>
+		byte StackPointer { get; set; }
+
+		/// <summary>
+		///  Status Register
+		/// </summary>
+		CpuFlag StatusRegister { get; set; }
+
+		/// <summary>
+		///  X Register
+		/// </summary>
+		byte XRegister { get; set; }
+
+		/// <summary>
+		///  Y Register
+		/// </summary>
+		byte YRegister { get; set; }
+
+		bool GetFlag(CpuFlag cpuFlag);
+
+		/// <summary>
+		///  Interrupt requests are a complex operation and only happen if the
+		///  "disable interrupt" flag is 0. IRQs can happen at any time, but
+		///  you dont want them to be destructive to the operation of the running
+		///  program. Therefore the current instruction is allowed to finish
+		///  (which I facilitate by doing the whole thing when cycles == 0) and
+		///  then the current program counter is stored on the stack. Then the
+		///  current status register is stored on the stack. When the routine
+		///  that services the interrupt has finished, the status register
+		///  and program counter can be restored to how they where before it
+		///  occurred. This is implemented by the "RTI" instruction. Once the IRQ
+		///  has happened, in a similar way to a reset, a programmable address
+		///  is read form hard coded location 0xFFFE, which is subsequently
+		///  set to the program counter.
+		/// </summary>
+		void Irq();
+
+		void Nmi();
+
+		byte Read(ushort address);
+
+		void RemoveFlag(CpuFlag cpuFlag);
+
+		/// <summary>
+		///  Forces the 6502 into a known state. This is hard-wired inside the CPU. The
+		///  registers are set to 0x00, the status register is cleared except for unused
+		///  bit which remains at 1. An absolute address is read from location 0xFFFC
+		///  which contains a second address that the program counter is set to. This
+		///  allows the programmer to jump to a known and programmable location in the
+		///  memory to start executing from. Typically the programmer would set the value
+		///  at location 0xFFFC at compile time.
+		/// </summary>
+		void Reset();
+
+		void SetFlag(CpuFlag cpuFlag);
+
+		void Write(ushort address, byte data);
+	}
+
+	public class Cpu : ICpu
 	{
 		private readonly IBus bus;
 
