@@ -11,9 +11,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 		public ImpliedAddressModeTests()
 		{
-			var bus = A.Fake<IBus>();
-
-			var cpu = new Cpu(bus);
+			var cpu = A.Fake<ICpu>();
 
 			addressMode = new ImpliedAddressMode(cpu);
 		}

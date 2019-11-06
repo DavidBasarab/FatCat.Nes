@@ -2,11 +2,11 @@ namespace FatCat.Nes.OpCodes
 {
 	public abstract class AddressMode
 	{
-		protected readonly Cpu cpu;
+		protected readonly ICpu cpu;
 
 		public abstract string Name { get; }
 
-		protected AddressMode(Cpu cpu) => this.cpu = cpu;
+		protected AddressMode(ICpu cpu) => this.cpu = cpu;
 
 		public abstract int Run();
 	}
@@ -15,7 +15,7 @@ namespace FatCat.Nes.OpCodes
 	{
 		public override string Name => "Implied";
 
-		public ImpliedAddressMode(Cpu cpu) : base(cpu) { }
+		public ImpliedAddressMode(ICpu cpu) : base(cpu) { }
 
 		public override int Run() => -1;
 	}
