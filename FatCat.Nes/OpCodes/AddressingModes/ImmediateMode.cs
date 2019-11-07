@@ -6,6 +6,11 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 		public override string Name => "Immediate";
 
-		public override int Run() => throw new System.NotImplementedException();
+		public override int Run()
+		{
+			cpu.AbsoluteAddress = cpu.ProgramCounter;
+			
+			return -1;
+		}
 	}
 }
