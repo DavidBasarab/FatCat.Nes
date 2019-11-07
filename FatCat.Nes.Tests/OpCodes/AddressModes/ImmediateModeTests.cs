@@ -18,10 +18,28 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		}
 
 		[Fact]
+		public void RunWillTake0Cycles()
+		{
+			var cycles = addressMode.Run();
+
+			cycles.Should().Be(0);
+		}
+
+		[Fact]
+		public void WillIncreaseTheProgramCounterBy1()
+		{
+			addressMode.Run();
+
+			ushort expectedProgramCounter = ProgramCounter + 1;
+
+			cpu.ProgramCounter.Should().Be(expectedProgramCounter);
+		}
+
+		[Fact]
 		public void WillSetTheAbsoluteAddressToProgramCounter()
 		{
 			addressMode.Run();
-			
+
 			cpu.AbsoluteAddress.Should().Be(ProgramCounter);
 		}
 	}

@@ -8,9 +8,9 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 		public override int Run()
 		{
-			cpu.AbsoluteAddress = cpu.ProgramCounter;
-			
-			return -1;
+			cpu.AbsoluteAddress = cpu.ProgramCounter++;
+
+			return 0;
 		}
 	}
 }
