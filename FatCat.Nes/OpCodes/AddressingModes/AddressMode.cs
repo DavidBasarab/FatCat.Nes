@@ -9,5 +9,7 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 		protected AddressMode(ICpu cpu) => this.cpu = cpu;
 
 		public abstract int Run();
+
+		protected void IncrementProgramCounter() => cpu.ProgramCounter++;
 	}
 }
