@@ -13,12 +13,21 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 		public RelativeModeTests() => addressMode = new Relative(cpu);
 
-		[Fact]
-		public void WillReadTheProgramCounterFromTheCpu()
+		[Theory]
+		[InlineData(131)]
+		[InlineData(212)]
+		[InlineData(254)]
+		public void WillChangeRelativeAddressIsBitwiseAndIsGreaterThan0(byte readValue)
 		{
+			cpu.ProgramCounter = ProgramCounter;
+			
+			A.CallTo(() => cpu.Read(ProgramCounter)).Returns(readValue);
+
 			addressMode.Run();
 
-			A.CallTo(() => cpu.Read(ProgramCounter)).MustHaveHappened();
+			var expectedAddress = (ushort)(readValue | 0xff00);
+
+			cpu.RelativeAddress.Should().Be(expectedAddress);
 		}
 
 		[Fact]
@@ -27,6 +36,29 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 			addressMode.Run();
 
 			cpu.ProgramCounter.Should().Be(ProgramCounter + 1);
+		}
+
+		[Theory]
+		[InlineData(0)]
+		[InlineData(1)]
+		[InlineData(127)]
+		public void WillNotChangeIfBitwiseCompareIs0(byte readValue)
+		{
+			A.CallTo(() => cpu.Read(ProgramCounter)).Returns(readValue);
+
+			addressMode.Run();
+
+			var expectedAddress = readValue;
+
+			cpu.RelativeAddress.Should().Be(expectedAddress);
+		}
+
+		[Fact]
+		public void WillReadTheProgramCounterFromTheCpu()
+		{
+			addressMode.Run();
+
+			A.CallTo(() => cpu.Read(ProgramCounter)).MustHaveHappened();
 		}
 	}
 }

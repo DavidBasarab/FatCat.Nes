@@ -8,11 +8,11 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 		public override int Run()
 		{
-			var readValue = ReadProgramCounter();
+			cpu.RelativeAddress = ReadProgramCounter();
+
+			if ((cpu.RelativeAddress & 0x80) > 0) cpu.RelativeAddress = (ushort)(cpu.RelativeAddress | 0xff00);
 
 			return 0;
 		}
-
-		
 	}
 }

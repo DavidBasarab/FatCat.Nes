@@ -21,18 +21,27 @@ namespace FatCat.OneOff
 			// 	PrintAddress(address);
 			// }
 
-			var startingAddress = 0x7d8d;
-
-			PrintAddress(startingAddress);
-
-			// Zero Page 
-			var zeroPageAddress = startingAddress & 0x00ff;
-
-			PrintAddress(zeroPageAddress);
+			// var startingAddress = 0x7d8d;
+			//
+			// PrintAddress(startingAddress);
+			//
+			// // Zero Page 
+			// var zeroPageAddress = startingAddress & 0x00ff;
+			//
+			// PrintAddress(zeroPageAddress);
 
 			//PlayingWithBitShifting();
 
 			//WaitForExit();
+
+			for (var number = -160; number < 256; number++)
+			{
+				var mask = 0x80;
+				
+				var result = number & mask;
+
+				Console.WriteLine($"Number {number} | <{number:x8}> | Result <{result:x8}> | {mask}");
+			}
 		}
 
 		private static void OnCancel(object sender, ConsoleCancelEventArgs e)
