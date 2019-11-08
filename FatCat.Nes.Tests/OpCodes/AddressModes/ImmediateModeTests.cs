@@ -6,8 +6,6 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 {
 	public class ImmediateModeTests : AddressModeTests
 	{
-		private const ushort ProgramCounter = 0x53E2;
-
 		protected override string ExpectedName => "Immediate";
 
 		public ImmediateModeTests()

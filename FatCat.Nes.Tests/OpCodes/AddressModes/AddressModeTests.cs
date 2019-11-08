@@ -7,13 +7,23 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 {
 	public abstract class AddressModeTests
 	{
+		protected const ushort ProgramCounter = 0xef2;
+		protected const byte ReadValue = 0x38;
+
 		protected readonly ICpu cpu;
 
 		protected AddressMode addressMode;
 
 		protected abstract string ExpectedName { get; }
 
-		protected AddressModeTests() => cpu = A.Fake<ICpu>();
+		protected AddressModeTests()
+		{
+			cpu = A.Fake<ICpu>();
+
+			cpu.ProgramCounter = ProgramCounter;
+
+			A.CallTo(() => cpu.Read(ProgramCounter)).Returns(ReadValue);
+		}
 
 		[Fact]
 		public void WillHaveCorrectAddressModeName() => addressMode.Name.Should().Be(ExpectedName);
