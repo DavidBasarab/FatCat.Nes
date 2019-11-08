@@ -11,5 +11,14 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 		public abstract int Run();
 
 		protected void IncrementProgramCounter() => cpu.ProgramCounter++;
+
+		protected byte ReadProgramCounter()
+		{
+			var readValue = cpu.Read(cpu.ProgramCounter);
+
+			cpu.ProgramCounter++;
+
+			return readValue;
+		}
 	}
 }
