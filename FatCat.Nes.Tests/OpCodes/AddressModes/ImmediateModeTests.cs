@@ -6,6 +6,8 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 {
 	public class ImmediateModeTests : AddressModeTests
 	{
+		protected override int ExpectedCycles => 0;
+
 		protected override string ExpectedName => "Immediate";
 
 		public ImmediateModeTests()
@@ -13,14 +15,6 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 			addressMode = new ImmediateMode(cpu);
 
 			cpu.ProgramCounter = ProgramCounter;
-		}
-
-		[Fact]
-		public void RunWillTake0Cycles()
-		{
-			var cycles = addressMode.Run();
-
-			cycles.Should().Be(0);
 		}
 
 		[Fact]

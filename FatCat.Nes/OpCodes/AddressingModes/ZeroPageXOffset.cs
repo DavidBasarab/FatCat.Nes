@@ -16,7 +16,7 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 			
 			cpu.ProgramCounter++;
 
-			return -1;
+			return 0;
 		}
 	}
 }

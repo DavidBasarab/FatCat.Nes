@@ -14,6 +14,8 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 		protected AddressMode addressMode;
 
+		protected abstract int ExpectedCycles { get; }
+
 		protected abstract string ExpectedName { get; }
 
 		protected AddressModeTests()
@@ -23,6 +25,14 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 			cpu.ProgramCounter = ProgramCounter;
 
 			A.CallTo(() => cpu.Read(ProgramCounter)).Returns(ReadValue);
+		}
+
+		[Fact]
+		public void RunWillTakeCycles()
+		{
+			var cycles = addressMode.Run();
+
+			cycles.Should().Be(ExpectedCycles);
 		}
 
 		[Fact]

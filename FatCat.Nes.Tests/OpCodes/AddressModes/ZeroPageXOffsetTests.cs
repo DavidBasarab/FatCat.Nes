@@ -9,6 +9,8 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 	{
 		private const byte XRegister = 0xd1;
 
+		protected override int ExpectedCycles => 0;
+
 		protected override string ExpectedName => "ZeroPage,X";
 
 		public ZeroPageXOffsetTests()

@@ -7,17 +7,11 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 {
 	public class ZeroPageModeTests : AddressModeTests
 	{
+		protected override int ExpectedCycles => 0;
+
 		protected override string ExpectedName => "ZeroPage";
 
 		public ZeroPageModeTests() => addressMode = new ZeroPageMode(cpu);
-
-		[Fact]
-		public void DoesNotRequireAnyCyclesToRun()
-		{
-			var neededCycles = addressMode.Run();
-
-			neededCycles.Should().Be(0);
-		}
 
 		[Fact]
 		public void WillIncrementTheProgramCounter()

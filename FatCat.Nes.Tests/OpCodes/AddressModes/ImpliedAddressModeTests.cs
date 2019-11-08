@@ -8,6 +8,8 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 	{
 		private const int AccumulatorValue = 0x52;
 
+		protected override int ExpectedCycles => 0;
+
 		protected override string ExpectedName => "Implied";
 
 		public ImpliedAddressModeTests()
@@ -16,9 +18,6 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 			cpu.Accumulator = AccumulatorValue;
 		}
-
-		[Fact]
-		public void WillReturn0Cycles() => addressMode.Run().Should().Be(0);
 
 		[Fact]
 		public void WillSetFetchedValueFromTheAccumulator()
