@@ -101,6 +101,8 @@ namespace FatCat.Nes
 		void SetFlag(CpuFlag cpuFlag);
 
 		void Write(ushort address, byte data);
+		
+		
 	}
 
 	public class Cpu : ICpu
