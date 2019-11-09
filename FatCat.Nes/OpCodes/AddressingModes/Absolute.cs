@@ -1,5 +1,3 @@
-using System;
-
 namespace FatCat.Nes.OpCodes.AddressingModes
 {
 	public class Absolute : AddressMode
@@ -11,7 +9,10 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 		public override int Run()
 		{
 			var low = ReadProgramCounter();
-			
+			var high = ReadProgramCounter();
+
+			cpu.AbsoluteAddress = (ushort)((high << 8) | low);
+
 			return 0;
 		}
 	}
