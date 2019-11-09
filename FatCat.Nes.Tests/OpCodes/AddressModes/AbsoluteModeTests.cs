@@ -50,6 +50,8 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		[Fact]
 		public void WillSetTheAbsoluteAddressToBothHighAndLowAddress()
 		{
+			cpu.XRegister = 0x00;
+			
 			addressMode.Run();
 
 			cpu.AbsoluteAddress.Should().Be(0xe43d);
