@@ -18,6 +18,16 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		}
 
 		[Fact]
+		public void IfTheXRegisterCauseTheAPageJumpThenAnAdditionalCycleIsNeeded()
+		{
+			cpu.XRegister = 0xfe;
+
+			var cycles = addressMode.Run();
+
+			cycles.Should().Be(1);
+		}
+
+		[Fact]
 		public void WillAddXRegisterToAbsoluteAddress()
 		{
 			addressMode.Run();

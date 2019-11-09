@@ -1,5 +1,3 @@
-using System;
-
 namespace FatCat.Nes.OpCodes.AddressingModes
 {
 	public class AbsoluteXOffset : Absolute
@@ -13,8 +11,15 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 			var cycles = base.Run();
 
 			cpu.AbsoluteAddress += cpu.XRegister;
-			
-			return cycles;
+
+			return Paged() ? 1 : cycles;
+		}
+
+		private bool Paged()
+		{
+			var highAddressValue = cpu.AbsoluteAddress & 0xff00;
+
+			return highAddressValue != high << 8;
 		}
 	}
 }
