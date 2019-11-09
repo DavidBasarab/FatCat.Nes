@@ -37,7 +37,7 @@ namespace FatCat.OneOff
 			for (var number = -160; number < 256; number++)
 			{
 				var mask = 0x80;
-				
+
 				var result = number & mask;
 
 				Console.WriteLine($"Number {number} | <{number:x8}> | Result <{result:x8}> | {mask}");

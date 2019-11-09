@@ -2,9 +2,9 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 {
 	public class ImmediateMode : AddressMode
 	{
-		public ImmediateMode(ICpu cpu) : base(cpu) { }
-
 		public override string Name => "Immediate";
+
+		public ImmediateMode(ICpu cpu) : base(cpu) { }
 
 		public override int Run()
 		{
@@ -14,7 +14,5 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 			return 0;
 		}
-
-		
 	}
 }

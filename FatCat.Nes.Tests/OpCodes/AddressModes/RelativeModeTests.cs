@@ -20,7 +20,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		public void WillChangeRelativeAddressIsBitwiseAndIsGreaterThan0(byte readValue)
 		{
 			cpu.ProgramCounter = ProgramCounter;
-			
+
 			A.CallTo(() => cpu.Read(ProgramCounter)).Returns(readValue);
 
 			addressMode.Run();

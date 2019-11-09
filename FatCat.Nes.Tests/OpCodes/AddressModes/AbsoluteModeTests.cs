@@ -52,7 +52,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		{
 			cpu.XRegister = 0x00;
 			cpu.YRegister = 0x00;
-			
+
 			addressMode.Run();
 
 			cpu.AbsoluteAddress.Should().Be(0xe43d);
