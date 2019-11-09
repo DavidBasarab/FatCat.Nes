@@ -8,11 +8,11 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 		public override int Run()
 		{
-			var cycles = base.Run();
+			base.Run();
 
 			cpu.AbsoluteAddress += cpu.XRegister;
 
-			return Paged() ? 1 : cycles;
+			return Paged() ? 1 : 0;
 		}
 
 		private bool Paged()
