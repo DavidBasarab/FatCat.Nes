@@ -14,12 +14,5 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 			return Paged() ? 1 : 0;
 		}
-
-		private bool Paged()
-		{
-			var highAddressValue = cpu.AbsoluteAddress & 0xff00;
-
-			return highAddressValue != high << 8;
-		}
 	}
 }
