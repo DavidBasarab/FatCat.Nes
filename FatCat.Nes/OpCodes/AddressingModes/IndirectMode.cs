@@ -16,28 +16,30 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 		public override int Run()
 		{
-			lowPointer = ReadProgramCounter();
-			highPointer = ReadProgramCounter();
+			ReadPointer();
 
-			pointer = (ushort)((highPointer << 8) | lowPointer);
+			lowAddress = cpu.Read(pointer);
 
-			if (IsPageBoundary)
-			{
-				lowAddress = cpu.Read(pointer);
-
-				var highBoundaryPointer = pointer & 0xff00;
-
-				highAddress = cpu.Read((ushort)highBoundaryPointer);
-			}
-			else
-			{
-				lowAddress = cpu.Read(pointer);
-				highAddress = cpu.Read((ushort)(pointer + 1));
-			}
+			ReadHighAddress();
 
 			cpu.AbsoluteAddress = (ushort)((highAddress << 8) | lowAddress);
 
 			return 0;
+		}
+
+		private void ReadHighAddress()
+		{
+			var highAddressPointer = IsPageBoundary ? (ushort)(pointer & 0xff00) : (ushort)(pointer + 1);
+
+			highAddress = cpu.Read(highAddressPointer);
+		}
+
+		private void ReadPointer()
+		{
+			lowPointer = ReadProgramCounter();
+			highPointer = ReadProgramCounter();
+
+			pointer = (ushort)((highPointer << 8) | lowPointer);
 		}
 	}
 }

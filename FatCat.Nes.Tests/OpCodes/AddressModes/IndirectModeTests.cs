@@ -8,10 +8,17 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 	public class IndirectModeTests : AddressModeTests
 	{
 		private const byte HighAddressValue = 0x73;
+
+		private const byte HighBoundaryAddressValue = 0x08;
+
 		private const byte HighPointer = 0xe1;
 
 		private const byte LowAddressValue = 0x14;
+
+		private const byte LowBoundaryAddressValue = 0x19;
+
 		private const byte LowBoundaryPointer = 0xff;
+
 		private const byte LowPointer = 0x43;
 
 		private static ushort BoundaryPointer => (HighPointer << 8) | LowBoundaryPointer;
@@ -31,6 +38,23 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 			A.CallTo(() => cpu.Read(Pointer)).Returns(LowAddressValue);
 			A.CallTo(() => cpu.Read((ushort)(Pointer + 1))).Returns(HighAddressValue);
+		}
+
+		[Fact]
+		public void IfPageHardwareBoundaryBugAbsoluteAddressWillBeFromTheBoundaryReads()
+		{
+			SetUpBoundaryBug();
+
+			var expectedHighPointer = BoundaryPointer & 0xff00;
+
+			A.CallTo(() => cpu.Read((ushort)expectedHighPointer)).Returns(HighBoundaryAddressValue);
+			A.CallTo(() => cpu.Read(BoundaryPointer)).Returns(LowBoundaryAddressValue);
+
+			addressMode.Run();
+
+			ushort expectedAddress = (HighBoundaryAddressValue << 8) | LowBoundaryAddressValue;
+
+			cpu.AbsoluteAddress.Should().Be(expectedAddress);
 		}
 
 		[Fact]
