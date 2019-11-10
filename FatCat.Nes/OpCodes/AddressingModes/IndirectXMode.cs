@@ -43,7 +43,5 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 			lowAddress = cpu.Read(lowLocation);
 		}
-
-		
 	}
 }
