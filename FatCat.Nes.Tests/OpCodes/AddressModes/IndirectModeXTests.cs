@@ -46,6 +46,16 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		}
 
 		[Fact]
+		public void WillReadTheHighAddressUsingTheXRegister()
+		{
+			addressMode.Run(); 
+			
+			ushort expectedRead = (InitialReadValue + XRegister + 1) & 0x00ff;
+
+			A.CallTo(() => cpu.Read(expectedRead)).MustHaveHappened();
+		}
+
+		[Fact]
 		public void WillReadTheProgramCounter()
 		{
 			addressMode.Run();

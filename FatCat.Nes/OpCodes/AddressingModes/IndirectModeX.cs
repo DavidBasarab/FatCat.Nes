@@ -8,11 +8,17 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 		public override int Run()
 		{
-			var value = ReadProgramCounter();
+			var location = ReadProgramCounter();
+
+			location += cpu.XRegister;
 			
-			var lowLocation = (ushort)((value + cpu.XRegister) & 0x00ff);
+			var lowLocation = (ushort)((location) & 0x00ff);
 
 			var lowAddress = cpu.Read(lowLocation);
+
+			ushort highLocation = (ushort)((location + 1) & 0x00ff);
+
+			var highAddress = cpu.Read(highLocation);
 
 			return 0;
 		}
