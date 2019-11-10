@@ -1,5 +1,3 @@
-using System;
-
 namespace FatCat.Nes.OpCodes.AddressingModes
 {
 	public class IndirectMode : AddressMode
@@ -12,7 +10,11 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 		{
 			var lowPointer = ReadProgramCounter();
 			var highPointer = ReadProgramCounter();
-			
+
+			var pointer = (ushort)((highPointer << 8) | lowPointer);
+
+			var lowAddress = cpu.Read(pointer);
+
 			return 0;
 		}
 	}

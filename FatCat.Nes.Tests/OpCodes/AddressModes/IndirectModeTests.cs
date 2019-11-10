@@ -9,6 +9,8 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		private const byte HighPointer = 0xe1;
 		private const byte LowPointer = 0x43;
 
+		private static ushort Pointer => (HighPointer << 8) | LowPointer;
+
 		protected override int ExpectedCycles => 0;
 
 		protected override string ExpectedName => "Indirect";
@@ -22,11 +24,11 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		}
 
 		[Fact]
-		public void WillReadLowPointer()
+		public void WillReadFromThePointerValue()
 		{
 			addressMode.Run();
 
-			A.CallTo(() => cpu.Read(ProgramCounter)).MustHaveHappened();
+			A.CallTo(() => cpu.Read(Pointer)).MustHaveHappened();
 		}
 
 		[Fact]
@@ -35,6 +37,14 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 			addressMode.Run();
 
 			A.CallTo(() => cpu.Read(ProgramCounter + 1)).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillReadLowPointer()
+		{
+			addressMode.Run();
+
+			A.CallTo(() => cpu.Read(ProgramCounter)).MustHaveHappened();
 		}
 	}
 }
