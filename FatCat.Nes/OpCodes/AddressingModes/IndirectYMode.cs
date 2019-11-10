@@ -11,6 +11,8 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 		public override int Run()
 		{
 			var readValue = ReadProgramCounter();
+
+			var lowAddress = cpu.Read((ushort)(readValue & 0x00ff));
 			
 			return 0;
 		}

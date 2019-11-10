@@ -13,11 +13,11 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 		private const byte LowAddressValue = 0x09;
 
-		private const byte XRegister = 0xd1;
+		private const byte YRegister = 0xd1;
 
-		private readonly ushort HighLocation = (InitialReadValue + XRegister + 1) & 0x00ff;
+		private readonly ushort HighLocation = (InitialReadValue + 1) & 0x00ff;
 
-		private readonly ushort LowLocation = (InitialReadValue + XRegister) & 0x00ff;
+		private readonly ushort LowLocation = InitialReadValue & 0x00ff;
 
 		protected override int ExpectedCycles => 0;
 
@@ -27,7 +27,12 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		{
 			addressMode = new IndirectYMode(cpu);
 
+			cpu.YRegister = YRegister;
+
 			A.CallTo(() => cpu.Read(ProgramCounter)).Returns(InitialReadValue);
+
+			A.CallTo(() => cpu.Read(HighLocation)).Returns(HighAddressValue);
+			A.CallTo(() => cpu.Read(LowLocation)).Returns(LowAddressValue);
 		}
 
 		[Fact]
@@ -36,6 +41,14 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 			addressMode.Run();
 
 			cpu.ProgramCounter.Should().Be(ProgramCounter + 1);
+		}
+
+		[Fact]
+		public void WillReadFromTheLowLocatino()
+		{
+			addressMode.Run();
+
+			A.CallTo(() => cpu.Read(LowLocation)).MustHaveHappened();
 		}
 
 		[Fact]
