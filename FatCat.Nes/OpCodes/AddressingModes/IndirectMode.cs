@@ -14,6 +14,9 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 			var pointer = (ushort)((highPointer << 8) | lowPointer);
 
 			var lowAddress = cpu.Read(pointer);
+			var highAddress = cpu.Read((ushort)(pointer + 1));
+
+			cpu.AbsoluteAddress = (ushort)((highAddress << 8) | lowAddress);
 
 			return 0;
 		}

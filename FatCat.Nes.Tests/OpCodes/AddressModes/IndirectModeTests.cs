@@ -1,12 +1,16 @@
 using FakeItEasy;
 using FatCat.Nes.OpCodes.AddressingModes;
+using FluentAssertions;
 using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes.AddressModes
 {
 	public class IndirectModeTests : AddressModeTests
 	{
+		private const byte HighAddressValue = 0x73;
 		private const byte HighPointer = 0xe1;
+
+		private const byte LowAddressValue = 0x14;
 		private const byte LowPointer = 0x43;
 
 		private static ushort Pointer => (HighPointer << 8) | LowPointer;
@@ -21,14 +25,33 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 			A.CallTo(() => cpu.Read(ProgramCounter)).Returns(LowPointer);
 			A.CallTo(() => cpu.Read(ProgramCounter + 1)).Returns(HighPointer);
+
+			A.CallTo(() => cpu.Read(Pointer)).Returns(LowAddressValue);
+			A.CallTo(() => cpu.Read((ushort)(Pointer + 1))).Returns(HighAddressValue);
 		}
 
 		[Fact]
-		public void WillReadFromThePointerValue()
+		public void WillReadFromThePointerValueForHighAddress()
+		{
+			addressMode.Run();
+
+			A.CallTo(() => cpu.Read((ushort)(Pointer + 1))).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillReadFromThePointerValueForLowAddress()
 		{
 			addressMode.Run();
 
 			A.CallTo(() => cpu.Read(Pointer)).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillSetAbsoluteAddressToReadPointValues()
+		{
+			addressMode.Run();
+
+			cpu.AbsoluteAddress.Should().Be(0x7314);
 		}
 
 		[Fact]
