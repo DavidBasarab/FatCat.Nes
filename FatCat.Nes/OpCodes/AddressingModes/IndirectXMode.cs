@@ -1,6 +1,6 @@
 namespace FatCat.Nes.OpCodes.AddressingModes
 {
-	public class IndirectModeX : AddressMode
+	public class IndirectXMode : AddressMode
 	{
 		private byte highAddress;
 		private byte location;
@@ -8,7 +8,7 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 		public override string Name => "(Indirect,X)";
 
-		public IndirectModeX(ICpu cpu) : base(cpu) { }
+		public IndirectXMode(ICpu cpu) : base(cpu) { }
 
 		public override int Run()
 		{

@@ -5,7 +5,7 @@ using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes.AddressModes
 {
-	public class IndirectModeXTests : AddressModeTests
+	public class IndirectXModeTests : AddressModeTests
 	{
 		private const byte HighAddressValue = 0x19;
 
@@ -23,9 +23,9 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 		protected override string ExpectedName => "(Indirect,X)";
 
-		public IndirectModeXTests()
+		public IndirectXModeTests()
 		{
-			addressMode = new IndirectModeX(cpu);
+			addressMode = new IndirectXMode(cpu);
 
 			cpu.XRegister = XRegister;
 
