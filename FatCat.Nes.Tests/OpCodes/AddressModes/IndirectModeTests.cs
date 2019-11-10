@@ -11,7 +11,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		private const byte HighPointer = 0xe1;
 
 		private const byte LowAddressValue = 0x14;
-		private const byte LowBoundaryPointer = 0x00;
+		private const byte LowBoundaryPointer = 0xff;
 		private const byte LowPointer = 0x43;
 
 		private static ushort BoundaryPointer => (HighPointer << 8) | LowBoundaryPointer;
@@ -34,13 +34,27 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		}
 
 		[Fact]
-		public void IfPageHardwareBoundaryBugReadLowAddress()
+		public void IfPageHardwareBoundaryBugReadHighAddress()
 		{
-			A.CallTo(() => cpu.Read(BoundaryPointer)).Returns(LowBoundaryPointer);
+			SetUpBoundaryBug();
 
 			addressMode.Run();
 
-			A.CallTo(() => cpu.Read(Pointer)).MustHaveHappened();
+			var expectedHighPointer = BoundaryPointer & 0xff00;
+
+			A.CallTo(() => cpu.Read((ushort)expectedHighPointer)).MustHaveHappened();
+
+			A.CallTo(() => cpu.Read((ushort)(Pointer + 1))).MustNotHaveHappened();
+		}
+
+		[Fact]
+		public void IfPageHardwareBoundaryBugReadLowAddress()
+		{
+			SetUpBoundaryBug();
+
+			addressMode.Run();
+
+			A.CallTo(() => cpu.Read(BoundaryPointer)).MustHaveHappened();
 		}
 
 		[Fact]
@@ -82,5 +96,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 			cpu.AbsoluteAddress.Should().Be(0x7314);
 		}
+
+		private void SetUpBoundaryBug() => A.CallTo(() => cpu.Read(ProgramCounter)).Returns(LowBoundaryPointer);
 	}
 }

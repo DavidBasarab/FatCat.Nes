@@ -2,19 +2,38 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 {
 	public class IndirectMode : AddressMode
 	{
+		private byte highAddress;
+		private byte highPointer;
+		private byte lowAddress;
+		private byte lowPointer;
+		private ushort pointer;
+
 		public override string Name => "Indirect";
+
+		private bool IsPageBoundary => lowPointer == 0xff;
 
 		public IndirectMode(ICpu cpu) : base(cpu) { }
 
 		public override int Run()
 		{
-			var lowPointer = ReadProgramCounter();
-			var highPointer = ReadProgramCounter();
+			lowPointer = ReadProgramCounter();
+			highPointer = ReadProgramCounter();
 
-			var pointer = (ushort)((highPointer << 8) | lowPointer);
+			pointer = (ushort)((highPointer << 8) | lowPointer);
 
-			var lowAddress = cpu.Read(pointer);
-			var highAddress = cpu.Read((ushort)(pointer + 1));
+			if (IsPageBoundary)
+			{
+				lowAddress = cpu.Read(pointer);
+
+				var highBoundaryPointer = pointer & 0xff00;
+
+				highAddress = cpu.Read((ushort)highBoundaryPointer);
+			}
+			else
+			{
+				lowAddress = cpu.Read(pointer);
+				highAddress = cpu.Read((ushort)(pointer + 1));
+			}
 
 			cpu.AbsoluteAddress = (ushort)((highAddress << 8) | lowAddress);
 
