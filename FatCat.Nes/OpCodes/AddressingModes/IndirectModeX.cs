@@ -2,25 +2,48 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 {
 	public class IndirectModeX : AddressMode
 	{
+		private byte highAddress;
+		private byte location;
+		private byte lowAddress;
+
 		public override string Name => "(Indirect,X)";
 
 		public IndirectModeX(ICpu cpu) : base(cpu) { }
 
 		public override int Run()
 		{
-			var location = ReadProgramCounter();
+			ReadLocation();
 
-			location += cpu.XRegister;
-			
-			var lowLocation = (ushort)((location) & 0x00ff);
+			ReadLowAddress();
 
-			var lowAddress = cpu.Read(lowLocation);
+			ReadHighAddress();
 
-			ushort highLocation = (ushort)((location + 1) & 0x00ff);
-
-			var highAddress = cpu.Read(highLocation);
+			SetAbsoluteAddress(highAddress, lowAddress);
 
 			return 0;
 		}
+
+		private void ReadHighAddress()
+		{
+			var highLocation = (ushort)((location + 1) & 0x00ff);
+
+			highAddress = cpu.Read(highLocation);
+		}
+
+		private void ReadLocation()
+		{
+			location = ReadProgramCounter();
+
+			location += cpu.XRegister;
+		}
+
+		private void ReadLowAddress()
+		{
+			var lowLocation = (ushort)(location & 0x00ff);
+
+			lowAddress = cpu.Read(lowLocation);
+		}
+
+		
 	}
 }

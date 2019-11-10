@@ -32,7 +32,7 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 			ReadHighAddress();
 
-			cpu.AbsoluteAddress = (ushort)((highAddress << 8) | lowAddress);
+			SetAbsoluteAddress(highAddress, lowAddress);
 
 			return 0;
 		}

@@ -14,7 +14,7 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 			low = ReadProgramCounter();
 			high = ReadProgramCounter();
 
-			cpu.AbsoluteAddress = (ushort)((high << 8) | low);
+			SetAbsoluteAddress(high, low);
 
 			return 0;
 		}

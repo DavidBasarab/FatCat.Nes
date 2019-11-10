@@ -20,5 +20,7 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 			return readValue;
 		}
+
+		protected void SetAbsoluteAddress(byte high, byte low) => cpu.AbsoluteAddress = (ushort)((high << 8) | low);
 	}
 }
