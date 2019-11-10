@@ -571,7 +571,7 @@
       "description" : "Jump",
       "bytes" : "3",
       "name" : "JMP",
-      "mode" : "Indirect ",
+      "mode" : "Indirect",
       "cycles" : "5",
       "opcode" : "$6C"
    },
