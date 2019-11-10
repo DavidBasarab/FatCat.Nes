@@ -10,6 +10,9 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 		public override int Run()
 		{
+			var lowPointer = ReadProgramCounter();
+			var highPointer = ReadProgramCounter();
+			
 			return 0;
 		}
 	}
