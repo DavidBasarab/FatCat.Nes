@@ -13,7 +13,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 		private const byte LowAddressValue = 0x09;
 
-		private const byte YRegister = 0xd1;
+		private const byte YRegister = 0x02;
 
 		private readonly ushort HighLocation = (InitialReadValue + 1) & 0x00ff;
 
@@ -33,6 +33,16 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 			A.CallTo(() => cpu.Read(HighLocation)).Returns(HighAddressValue);
 			A.CallTo(() => cpu.Read(LowLocation)).Returns(LowAddressValue);
+		}
+
+		[Fact]
+		public void IfThePageChangesAnExtraClockCycleIsRequired()
+		{
+			cpu.YRegister = 0xff;
+
+			var cycles = addressMode.Run();
+
+			cycles.Should().Be(1);
 		}
 
 		[Fact]

@@ -1,10 +1,21 @@
-using System;
-
 namespace FatCat.Nes.OpCodes.AddressingModes
 {
 	public class IndirectYMode : AddressMode
 	{
+		private byte highAddress;
+		private byte lowAddress;
+
 		public override string Name => "(Indirect),Y";
+
+		private bool HasPaged
+		{
+			get
+			{
+				var highPart = cpu.AbsoluteAddress & 0xff00;
+
+				return highPart != highAddress << 8;
+			}
+		}
 
 		public IndirectYMode(ICpu cpu) : base(cpu) { }
 
@@ -12,14 +23,14 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 		{
 			var readValue = ReadProgramCounter();
 
-			var lowAddress = cpu.Read((ushort)(readValue & 0x00ff));
-			var highAddress = cpu.Read((ushort)((readValue + 1) & 0x00ff));
-			
+			lowAddress = cpu.Read((ushort)(readValue & 0x00ff));
+			highAddress = cpu.Read((ushort)((readValue + 1) & 0x00ff));
+
 			SetAbsoluteAddress(highAddress, lowAddress);
 
 			cpu.AbsoluteAddress += cpu.YRegister;
-			
-			return 0;
+
+			return HasPaged ? 1 : 0;
 		}
 	}
 }
