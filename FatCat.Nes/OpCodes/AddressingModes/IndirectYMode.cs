@@ -13,6 +13,11 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 			var readValue = ReadProgramCounter();
 
 			var lowAddress = cpu.Read((ushort)(readValue & 0x00ff));
+			var highAddress = cpu.Read((ushort)((readValue + 1) & 0x00ff));
+			
+			SetAbsoluteAddress(highAddress, lowAddress);
+
+			cpu.AbsoluteAddress += cpu.YRegister;
 			
 			return 0;
 		}

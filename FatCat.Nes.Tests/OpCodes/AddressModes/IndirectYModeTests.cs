@@ -44,7 +44,15 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		}
 
 		[Fact]
-		public void WillReadFromTheLowLocatino()
+		public void WillReadFromHighLocation()
+		{
+			addressMode.Run();
+
+			A.CallTo(() => cpu.Read(HighLocation)).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillReadFromTheLowLocation()
 		{
 			addressMode.Run();
 
@@ -57,6 +65,18 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 			addressMode.Run();
 
 			A.CallTo(() => cpu.Read(ProgramCounter)).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillSetTheAbsoluteAddressToValuesPlusTheYRegister()
+		{
+			addressMode.Run();
+
+			ushort expectedAddress = (HighAddressValue << 8) | LowAddressValue;
+
+			expectedAddress += YRegister;
+
+			cpu.AbsoluteAddress.Should().Be(expectedAddress);
 		}
 	}
 }
