@@ -38,11 +38,15 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 			}
 		}
 
+		private readonly AddressModeFactory addressModeFactory;
+
+		public AddressModeFactoryTests() => addressModeFactory = new AddressModeFactory();
+
 		[Theory]
 		[MemberData(nameof(AddressModeData), MemberType = typeof(AddressModeFactoryTests))]
 		public void WillReturnTheCorrectAddressMode(string name, Type expectedType)
 		{
-			var addressMode = AddressModeFactory.Create(name);
+			var addressMode = addressModeFactory.Create(name);
 
 			addressMode.Should().NotBeNull();
 
