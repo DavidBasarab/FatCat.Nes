@@ -1,13 +1,13 @@
 namespace FatCat.Nes.OpCodes.AddressingModes
 {
-	public class Absolute : AddressMode
+	public class AbsoluteMode : AddressMode
 	{
 		private byte high;
 		private byte low;
 
 		public override string Name => "Absolute";
 
-		public Absolute(ICpu cpu) : base(cpu) { }
+		public AbsoluteMode(ICpu cpu) : base(cpu) { }
 
 		public override int Run()
 		{

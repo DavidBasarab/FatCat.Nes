@@ -15,7 +15,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 		public ZeroPageXOffsetTests()
 		{
-			addressMode = new ZeroPageXOffset(cpu);
+			addressMode = new ZeroPageXOffsetMode(cpu);
 
 			cpu.XRegister = XRegister;
 		}

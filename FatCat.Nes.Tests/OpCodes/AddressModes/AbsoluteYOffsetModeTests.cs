@@ -12,7 +12,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 		public AbsoluteYOffsetModeTests()
 		{
-			addressMode = new AbsoluteYOffset(cpu);
+			addressMode = new AbsoluteModeYOffset(cpu);
 
 			cpu.YRegister = YRegister;
 		}

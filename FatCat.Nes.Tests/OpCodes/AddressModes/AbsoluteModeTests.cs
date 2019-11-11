@@ -17,7 +17,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 		public AbsoluteModeTests()
 		{
-			addressMode = new Absolute(cpu);
+			addressMode = new AbsoluteMode(cpu);
 
 			A.CallTo(() => cpu.Read(ProgramCounter)).Returns(LowAddress);
 			A.CallTo(() => cpu.Read(ProgramCounter + 1)).Returns(HighAddress);

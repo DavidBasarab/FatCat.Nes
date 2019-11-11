@@ -1,10 +1,10 @@
 namespace FatCat.Nes.OpCodes.AddressingModes
 {
-	public class ZeroPageXOffset : AddressMode
+	public class ZeroPageXOffsetMode : AddressMode
 	{
 		public override string Name => "ZeroPage,X";
 
-		public ZeroPageXOffset(ICpu cpu) : base(cpu) { }
+		public ZeroPageXOffsetMode(ICpu cpu) : base(cpu) { }
 
 		public override int Run()
 		{

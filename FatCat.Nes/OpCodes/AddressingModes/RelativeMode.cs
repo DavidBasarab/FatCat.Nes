@@ -1,10 +1,10 @@
 namespace FatCat.Nes.OpCodes.AddressingModes
 {
-	public class Relative : AddressMode
+	public class RelativeMode : AddressMode
 	{
 		public override string Name => "Relative";
 
-		public Relative(ICpu cpu) : base(cpu) { }
+		public RelativeMode(ICpu cpu) : base(cpu) { }
 
 		public override int Run()
 		{

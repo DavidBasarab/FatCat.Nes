@@ -1,10 +1,10 @@
 namespace FatCat.Nes.OpCodes.AddressingModes
 {
-	public class AbsoluteXOffset : Absolute
+	public class AbsoluteModeXOffset : AbsoluteMode
 	{
 		public override string Name => "Absolute,X";
 
-		public AbsoluteXOffset(ICpu cpu) : base(cpu) { }
+		public AbsoluteModeXOffset(ICpu cpu) : base(cpu) { }
 
 		public override int Run()
 		{

@@ -11,7 +11,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 		protected override string ExpectedName => "Relative";
 
-		public RelativeModeTests() => addressMode = new Relative(cpu);
+		public RelativeModeTests() => addressMode = new RelativeMode(cpu);
 
 		[Theory]
 		[InlineData(131)]
