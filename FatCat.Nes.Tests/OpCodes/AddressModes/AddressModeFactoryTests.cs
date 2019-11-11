@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using FatCat.Nes.OpCodes;
 using FatCat.Nes.OpCodes.AddressingModes;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes.AddressModes
@@ -10,6 +12,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 	{
 		public static IEnumerable<object[]> AddressModeData
 		{
+			[UsedImplicitly]
 			get
 			{
 				yield return new object[] { "Absolute", typeof(AbsoluteMode) };
@@ -38,9 +41,32 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 			}
 		}
 
+		public static IEnumerable<object[]> OpCodes
+		{
+			get
+			{
+				var opCodeReader = new OpCodeReader();
+
+				var opCodes = opCodeReader.GetAll();
+
+				foreach (var opCode in opCodes) yield return new object[] { opCode };
+			}
+		}
+
 		private readonly AddressModeFactory addressModeFactory;
 
 		public AddressModeFactoryTests() => addressModeFactory = new AddressModeFactory();
+
+		[Theory]
+		[MemberData(nameof(OpCodes), MemberType = typeof(AddressModeFactoryTests))]
+		public void WillBeAbleToCreateEachOpCode(OpCode opCode)
+		{
+			var addressMode = addressModeFactory.Create(opCode.Mode);
+
+			addressMode.Should().NotBeNull();
+
+			addressMode.Name.Should().Be(opCode.Mode);
+		}
 
 		[Theory]
 		[MemberData(nameof(AddressModeData), MemberType = typeof(AddressModeFactoryTests))]
