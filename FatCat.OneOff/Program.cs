@@ -34,14 +34,22 @@ namespace FatCat.OneOff
 
 			//WaitForExit();
 
-			for (var number = -160; number < 256; number++)
-			{
-				var mask = 0x80;
+			// for (var number = -160; number < 256; number++)
+			// {
+			// 	var mask = 0x80;
+			//
+			// 	var result = number & mask;
+			//
+			// 	Console.WriteLine($"Number {number} | <{number:x8}> | Result <{result:x8}> | {mask}");
+			// }
 
-				var result = number & mask;
+			var number = 1;
+			
+			PrintAddress(number);
 
-				Console.WriteLine($"Number {number} | <{number:x8}> | Result <{result:x8}> | {mask}");
-			}
+			var bitNegative = ~number;
+
+			PrintAddress(bitNegative);
 		}
 
 		private static void OnCancel(object sender, ConsoleCancelEventArgs e)
