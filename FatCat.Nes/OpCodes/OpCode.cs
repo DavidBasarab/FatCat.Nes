@@ -3,19 +3,22 @@ using System.Text.Json.Serialization;
 
 namespace FatCat.Nes.OpCodes
 {
-	public class AddWithCarry : OpCode
-	{
-		public override int Execute() => throw new NotImplementedException();
-	}
-
 	// TODO remove after all op codes implemented
 	public class TestingOpCode : OpCode
 	{
+		// This will need to rethink the reader
+		public TestingOpCode()
+			: base(null) { }
+
+		public TestingOpCode(ICpu cpu) : base(cpu) { }
+
 		public override int Execute() => throw new NotImplementedException();
 	}
 
 	public abstract class OpCode
 	{
+		protected readonly ICpu cpu;
+
 		[JsonPropertyName("bytes")]
 		[JsonConverter(typeof(JsonConverterStringToInt))]
 		public int Bytes { get; set; }
@@ -36,6 +39,8 @@ namespace FatCat.Nes.OpCodes
 		[JsonPropertyName("opcode")]
 		[JsonConverter(typeof(JsonConverterOpCodeByteCode))]
 		public byte Value { get; set; }
+
+		protected OpCode(ICpu cpu) => this.cpu = cpu;
 
 		public abstract int Execute();
 	}

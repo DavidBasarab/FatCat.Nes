@@ -1,21 +1,24 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
+using FakeItEasy;
 using FatCat.Nes.OpCodes;
 using FluentAssertions;
 using Xunit;
 
-namespace FatCat.Nes.Tests
+namespace FatCat.Nes.Tests.OpCodes
 {
 	public class OpCodeReaderTests
 	{
+		private static ICpu cpu;
+
 		public static IEnumerable<object[]> TestOpCodes
 		{
 			get
 			{
 				yield return new object[]
 							{
-								new TestingOpCode
+								new TestingOpCode(Cpu)
 								{
 									Bytes = 3,
 									Cycles = 4,
@@ -28,7 +31,7 @@ namespace FatCat.Nes.Tests
 
 				yield return new object[]
 							{
-								new TestingOpCode
+								new TestingOpCode(Cpu)
 								{
 									Bytes = 3,
 									Cycles = 4,
@@ -41,7 +44,7 @@ namespace FatCat.Nes.Tests
 
 				yield return new object[]
 							{
-								new TestingOpCode
+								new TestingOpCode(Cpu)
 								{
 									Bytes = 3,
 									Cycles = 6,
@@ -54,7 +57,7 @@ namespace FatCat.Nes.Tests
 
 				yield return new object[]
 							{
-								new TestingOpCode
+								new TestingOpCode(Cpu)
 								{
 									Bytes = 1,
 									Cycles = 2,
@@ -67,7 +70,7 @@ namespace FatCat.Nes.Tests
 
 				yield return new object[]
 							{
-								new TestingOpCode
+								new TestingOpCode(Cpu)
 								{
 									Bytes = 3,
 									Cycles = 4,
@@ -80,7 +83,7 @@ namespace FatCat.Nes.Tests
 
 				yield return new object[]
 							{
-								new TestingOpCode
+								new TestingOpCode(Cpu)
 								{
 									Bytes = 2,
 									Cycles = 2,
@@ -92,6 +95,8 @@ namespace FatCat.Nes.Tests
 							};
 			}
 		}
+
+		private static ICpu Cpu => cpu ??= A.Fake<ICpu>();
 
 		private readonly OpCodeReader opCodeReader;
 
