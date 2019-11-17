@@ -28,6 +28,18 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		}
 
 		[Fact]
+		public void OnFetchWillReadFromAbsoluteAddress()
+		{
+			ushort absoluteAddress = 0x1970;
+
+			cpu.AbsoluteAddress = absoluteAddress;
+
+			addressMode.Fetch();
+
+			VerifyReadFromAbsoluteAddress(absoluteAddress);
+		}
+
+		[Fact]
 		public void RunWillTakeCycles()
 		{
 			var cycles = addressMode.Run();
@@ -37,5 +49,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 		[Fact]
 		public void WillHaveCorrectAddressModeName() => addressMode.Name.Should().Be(ExpectedName);
+
+		protected virtual void VerifyReadFromAbsoluteAddress(ushort absoluteAddress) { A.CallTo(() => cpu.Read(absoluteAddress)).MustHaveHappened(); }
 	}
 }

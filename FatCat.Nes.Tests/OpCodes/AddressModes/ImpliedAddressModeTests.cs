@@ -1,3 +1,4 @@
+using FakeItEasy;
 using FatCat.Nes.OpCodes.AddressingModes;
 using FluentAssertions;
 using Xunit;
@@ -26,5 +27,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 			cpu.Fetched.Should().Be(AccumulatorValue);
 		}
+
+		protected override void VerifyReadFromAbsoluteAddress(ushort absoluteAddress) => A.CallTo(() => cpu.Read(absoluteAddress)).MustNotHaveHappened();
 	}
 }

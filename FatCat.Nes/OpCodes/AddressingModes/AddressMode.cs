@@ -5,6 +5,8 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 		string Name { get; }
 
 		int Run();
+
+		byte Fetch();
 	}
 
 	public abstract class AddressMode : IAddressMode
@@ -16,6 +18,13 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 		protected AddressMode(ICpu cpu) => this.cpu = cpu;
 
 		public abstract int Run();
+
+		public virtual byte Fetch()
+		{
+			cpu.Read(cpu.AbsoluteAddress);
+			
+			return 0;
+		}
 
 		protected void IncrementProgramCounter() => cpu.ProgramCounter++;
 
