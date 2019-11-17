@@ -1,4 +1,3 @@
-using System;
 using FatCat.Nes.OpCodes.AddressingModes;
 
 namespace FatCat.Nes.OpCodes
@@ -12,7 +11,12 @@ namespace FatCat.Nes.OpCodes
 			var fetchedData = addressMode.Fetch();
 
 			var carryFlag = cpu.GetFlag(CpuFlag.CarryBit);
-			
+
+			var total = cpu.Accumulator + fetchedData;
+
+			if (total > 255) cpu.SetFlag(CpuFlag.CarryBit);
+			else cpu.RemoveFlag(CpuFlag.CarryBit);
+
 			return -1;
 		}
 	}

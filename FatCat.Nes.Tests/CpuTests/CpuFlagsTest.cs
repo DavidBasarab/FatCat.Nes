@@ -35,6 +35,19 @@ namespace FatCat.Nes.Tests.CpuTests
 
 			cpu.GetFlag(flag).Should().BeTrue();
 		}
+		
+		[Theory]
+		[InlineData(CpuFlag.Break)]
+		[InlineData(CpuFlag.Overflow)]
+		[InlineData(CpuFlag.CarryBit)]
+		public void CanSetTheSameFlagMoreThanOnce(CpuFlag flag)
+		{
+			cpu.SetFlag(flag);
+			cpu.SetFlag(flag);
+			cpu.SetFlag(flag);
+
+			cpu.GetFlag(flag).Should().BeTrue();
+		}
 
 		[Theory]
 		[InlineData(CpuFlag.Break, CpuFlag.Overflow, CpuFlag.Negative)]
