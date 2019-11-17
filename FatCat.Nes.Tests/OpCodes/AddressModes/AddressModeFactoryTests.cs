@@ -59,7 +59,7 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 
 		[Theory]
 		[MemberData(nameof(OpCodes), MemberType = typeof(AddressModeFactoryTests))]
-		public void WillBeAbleToCreateEachOpCode(OpCode opCode)
+		public void WillBeAbleToCreateEachOpCode(OpCodeItem opCode)
 		{
 			var addressMode = addressModeFactory.Create(opCode.Mode);
 

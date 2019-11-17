@@ -7,11 +7,11 @@ namespace FatCat.Nes.OpCodes
 {
 	public class OpCodeReader
 	{
-		private static List<OpCode> OpCodes { get; } = LoadOpCodes();
+		private static List<OpCodeItem> OpCodes { get; } = LoadOpCodes();
 
-		public OpCode Get(byte value) => OpCodes.FirstOrDefault(i => i.Value == value);
+		public OpCodeItem Get(byte value) => OpCodes.FirstOrDefault(i => i.Value == value);
 
-		public List<OpCode> GetAll() => OpCodes;
+		public List<OpCodeItem> GetAll() => OpCodes;
 
 		private static string GetOpCodeJson()
 		{
@@ -23,11 +23,11 @@ namespace FatCat.Nes.OpCodes
 			return reader.ReadToEnd();
 		}
 
-		private static List<OpCode> LoadOpCodes()
+		private static List<OpCodeItem> LoadOpCodes()
 		{
 			var opCodeJson = GetOpCodeJson();
 
-			return new List<OpCode>(JsonSerializer.Deserialize<List<TestingOpCode>>(opCodeJson));
+			return JsonSerializer.Deserialize<List<OpCodeItem>>(opCodeJson);
 		}
 	}
 }
