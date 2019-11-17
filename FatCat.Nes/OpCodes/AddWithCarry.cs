@@ -12,7 +12,7 @@ namespace FatCat.Nes.OpCodes
 
 			var carryFlag = cpu.GetFlag(CpuFlag.CarryBit);
 
-			var total = cpu.Accumulator + fetchedData;
+			var total = cpu.Accumulator + fetchedData + (carryFlag ? 1 : 0);
 
 			if (total > 255) cpu.SetFlag(CpuFlag.CarryBit);
 			else cpu.RemoveFlag(CpuFlag.CarryBit);
