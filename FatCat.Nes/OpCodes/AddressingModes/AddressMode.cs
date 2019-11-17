@@ -1,6 +1,13 @@
 namespace FatCat.Nes.OpCodes.AddressingModes
 {
-	public abstract class AddressMode
+	public interface IAddressMode
+	{
+		string Name { get; }
+
+		int Run();
+	}
+
+	public abstract class AddressMode : IAddressMode
 	{
 		protected readonly ICpu cpu;
 
