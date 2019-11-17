@@ -15,7 +15,7 @@ namespace FatCat.Nes.Tests
 			{
 				yield return new object[]
 							{
-								new OpCode
+								new TestingOpCode
 								{
 									Bytes = 3,
 									Cycles = 4,
@@ -28,7 +28,7 @@ namespace FatCat.Nes.Tests
 
 				yield return new object[]
 							{
-								new OpCode
+								new TestingOpCode
 								{
 									Bytes = 3,
 									Cycles = 4,
@@ -41,7 +41,7 @@ namespace FatCat.Nes.Tests
 
 				yield return new object[]
 							{
-								new OpCode
+								new TestingOpCode
 								{
 									Bytes = 3,
 									Cycles = 6,
@@ -54,7 +54,7 @@ namespace FatCat.Nes.Tests
 
 				yield return new object[]
 							{
-								new OpCode
+								new TestingOpCode
 								{
 									Bytes = 1,
 									Cycles = 2,
@@ -67,7 +67,7 @@ namespace FatCat.Nes.Tests
 
 				yield return new object[]
 							{
-								new OpCode
+								new TestingOpCode
 								{
 									Bytes = 3,
 									Cycles = 4,
@@ -80,7 +80,7 @@ namespace FatCat.Nes.Tests
 
 				yield return new object[]
 							{
-								new OpCode
+								new TestingOpCode
 								{
 									Bytes = 2,
 									Cycles = 2,
@@ -109,7 +109,7 @@ namespace FatCat.Nes.Tests
 			""description"" : ""Branch if Carry Set""
 			}";
 
-			var opCode = JsonSerializer.Deserialize<OpCode>(json);
+			var opCode = JsonSerializer.Deserialize<TestingOpCode>(json);
 
 			opCode.Value.Should().Be(0xB0);
 			opCode.Cycles.Should().Be(2);

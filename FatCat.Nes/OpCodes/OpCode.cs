@@ -1,8 +1,20 @@
+using System;
 using System.Text.Json.Serialization;
 
 namespace FatCat.Nes.OpCodes
 {
-	public class OpCode
+	public class AddWithCarry : OpCode
+	{
+		public override int Execute() => throw new NotImplementedException();
+	}
+
+	// TODO remove after all op codes implemented
+	public class TestingOpCode : OpCode
+	{
+		public override int Execute() => throw new NotImplementedException();
+	}
+
+	public abstract class OpCode
 	{
 		[JsonPropertyName("bytes")]
 		[JsonConverter(typeof(JsonConverterStringToInt))]
@@ -24,5 +36,7 @@ namespace FatCat.Nes.OpCodes
 		[JsonPropertyName("opcode")]
 		[JsonConverter(typeof(JsonConverterOpCodeByteCode))]
 		public byte Value { get; set; }
+
+		public abstract int Execute();
 	}
 }

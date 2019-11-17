@@ -27,7 +27,7 @@ namespace FatCat.Nes.OpCodes
 		{
 			var opCodeJson = GetOpCodeJson();
 
-			return JsonSerializer.Deserialize<List<OpCode>>(opCodeJson);
+			return new List<OpCode>(JsonSerializer.Deserialize<List<TestingOpCode>>(opCodeJson));
 		}
 	}
 }
