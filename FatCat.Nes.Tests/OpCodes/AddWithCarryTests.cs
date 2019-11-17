@@ -33,16 +33,17 @@ namespace FatCat.Nes.Tests.OpCodes
 								0x62, // fetched
 								false // carry bit set
 							};
+
 				yield return new object[]
 							{
 								0x60, // accumulator
 								0x9f, // fetched
-								true // carry bit set
+								true  // carry bit set
 							};
 			}
 		}
 
-		public static IEnumerable<object[]> ZeroFlagData
+		public static IEnumerable<object[]> ZeroData
 		{
 			get
 			{
@@ -89,13 +90,13 @@ namespace FatCat.Nes.Tests.OpCodes
 
 		[Theory]
 		[MemberData(nameof(NonCarryOrOverflowData), MemberType = typeof(AddWithCarryTests))]
-		public void WillSetTheCarryBitToFalseInNonOverflow(byte accumulator, byte fetched, bool carry)
+		public void WillRemoveTheZeroFlagForNonOverflowData(byte accumulator, byte fetched, bool carry)
 		{
 			SetUpForExectue(accumulator, fetched, carry);
 
 			opCode.Execute();
 
-			A.CallTo(() => cpu.RemoveFlag(CpuFlag.CarryBit)).MustHaveHappened();
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Zero)).MustHaveHappened();
 		}
 
 		[Theory]
@@ -107,6 +108,28 @@ namespace FatCat.Nes.Tests.OpCodes
 			opCode.Execute();
 
 			A.CallTo(() => cpu.SetFlag(CpuFlag.CarryBit)).MustHaveHappened();
+		}
+
+		[Theory]
+		[MemberData(nameof(NonCarryOrOverflowData), MemberType = typeof(AddWithCarryTests))]
+		public void WillSetTheCarryBitToFalseInNonOverflow(byte accumulator, byte fetched, bool carry)
+		{
+			SetUpForExectue(accumulator, fetched, carry);
+
+			opCode.Execute();
+
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.CarryBit)).MustHaveHappened();
+		}
+
+		[Theory]
+		[MemberData(nameof(ZeroData), MemberType = typeof(AddWithCarryTests))]
+		public void WillSetTheZeroFlagIfTheValueIsZero(byte accumulator, byte fetched, bool carry)
+		{
+			SetUpForExectue(accumulator, fetched, carry);
+
+			opCode.Execute();
+
+			A.CallTo(() => cpu.SetFlag(CpuFlag.Zero)).MustHaveHappened();
 		}
 
 		private void SetUpForExectue(byte accumulator, byte fetched, bool carry)
