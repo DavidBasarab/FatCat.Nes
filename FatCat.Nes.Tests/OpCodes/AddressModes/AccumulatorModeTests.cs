@@ -28,6 +28,10 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 			cpu.Fetched.Should().Be(AccumulatorValue);
 		}
 
+		protected override void VerifyFetchedValue(byte fetchedValue, byte startingFetchedValue) => cpu.Fetched.Should().Be(startingFetchedValue);
+
+		protected override void VerifyFetchResult(byte fetchResult, byte fetchedValue, byte startingFetchedValue) => fetchResult.Should().Be(startingFetchedValue);
+
 		protected override void VerifyReadFromAbsoluteAddress(ushort absoluteAddress) => A.CallTo(() => cpu.Read(absoluteAddress)).MustNotHaveHappened();
 	}
 }
