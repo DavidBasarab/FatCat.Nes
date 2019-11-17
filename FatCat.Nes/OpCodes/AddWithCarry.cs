@@ -9,7 +9,7 @@ namespace FatCat.Nes.OpCodes
 
 		public override int Execute()
 		{
-			var fetchedData = cpu.Read(cpu.AbsoluteAddress);
+			var fetchedData = addressMode.Fetch();
 			
 			return -1;
 		}
