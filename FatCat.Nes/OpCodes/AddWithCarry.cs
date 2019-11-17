@@ -10,6 +10,8 @@ namespace FatCat.Nes.OpCodes
 		public override int Execute()
 		{
 			var fetchedData = addressMode.Fetch();
+
+			var carryFlag = cpu.GetFlag(CpuFlag.CarryBit);
 			
 			return -1;
 		}

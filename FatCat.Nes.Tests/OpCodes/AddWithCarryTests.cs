@@ -32,5 +32,13 @@ namespace FatCat.Nes.Tests.OpCodes
 
 			A.CallTo(() => addressMode.Fetch()).MustHaveHappened();
 		}
+
+		[Fact]
+		public void WillReadTheCarryFlag()
+		{
+			opCode.Execute();
+
+			A.CallTo(() => cpu.GetFlag(CpuFlag.CarryBit)).MustHaveHappened();
+		}
 	}
 }
