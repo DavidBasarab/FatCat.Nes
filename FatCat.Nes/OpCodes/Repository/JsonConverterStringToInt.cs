@@ -4,23 +4,24 @@ using System.Buffers.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace FatCat.Nes.OpCodes
+namespace FatCat.Nes.OpCodes.Repository
 {
-	public class JsonConverterOpCodeCycle : JsonConverter<int>
+	public class JsonConverterStringToInt : JsonConverter<int>
 	{
 		public override int Read(ref Utf8JsonReader reader, Type type, JsonSerializerOptions options)
 		{
 			if (reader.TokenType == JsonTokenType.String)
 			{
+				// try to parse number directly from bytes
 				var span = reader.HasValueSequence ? reader.ValueSequence.ToArray() : reader.ValueSpan;
 
 				if (Utf8Parser.TryParse(span, out int number, out var bytesConsumed) && span.Length == bytesConsumed) return number;
 
-				var jsonValue = reader.GetString();
-
-				if (int.TryParse(jsonValue[0].ToString(), out number)) return number;
+				// try to parse from a string if the above failed, this covers cases with other escaped/UTF characters
+				if (int.TryParse(reader.GetString(), out number)) return number;
 			}
 
+			// fallback to default handling
 			return reader.GetInt32();
 		}
 

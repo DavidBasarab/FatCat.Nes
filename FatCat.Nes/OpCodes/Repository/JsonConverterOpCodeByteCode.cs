@@ -4,7 +4,7 @@ using System.Buffers.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace FatCat.Nes.OpCodes
+namespace FatCat.Nes.OpCodes.Repository
 {
 	public class JsonConverterOpCodeByteCode : JsonConverter<byte>
 	{

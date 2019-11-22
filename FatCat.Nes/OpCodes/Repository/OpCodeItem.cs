@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace FatCat.Nes.OpCodes
+namespace FatCat.Nes.OpCodes.Repository
 {
 	public class OpCodeItem
 	{

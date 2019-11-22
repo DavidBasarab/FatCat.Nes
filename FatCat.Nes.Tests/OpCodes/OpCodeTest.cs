@@ -8,7 +8,8 @@ namespace FatCat.Nes.Tests.OpCodes
 {
 	public abstract class OpCodeTest
 	{
-		private const byte FetchedData = 0x13;
+		protected const byte Accumulator = 0x65;
+		protected const byte FetchedData = 0x13;
 
 		protected readonly IAddressMode addressMode;
 
@@ -22,6 +23,8 @@ namespace FatCat.Nes.Tests.OpCodes
 		{
 			cpu = A.Fake<ICpu>();
 			addressMode = A.Fake<IAddressMode>();
+
+			cpu.Accumulator = Accumulator;
 
 			A.CallTo(() => addressMode.Fetch()).Returns(FetchedData);
 		}

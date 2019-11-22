@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 
-namespace FatCat.Nes.OpCodes
+namespace FatCat.Nes.OpCodes.Repository
 {
 	public class OpCodeReader
 	{

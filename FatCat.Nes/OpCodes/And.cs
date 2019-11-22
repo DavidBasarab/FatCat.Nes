@@ -8,6 +8,13 @@ namespace FatCat.Nes.OpCodes
 
 		public override string Name => "AND";
 
-		public override int Execute() => throw new System.NotImplementedException();
+		public override int Execute()
+		{
+			var fetched = addressMode.Fetch();
+
+			cpu.Accumulator = (byte)(cpu.Accumulator & fetched);
+			
+			return -1;
+		}
 	}
 }
