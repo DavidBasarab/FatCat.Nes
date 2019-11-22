@@ -188,7 +188,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		[MemberData(nameof(NonNegativeData), MemberType = typeof(AddWithCarryTests))]
 		public void WillNotSetTheNegativeFlag(byte accumulator, byte fetched, bool carry)
 		{
-			SetUpForExectue(accumulator, fetched, carry);
+			SetUpForExecute(accumulator, fetched, carry);
 
 			opCode.Execute();
 
@@ -200,7 +200,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		[MemberData(nameof(NoOverflowData), MemberType = typeof(AddWithCarryTests))]
 		public void WillNotSetTheOverflowFlag(byte accumulator, byte fetched, bool carry)
 		{
-			SetUpForExectue(accumulator, fetched, carry);
+			SetUpForExecute(accumulator, fetched, carry);
 
 			opCode.Execute();
 
@@ -220,7 +220,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		[MemberData(nameof(NonCarryData), MemberType = typeof(AddWithCarryTests))]
 		public void WillRemoveTheZeroFlagForNonOverflowData(byte accumulator, byte fetched, bool carry)
 		{
-			SetUpForExectue(accumulator, fetched, carry);
+			SetUpForExecute(accumulator, fetched, carry);
 
 			opCode.Execute();
 
@@ -231,7 +231,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		[MemberData(nameof(OverflowData), MemberType = typeof(AddWithCarryTests))]
 		public void WillSetTheAccumulatorToTheNewTotal(byte accumulator, byte fetched, bool carry)
 		{
-			SetUpForExectue(accumulator, fetched, carry);
+			SetUpForExecute(accumulator, fetched, carry);
 
 			opCode.Execute();
 
@@ -246,7 +246,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		[MemberData(nameof(CarryData), MemberType = typeof(AddWithCarryTests))]
 		public void WillSetTheCarryBitIfTotalIsMoreThan255(byte accumulator, byte fetched, bool carry)
 		{
-			SetUpForExectue(accumulator, fetched, carry);
+			SetUpForExecute(accumulator, fetched, carry);
 
 			opCode.Execute();
 
@@ -257,7 +257,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		[MemberData(nameof(NonCarryData), MemberType = typeof(AddWithCarryTests))]
 		public void WillSetTheCarryBitToFalseInNonOverflow(byte accumulator, byte fetched, bool carry)
 		{
-			SetUpForExectue(accumulator, fetched, carry);
+			SetUpForExecute(accumulator, fetched, carry);
 
 			opCode.Execute();
 
@@ -268,7 +268,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		[MemberData(nameof(NegativeData), MemberType = typeof(AddWithCarryTests))]
 		public void WillSetTheNegativeFlag(byte accumulator, byte fetched, bool carry)
 		{
-			SetUpForExectue(accumulator, fetched, carry);
+			SetUpForExecute(accumulator, fetched, carry);
 
 			opCode.Execute();
 
@@ -280,7 +280,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		[MemberData(nameof(OverflowData), MemberType = typeof(AddWithCarryTests))]
 		public void WillSetTheOverflowFlag(byte accumulator, byte fetched, bool carry)
 		{
-			SetUpForExectue(accumulator, fetched, carry);
+			SetUpForExecute(accumulator, fetched, carry);
 
 			opCode.Execute();
 
@@ -292,7 +292,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		[MemberData(nameof(ZeroData), MemberType = typeof(AddWithCarryTests))]
 		public void WillSetTheZeroFlagIfTheValueIsZero(byte accumulator, byte fetched, bool carry)
 		{
-			SetUpForExectue(accumulator, fetched, carry);
+			SetUpForExecute(accumulator, fetched, carry);
 
 			opCode.Execute();
 
@@ -307,7 +307,7 @@ namespace FatCat.Nes.Tests.OpCodes
 			cycles.Should().Be(1);
 		}
 
-		private void SetUpForExectue(byte accumulator, byte fetched, bool carry)
+		private void SetUpForExecute(byte accumulator, byte fetched, bool carry)
 		{
 			cpu.Accumulator = accumulator;
 

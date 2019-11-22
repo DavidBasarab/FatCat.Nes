@@ -1,9 +1,8 @@
-using System;
 using FatCat.Nes.OpCodes.AddressingModes;
 
 namespace FatCat.Nes.OpCodes
 {
-	public class SubtractWithCarry : OpCode
+	public class SubtractWithCarry : WithCarryOpCode
 	{
 		public override string Name => "SBC";
 
@@ -11,9 +10,11 @@ namespace FatCat.Nes.OpCodes
 
 		public override int Execute()
 		{
-			var fetchedData = addressMode.Fetch();
-			
-			return -1;
+			fetchedData = addressMode.Fetch();
+
+			fetchedData = (ushort)(fetchedData ^ 0x00ff);
+
+			return DoAddWithCarry();
 		}
 	}
 }
