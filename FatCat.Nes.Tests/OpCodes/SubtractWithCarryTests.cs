@@ -43,7 +43,7 @@ namespace FatCat.Nes.Tests.OpCodes
 			{
 				yield return new object[]
 							{
-								208,    // accumulator
+								208, // accumulator
 								48,  // fetched
 								true // carry bit set
 							};
@@ -64,14 +64,14 @@ namespace FatCat.Nes.Tests.OpCodes
 				yield return new object[]
 							{
 								80,   // accumulator
-								240,   // fetched
+								240,  // fetched
 								false // carry bit set
 							};
 
 				yield return new object[]
 							{
-								80,   // accumulator
-								176,   // fetched
+								80,  // accumulator
+								176, // fetched
 								true // carry bit set
 							};
 			}
@@ -179,16 +179,15 @@ namespace FatCat.Nes.Tests.OpCodes
 				yield return new object[]
 							{
 								0x000, // accumulator
-								0xff, // fetched
+								0xff,  // fetched
 								false  // carry bit set
 							};
 			}
 		}
 
-		public SubtractWithCarryTests() => opCode = new SubtractWithCarry(cpu, addressMode);
+		protected override string ExpectedName => "SBC";
 
-		[Fact]
-		public void NameWillBeSBC() => opCode.Name.Should().Be("SBC");
+		public SubtractWithCarryTests() => opCode = new SubtractWithCarry(cpu, addressMode);
 
 		[Fact]
 		public void WillFetchTheData()

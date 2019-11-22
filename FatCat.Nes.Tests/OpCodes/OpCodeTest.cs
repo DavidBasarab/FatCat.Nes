@@ -1,6 +1,8 @@
 using FakeItEasy;
 using FatCat.Nes.OpCodes;
 using FatCat.Nes.OpCodes.AddressingModes;
+using FluentAssertions;
+using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes
 {
@@ -14,6 +16,8 @@ namespace FatCat.Nes.Tests.OpCodes
 
 		protected OpCode opCode;
 
+		protected abstract string ExpectedName { get; }
+
 		protected OpCodeTest()
 		{
 			cpu = A.Fake<ICpu>();
@@ -21,5 +25,8 @@ namespace FatCat.Nes.Tests.OpCodes
 
 			A.CallTo(() => addressMode.Fetch()).Returns(FetchedData);
 		}
+
+		[Fact]
+		public void NameWillBeThreeLetterOpCode() => opCode.Name.Should().Be(ExpectedName);
 	}
 }

@@ -171,10 +171,9 @@ namespace FatCat.Nes.Tests.OpCodes
 			}
 		}
 
-		public AddWithCarryTests() => opCode = new AddWithCarry(cpu, addressMode);
+		protected override string ExpectedName => "ADC";
 
-		[Fact]
-		public void NameWillBeAdc() => opCode.Name.Should().Be("ADC");
+		public AddWithCarryTests() => opCode = new AddWithCarry(cpu, addressMode);
 
 		[Fact]
 		public void WillFetchFromTheAddressMode()
