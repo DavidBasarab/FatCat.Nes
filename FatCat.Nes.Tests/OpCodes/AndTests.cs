@@ -2,38 +2,66 @@ using System.Collections.Generic;
 using FakeItEasy;
 using FatCat.Nes.OpCodes;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes
 {
 	public class AndTests : OpCodeTest
 	{
-		public static IEnumerable<object[]> NonNegativeData
+		public static IEnumerable<object[]> NegativeData
 		{
+			[UsedImplicitly]
 			get
 			{
 				yield return new object[]
 							{
-								2, // accumulator
-								3  // fetched
+								0b_1101_1001, // accumulator
+								0b_1001_1111  // fetched
 							};
 
 				yield return new object[]
 							{
-								2, // accumulator
-								3  // fetched
+								0b_1000_0000, // accumulator
+								0b_1111_1111  // fetched
 							};
 
 				yield return new object[]
 							{
-								253, // accumulator
-								6    // fetched
+								0b_1111_1111, // accumulator
+								0b_1111_1111  // fetched
+							};
+			}
+		}
+
+		public static IEnumerable<object[]> NonNegativeData
+		{
+			[UsedImplicitly]
+			get
+			{
+				yield return new object[]
+							{
+								0b_0101_1001, // accumulator
+								0b_0001_1111  // fetched
+							};
+
+				yield return new object[]
+							{
+								0b_0000_0000, // accumulator
+								0b_0111_1111  // fetched
+							};
+
+				yield return new object[]
+							{
+								0b_0111_1111, // accumulator
+								0b_0111_1111  // fetched
 							};
 			}
 		}
 
 		public static IEnumerable<object[]> NonZeroData
 		{
+			[UsedImplicitly]
 			get
 			{
 				yield return new object[]
@@ -58,6 +86,7 @@ namespace FatCat.Nes.Tests.OpCodes
 
 		public static IEnumerable<object[]> ZeroData
 		{
+			[UsedImplicitly]
 			get
 			{
 				yield return new object[]
@@ -87,6 +116,20 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Theory]
+		[MemberData(nameof(NonNegativeData), MemberType = typeof(AndTests))]
+		public void WillRemoveNegativeFlagIfDataIsNotNegative(byte accumulator, byte fetched)
+		{
+			cpu.Accumulator = accumulator;
+
+			A.CallTo(() => addressMode.Fetch()).Returns(fetched);
+
+			opCode.Execute();
+
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Negative)).MustHaveHappened();
+			A.CallTo(() => cpu.SetFlag(CpuFlag.Negative)).MustNotHaveHappened();
+		}
+
+		[Theory]
 		[MemberData(nameof(NonZeroData), MemberType = typeof(AndTests))]
 		public void WillRemoveZeroFlagIfDataIsNotZero(byte accumulator, byte fetched)
 		{
@@ -108,6 +151,28 @@ namespace FatCat.Nes.Tests.OpCodes
 			byte expectedValue = Accumulator & FetchedData;
 
 			cpu.Accumulator.Should().Be(expectedValue);
+		}
+		
+		[Fact]
+		public void AndWillTake1Cycle()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(1);
+		}
+
+		[Theory]
+		[MemberData(nameof(NegativeData), MemberType = typeof(AndTests))]
+		public void WillSetTheNegativeFlagIfDataIsNegative(byte accumulator, byte fetched)
+		{
+			cpu.Accumulator = accumulator;
+
+			A.CallTo(() => addressMode.Fetch()).Returns(fetched);
+
+			opCode.Execute();
+
+			A.CallTo(() => cpu.SetFlag(CpuFlag.Negative)).MustHaveHappened();
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Negative)).MustNotHaveHappened();
 		}
 
 		[Theory]

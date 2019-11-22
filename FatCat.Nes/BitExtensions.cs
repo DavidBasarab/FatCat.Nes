@@ -8,6 +8,8 @@ namespace FatCat.Nes
 
 		public static byte ApplyLowMask(this int value) => (byte)(value & 0x00ff);
 
+		public static bool IsNegative(this byte value) => (value & 0x80) > 0;
+
 		public static bool IsZero(this byte value) => value == 0x00;
 	}
 }
