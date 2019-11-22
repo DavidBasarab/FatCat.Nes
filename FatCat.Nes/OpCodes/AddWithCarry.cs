@@ -29,7 +29,7 @@ namespace FatCat.Nes.OpCodes
 
 			cpu.Accumulator = (byte)(total & 0x00ff);
 
-			return -1;
+			return 1;
 		}
 
 		private void SetOverflowFlag(byte fetchedData, int total)

@@ -242,6 +242,21 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Theory]
+		[MemberData(nameof(OverflowData), MemberType = typeof(AddWithCarryTests))]
+		public void WillSetTheAccumulatorToTheNewTotal(byte accumulator, byte fetched, bool carry)
+		{
+			SetUpForExectue(accumulator, fetched, carry);
+
+			opCode.Execute();
+
+			var expectedTotal = accumulator + fetched + (carry ? 1 : 0);
+
+			var expectedAccumulatorValue = (byte)(expectedTotal & 0x00ff);
+
+			cpu.Accumulator.Should().Be(expectedAccumulatorValue);
+		}
+
+		[Theory]
 		[MemberData(nameof(CarryData), MemberType = typeof(AddWithCarryTests))]
 		public void WillSetTheCarryBitIfTotalIsMoreThan255(byte accumulator, byte fetched, bool carry)
 		{
@@ -297,20 +312,13 @@ namespace FatCat.Nes.Tests.OpCodes
 
 			A.CallTo(() => cpu.SetFlag(CpuFlag.Zero)).MustHaveHappened();
 		}
-		
-		[Theory]
-		[MemberData(nameof(OverflowData), MemberType = typeof(AddWithCarryTests))]
-		public void WillSetTheAccumulatorToTheNewTotal(byte accumulator, byte fetched, bool carry)
+
+		[Fact]
+		public void WillTake1Cycle()
 		{
-			SetUpForExectue(accumulator, fetched, carry);
+			var cycles = opCode.Execute();
 
-			opCode.Execute();
-
-			var expectedTotal = accumulator + fetched + (carry ? 1 : 0);
-
-			var expectedAccumulatorValue = (byte)(expectedTotal & 0x00ff);
-
-			cpu.Accumulator.Should().Be(expectedAccumulatorValue);
+			cycles.Should().Be(1);
 		}
 
 		private void SetUpForExectue(byte accumulator, byte fetched, bool carry)
