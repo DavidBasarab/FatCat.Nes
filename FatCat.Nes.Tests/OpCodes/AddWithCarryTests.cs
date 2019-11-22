@@ -8,6 +8,8 @@ namespace FatCat.Nes.Tests.OpCodes
 {
 	public class AddWithCarryTests
 	{
+		// Test cases found @ http://www.6502.org/tutorials/vflag.html
+
 		private const byte FetchedData = 0x13;
 
 		public static IEnumerable<object[]> CarryData
@@ -27,6 +29,40 @@ namespace FatCat.Nes.Tests.OpCodes
 								0x9f, // fetched
 								true  // carry bit set
 							};
+
+				yield return new object[]
+							{
+								0x01, // accumulator
+								0xff, // fetched
+								false // carry bit set
+							};
+
+				yield return new object[]
+							{
+								0x80, // accumulator
+								0xff, // fetched
+								false // carry bit set
+							};
+			}
+		}
+
+		public static IEnumerable<object[]> NegativeData
+		{
+			get
+			{
+				yield return new object[]
+							{
+								2, // accumulator
+								253, // fetched
+								false // carry bit set
+							};
+
+				yield return new object[]
+							{
+								125, // accumulator
+								2,   // fetched
+								true // carry bit set
+							};
 			}
 		}
 
@@ -39,6 +75,33 @@ namespace FatCat.Nes.Tests.OpCodes
 								0x32, // accumulator
 								0x25, // fetched
 								false // carry bit set
+							};
+			}
+		}
+
+		public static IEnumerable<object[]> NonNegativeData
+		{
+			get
+			{
+				yield return new object[]
+							{
+								2,    // accumulator
+								3,    // fetched
+								false // carry bit set
+							};
+
+				yield return new object[]
+							{
+								2,   // accumulator
+								3,   // fetched
+								true // carry bit set
+							};
+
+				yield return new object[]
+							{
+								253, // accumulator
+								6,   // fetched
+								true // carry bit set
 							};
 			}
 		}
@@ -87,12 +150,12 @@ namespace FatCat.Nes.Tests.OpCodes
 								0x01, // fetched
 								false // carry bit set
 							};
-				
+
 				yield return new object[]
 							{
 								0x3f, // accumulator
 								0x40, // fetched
-								true // carry bit set
+								true  // carry bit set
 							};
 			}
 		}
@@ -132,6 +195,18 @@ namespace FatCat.Nes.Tests.OpCodes
 			opCode.Execute();
 
 			A.CallTo(() => addressMode.Fetch()).MustHaveHappened();
+		}
+
+		[Theory]
+		[MemberData(nameof(NonNegativeData), MemberType = typeof(AddWithCarryTests))]
+		public void WillNotSetTheNegativeFlag(byte accumulator, byte fetched, bool carry)
+		{
+			SetUpForExectue(accumulator, fetched, carry);
+
+			opCode.Execute();
+
+			A.CallTo(() => cpu.SetFlag(CpuFlag.Negative)).MustNotHaveHappened();
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Negative)).MustHaveHappened();
 		}
 
 		[Theory]
@@ -185,6 +260,18 @@ namespace FatCat.Nes.Tests.OpCodes
 			opCode.Execute();
 
 			A.CallTo(() => cpu.RemoveFlag(CpuFlag.CarryBit)).MustHaveHappened();
+		}
+
+		[Theory]
+		[MemberData(nameof(NegativeData), MemberType = typeof(AddWithCarryTests))]
+		public void WillSetTheNegativeFlag(byte accumulator, byte fetched, bool carry)
+		{
+			SetUpForExectue(accumulator, fetched, carry);
+
+			opCode.Execute();
+
+			A.CallTo(() => cpu.SetFlag(CpuFlag.Negative)).MustHaveHappened();
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Negative)).MustNotHaveHappened();
 		}
 
 		[Theory]

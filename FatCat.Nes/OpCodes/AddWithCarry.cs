@@ -20,16 +20,25 @@ namespace FatCat.Nes.OpCodes
 			if ((total & 0x00ff) == 0) cpu.SetFlag(CpuFlag.Zero);
 			else cpu.RemoveFlag(CpuFlag.Zero);
 
-			// Overflow Flag = ~(A^F) & (A^T)
+			SetOverflowFlag(fetchedData, total);
+
+			var negativeFlag = (total & 0x80) > 0;
+
+			if (negativeFlag) cpu.SetFlag(CpuFlag.Negative);
+			else cpu.RemoveFlag(CpuFlag.Negative);
+
+			return -1;
+		}
+
+		private void SetOverflowFlag(byte fetchedData, int total)
+		{ // Overflow Flag = ~(A^F) & (A^T)
 			var accumulatorFetched = cpu.Accumulator ^ fetchedData;
 			var accumulatorTotal = cpu.Accumulator ^ total;
 
-			var shouldOverflow = ((~accumulatorFetched & accumulatorTotal) & 0x0080) > 0;
+			var shouldOverflow = (~accumulatorFetched & accumulatorTotal & 0x0080) > 0;
 
 			if (shouldOverflow) cpu.SetFlag(CpuFlag.Overflow);
 			else cpu.RemoveFlag(CpuFlag.Overflow);
-
-			return -1;
 		}
 	}
 }
