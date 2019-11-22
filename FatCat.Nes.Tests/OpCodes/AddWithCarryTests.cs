@@ -10,20 +10,7 @@ namespace FatCat.Nes.Tests.OpCodes
 	{
 		private const byte FetchedData = 0x13;
 
-		public static IEnumerable<object[]> NonCarryOrOverflowData
-		{
-			get
-			{
-				yield return new object[]
-							{
-								0x32, // accumulator
-								0x25, // fetched
-								false // carry bit set
-							};
-			}
-		}
-
-		public static IEnumerable<object[]> OverflowData
+		public static IEnumerable<object[]> CarryData
 		{
 			get
 			{
@@ -39,6 +26,66 @@ namespace FatCat.Nes.Tests.OpCodes
 								0x60, // accumulator
 								0x9f, // fetched
 								true  // carry bit set
+							};
+			}
+		}
+
+		public static IEnumerable<object[]> NonCarryData
+		{
+			get
+			{
+				yield return new object[]
+							{
+								0x32, // accumulator
+								0x25, // fetched
+								false // carry bit set
+							};
+			}
+		}
+
+		public static IEnumerable<object[]> NoOverflowData
+		{
+			get
+			{
+				yield return new object[]
+							{
+								0x01, // accumulator
+								0x01, // fetched
+								false // carry bit set
+							};
+
+				yield return new object[]
+							{
+								0x01, // accumulator
+								0xff, // fetched
+								false // carry bit set
+							};
+
+				yield return new object[]
+							{
+								0x00, // accumulator
+								0x01, // fetched
+								true  // carry bit set
+							};
+			}
+		}
+
+		public static IEnumerable<object[]> OverflowData
+		{
+			get
+			{
+				yield return new object[]
+							{
+								0x80, // accumulator
+								0xff, // fetched
+								false // carry bit set
+							};
+
+				yield return new object[]
+							{
+								0x7f, // accumulator
+								0x01, // fetched
+								false // carry bit set
 							};
 			}
 		}
@@ -80,6 +127,18 @@ namespace FatCat.Nes.Tests.OpCodes
 			A.CallTo(() => addressMode.Fetch()).MustHaveHappened();
 		}
 
+		[Theory]
+		[MemberData(nameof(NoOverflowData), MemberType = typeof(AddWithCarryTests))]
+		public void WillNotSetTheOverflowFlag(byte accumulator, byte fetched, bool carry)
+		{
+			SetUpForExectue(accumulator, fetched, carry);
+
+			opCode.Execute();
+
+			A.CallTo(() => cpu.SetFlag(CpuFlag.Overflow)).MustNotHaveHappened();
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Overflow)).MustHaveHappened();
+		}
+
 		[Fact]
 		public void WillReadTheCarryFlag()
 		{
@@ -89,7 +148,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Theory]
-		[MemberData(nameof(NonCarryOrOverflowData), MemberType = typeof(AddWithCarryTests))]
+		[MemberData(nameof(NonCarryData), MemberType = typeof(AddWithCarryTests))]
 		public void WillRemoveTheZeroFlagForNonOverflowData(byte accumulator, byte fetched, bool carry)
 		{
 			SetUpForExectue(accumulator, fetched, carry);
@@ -100,7 +159,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Theory]
-		[MemberData(nameof(OverflowData), MemberType = typeof(AddWithCarryTests))]
+		[MemberData(nameof(CarryData), MemberType = typeof(AddWithCarryTests))]
 		public void WillSetTheCarryBitIfTotalIsMoreThan255(byte accumulator, byte fetched, bool carry)
 		{
 			SetUpForExectue(accumulator, fetched, carry);
@@ -111,7 +170,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Theory]
-		[MemberData(nameof(NonCarryOrOverflowData), MemberType = typeof(AddWithCarryTests))]
+		[MemberData(nameof(NonCarryData), MemberType = typeof(AddWithCarryTests))]
 		public void WillSetTheCarryBitToFalseInNonOverflow(byte accumulator, byte fetched, bool carry)
 		{
 			SetUpForExectue(accumulator, fetched, carry);
@@ -119,6 +178,18 @@ namespace FatCat.Nes.Tests.OpCodes
 			opCode.Execute();
 
 			A.CallTo(() => cpu.RemoveFlag(CpuFlag.CarryBit)).MustHaveHappened();
+		}
+
+		[Theory]
+		[MemberData(nameof(OverflowData), MemberType = typeof(AddWithCarryTests))]
+		public void WillSetTheOverflowFlag(byte accumulator, byte fetched, bool carry)
+		{
+			SetUpForExectue(accumulator, fetched, carry);
+
+			opCode.Execute();
+
+			A.CallTo(() => cpu.SetFlag(CpuFlag.Overflow)).MustHaveHappened();
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Overflow)).MustNotHaveHappened();
 		}
 
 		[Theory]
