@@ -8,6 +8,8 @@ namespace FatCat.Nes.OpCodes
 		private byte fetchedData;
 		private int total;
 
+		public override string Name => "ADC";
+
 		public AddWithCarry(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 
 		public override int Execute()

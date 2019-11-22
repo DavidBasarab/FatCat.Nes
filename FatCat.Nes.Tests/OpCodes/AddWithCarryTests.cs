@@ -1,17 +1,14 @@
 using System.Collections.Generic;
 using FakeItEasy;
 using FatCat.Nes.OpCodes;
-using FatCat.Nes.OpCodes.AddressingModes;
 using FluentAssertions;
 using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes
 {
-	public class AddWithCarryTests
+	public class AddWithCarryTests : OpCodeTest
 	{
 		// Test cases found @ http://www.6502.org/tutorials/vflag.html
-
-		private const byte FetchedData = 0x13;
 
 		public static IEnumerable<object[]> CarryData
 		{
@@ -174,21 +171,10 @@ namespace FatCat.Nes.Tests.OpCodes
 			}
 		}
 
-		private readonly IAddressMode addressMode;
+		public AddWithCarryTests() => opCode = new AddWithCarry(cpu, addressMode);
 
-		private readonly ICpu cpu;
-
-		private readonly AddWithCarry opCode;
-
-		public AddWithCarryTests()
-		{
-			cpu = A.Fake<ICpu>();
-			addressMode = A.Fake<IAddressMode>();
-
-			A.CallTo(() => addressMode.Fetch()).Returns(FetchedData);
-
-			opCode = new AddWithCarry(cpu, addressMode);
-		}
+		[Fact]
+		public void NameWillBeAdc() => opCode.Name.Should().Be("ADC");
 
 		[Fact]
 		public void WillFetchFromTheAddressMode()

@@ -7,6 +7,8 @@ namespace FatCat.Nes.OpCodes
 		protected readonly IAddressMode addressMode;
 		protected readonly ICpu cpu;
 
+		public abstract string Name { get; }
+
 		protected OpCode(ICpu cpu, IAddressMode addressMode)
 		{
 			this.cpu = cpu;
