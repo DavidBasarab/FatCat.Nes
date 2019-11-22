@@ -16,21 +16,21 @@ namespace FatCat.Nes.Tests.OpCodes
 			{
 				yield return new object[]
 							{
-								208,    // accumulator
-								176,   // fetched
+								208, // accumulator
+								176, // fetched
 								true // carry bit set
 							};
 
 				yield return new object[]
 							{
-								208,   // accumulator
+								208,  // accumulator
 								112,  // fetched
 								false // carry bit set
 							};
 
 				yield return new object[]
 							{
-								208,   // accumulator
+								208, // accumulator
 								48,  // fetched
 								true // carry bit set
 							};
@@ -63,16 +63,16 @@ namespace FatCat.Nes.Tests.OpCodes
 			{
 				yield return new object[]
 							{
-								75,   // accumulator
-								15,   // fetched
+								80,   // accumulator
+								240,   // fetched
 								false // carry bit set
 							};
 
 				yield return new object[]
 							{
-								93,   // accumulator
-								22,   // fetched
-								false // carry bit set
+								80,   // accumulator
+								176,   // fetched
+								true // carry bit set
 							};
 			}
 		}
@@ -83,14 +83,14 @@ namespace FatCat.Nes.Tests.OpCodes
 			{
 				yield return new object[]
 							{
-								20,    // accumulator
+								20,   // accumulator
 								3,    // fetched
 								false // carry bit set
 							};
 
 				yield return new object[]
 							{
-								12,   // accumulator
+								12,  // accumulator
 								3,   // fetched
 								true // carry bit set
 							};
@@ -197,7 +197,18 @@ namespace FatCat.Nes.Tests.OpCodes
 
 			A.CallTo(() => addressMode.Fetch()).MustHaveHappened();
 		}
-		
+
+		[Theory]
+		[MemberData(nameof(NonCarryData), MemberType = typeof(SubtractWithCarryTests))]
+		public void WillNotSetTheCarryBit(byte accumulator, byte fetched, bool carry)
+		{
+			SetUpForExecute(accumulator, fetched, carry);
+
+			opCode.Execute();
+
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.CarryBit)).MustHaveHappened();
+		}
+
 		[Theory]
 		[MemberData(nameof(NonNegativeData), MemberType = typeof(SubtractWithCarryTests))]
 		public void WillNotSetTheNegativeFlag(byte accumulator, byte fetched, bool carry)
@@ -267,17 +278,6 @@ namespace FatCat.Nes.Tests.OpCodes
 			opCode.Execute();
 
 			A.CallTo(() => cpu.SetFlag(CpuFlag.CarryBit)).MustHaveHappened();
-		}
-
-		[Theory]
-		[MemberData(nameof(NonCarryData), MemberType = typeof(SubtractWithCarryTests))]
-		public void WillSetTheCarryBitToFalseInNonOverflow(byte accumulator, byte fetched, bool carry)
-		{
-			SetUpForExecute(accumulator, fetched, carry);
-
-			opCode.Execute();
-
-			A.CallTo(() => cpu.RemoveFlag(CpuFlag.CarryBit)).MustHaveHappened();
 		}
 
 		[Theory]
