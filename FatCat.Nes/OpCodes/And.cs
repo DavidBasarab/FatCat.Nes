@@ -10,7 +10,7 @@ namespace FatCat.Nes.OpCodes
 
 		public override int Execute()
 		{
-			var fetched = addressMode.Fetch();
+			Fetch();
 
 			cpu.Accumulator = (byte)(cpu.Accumulator & fetched);
 

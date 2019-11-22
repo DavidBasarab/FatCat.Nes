@@ -10,7 +10,7 @@ namespace FatCat.Nes.OpCodes
 
 		public override int Execute()
 		{
-			fetchedData = addressMode.Fetch();
+			Fetch();
 
 			return DoAddWithCarry();
 		}

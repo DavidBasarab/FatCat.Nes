@@ -5,7 +5,6 @@ namespace FatCat.Nes.OpCodes
 	public abstract class WithCarryOpCode : OpCode
 	{
 		protected bool carryFlag;
-		protected ushort fetchedData;
 		protected int total;
 
 		protected WithCarryOpCode(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
@@ -14,7 +13,7 @@ namespace FatCat.Nes.OpCodes
 		{
 			carryFlag = cpu.GetFlag(CpuFlag.CarryBit);
 
-			total = cpu.Accumulator + fetchedData + (carryFlag ? 1 : 0);
+			total = cpu.Accumulator + fetched + (carryFlag ? 1 : 0);
 
 			SetCarryBit();
 
@@ -46,7 +45,7 @@ namespace FatCat.Nes.OpCodes
 		private void SetOverflowFlag()
 		{
 			// Overflow Flag = ~(A^F) & (A^T)
-			var accumulatorFetched = cpu.Accumulator ^ fetchedData;
+			var accumulatorFetched = cpu.Accumulator ^ fetched;
 			var accumulatorTotal = cpu.Accumulator ^ total;
 
 			var shouldOverflow = (~accumulatorFetched & accumulatorTotal & 0x0080) > 0;

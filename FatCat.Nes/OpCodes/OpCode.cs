@@ -6,6 +6,7 @@ namespace FatCat.Nes.OpCodes
 	{
 		protected readonly IAddressMode addressMode;
 		protected readonly ICpu cpu;
+		protected byte fetched;
 
 		public abstract string Name { get; }
 
@@ -16,5 +17,7 @@ namespace FatCat.Nes.OpCodes
 		}
 
 		public abstract int Execute();
+
+		protected void Fetch() => fetched = addressMode.Fetch();
 	}
 }
