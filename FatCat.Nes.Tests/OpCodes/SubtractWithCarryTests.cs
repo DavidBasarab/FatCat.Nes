@@ -83,21 +83,21 @@ namespace FatCat.Nes.Tests.OpCodes
 			{
 				yield return new object[]
 							{
-								2,    // accumulator
+								20,    // accumulator
 								3,    // fetched
 								false // carry bit set
 							};
 
 				yield return new object[]
 							{
-								2,   // accumulator
+								12,   // accumulator
 								3,   // fetched
 								true // carry bit set
 							};
 
 				yield return new object[]
 							{
-								253, // accumulator
+								110, // accumulator
 								6,   // fetched
 								true // carry bit set
 							};
