@@ -22,7 +22,7 @@ namespace FatCat.Nes.OpCodes
 
 			SetOverflowFlag();
 
-			SetCarryFlag();
+			SetNegativeFlag();
 
 			cpu.Accumulator = total.ApplyLowMask();
 
@@ -35,7 +35,7 @@ namespace FatCat.Nes.OpCodes
 			else cpu.RemoveFlag(CpuFlag.CarryBit);
 		}
 
-		private void SetCarryFlag()
+		private void SetNegativeFlag()
 		{
 			var negativeFlag = (total & 0x80) > 0;
 
