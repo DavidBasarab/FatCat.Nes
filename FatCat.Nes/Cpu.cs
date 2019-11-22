@@ -240,8 +240,8 @@ namespace FatCat.Nes
 
 		private void RunInterrupt(ushort programCounterLocation, int cycles)
 		{
-			PushToStack((byte)((ProgramCounter >> 8) & 0x00ff));
-			PushToStack((byte)(ProgramCounter & 0x00ff));
+			PushToStack((ProgramCounter >> 8).ApplyLowMask());
+			PushToStack(ProgramCounter.ApplyLowMask());
 
 			RemoveFlag(CpuFlag.Break);
 			SetFlag(CpuFlag.Unused);

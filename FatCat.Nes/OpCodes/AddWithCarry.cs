@@ -4,36 +4,50 @@ namespace FatCat.Nes.OpCodes
 {
 	public class AddWithCarry : OpCode
 	{
+		private bool carryFlag;
+		private byte fetchedData;
+		private int total;
+
 		public AddWithCarry(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 
 		public override int Execute()
 		{
-			var fetchedData = addressMode.Fetch();
+			fetchedData = addressMode.Fetch();
 
-			var carryFlag = cpu.GetFlag(CpuFlag.CarryBit);
+			carryFlag = cpu.GetFlag(CpuFlag.CarryBit);
 
-			var total = cpu.Accumulator + fetchedData + (carryFlag ? 1 : 0);
+			total = cpu.Accumulator + fetchedData + (carryFlag ? 1 : 0);
 
-			if (total > 255) cpu.SetFlag(CpuFlag.CarryBit);
-			else cpu.RemoveFlag(CpuFlag.CarryBit);
+			SetCarryBit();
 
-			if ((total & 0x00ff) == 0) cpu.SetFlag(CpuFlag.Zero);
-			else cpu.RemoveFlag(CpuFlag.Zero);
+			SetZeroFlag();
 
-			SetOverflowFlag(fetchedData, total);
+			SetOverflowFlag();
 
-			var negativeFlag = (total & 0x80) > 0;
+			SetCarryFlag();
 
-			if (negativeFlag) cpu.SetFlag(CpuFlag.Negative);
-			else cpu.RemoveFlag(CpuFlag.Negative);
-
-			cpu.Accumulator = (byte)(total & 0x00ff);
+			cpu.Accumulator = total.ApplyLowMask();
 
 			return 1;
 		}
 
-		private void SetOverflowFlag(byte fetchedData, int total)
-		{ // Overflow Flag = ~(A^F) & (A^T)
+		private void SetCarryBit()
+		{
+			if (total > 255) cpu.SetFlag(CpuFlag.CarryBit);
+			else cpu.RemoveFlag(CpuFlag.CarryBit);
+		}
+
+		private void SetCarryFlag()
+		{
+			var negativeFlag = (total & 0x80) > 0;
+
+			if (negativeFlag) cpu.SetFlag(CpuFlag.Negative);
+			else cpu.RemoveFlag(CpuFlag.Negative);
+		}
+
+		private void SetOverflowFlag()
+		{
+			// Overflow Flag = ~(A^F) & (A^T)
 			var accumulatorFetched = cpu.Accumulator ^ fetchedData;
 			var accumulatorTotal = cpu.Accumulator ^ total;
 
@@ -41,6 +55,12 @@ namespace FatCat.Nes.OpCodes
 
 			if (shouldOverflow) cpu.SetFlag(CpuFlag.Overflow);
 			else cpu.RemoveFlag(CpuFlag.Overflow);
+		}
+
+		private void SetZeroFlag()
+		{
+			if (total.ApplyLowMask() == 0) cpu.SetFlag(CpuFlag.Zero);
+			else cpu.RemoveFlag(CpuFlag.Zero);
 		}
 	}
 }

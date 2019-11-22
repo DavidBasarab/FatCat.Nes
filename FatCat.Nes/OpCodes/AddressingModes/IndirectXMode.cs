@@ -25,7 +25,7 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 		private void ReadHighAddress()
 		{
-			var highLocation = (ushort)((location + 1) & 0x00ff);
+			var highLocation = (ushort)(location + 1).ApplyLowMask();
 
 			highAddress = cpu.Read(highLocation);
 		}
@@ -39,7 +39,7 @@ namespace FatCat.Nes.OpCodes.AddressingModes
 
 		private void ReadLowAddress()
 		{
-			var lowLocation = (ushort)(location & 0x00ff);
+			var lowLocation = (ushort)location.ApplyLowMask();
 
 			lowAddress = cpu.Read(lowLocation);
 		}
