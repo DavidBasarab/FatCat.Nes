@@ -9,6 +9,11 @@ namespace FatCat.Nes.OpCodes
 
 		public SubtractWithCarry(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 
-		public override int Execute() => throw new NotImplementedException();
+		public override int Execute()
+		{
+			var fetchedData = addressMode.Fetch();
+			
+			return -1;
+		}
 	}
 }
