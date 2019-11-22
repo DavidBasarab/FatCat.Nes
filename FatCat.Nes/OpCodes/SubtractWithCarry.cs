@@ -5,7 +5,7 @@ namespace FatCat.Nes.OpCodes
 {
 	public class SubtractWithCarry : OpCode
 	{
-		public override string Name { get; }
+		public override string Name => "SBC";
 
 		public SubtractWithCarry(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 
