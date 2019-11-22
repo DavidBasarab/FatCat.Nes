@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using FakeItEasy;
 using FatCat.Nes.OpCodes;
 using FatCat.Nes.OpCodes.AddressingModes;
+using FluentAssertions;
 using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes
@@ -52,8 +53,8 @@ namespace FatCat.Nes.Tests.OpCodes
 			{
 				yield return new object[]
 							{
-								2, // accumulator
-								253, // fetched
+								2,    // accumulator
+								253,  // fetched
 								false // carry bit set
 							};
 
@@ -295,6 +296,21 @@ namespace FatCat.Nes.Tests.OpCodes
 			opCode.Execute();
 
 			A.CallTo(() => cpu.SetFlag(CpuFlag.Zero)).MustHaveHappened();
+		}
+		
+		[Theory]
+		[MemberData(nameof(OverflowData), MemberType = typeof(AddWithCarryTests))]
+		public void WillSetTheAccumulatorToTheNewTotal(byte accumulator, byte fetched, bool carry)
+		{
+			SetUpForExectue(accumulator, fetched, carry);
+
+			opCode.Execute();
+
+			var expectedTotal = accumulator + fetched + (carry ? 1 : 0);
+
+			var expectedAccumulatorValue = (byte)(expectedTotal & 0x00ff);
+
+			cpu.Accumulator.Should().Be(expectedAccumulatorValue);
 		}
 
 		private void SetUpForExectue(byte accumulator, byte fetched, bool carry)
