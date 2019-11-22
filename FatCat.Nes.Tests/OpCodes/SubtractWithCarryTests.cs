@@ -249,7 +249,9 @@ namespace FatCat.Nes.Tests.OpCodes
 
 			opCode.Execute();
 
-			var expectedTotal = accumulator + fetched + (carry ? 1 : 0);
+			var fetchToUse = fetched ^ 0x00ff;
+
+			var expectedTotal = accumulator + fetchToUse + (carry ? 1 : 0);
 
 			var expectedAccumulatorValue = (byte)(expectedTotal & 0x00ff);
 
