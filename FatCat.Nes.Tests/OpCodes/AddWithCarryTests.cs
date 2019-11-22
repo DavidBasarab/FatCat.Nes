@@ -87,6 +87,13 @@ namespace FatCat.Nes.Tests.OpCodes
 								0x01, // fetched
 								false // carry bit set
 							};
+				
+				yield return new object[]
+							{
+								0x3f, // accumulator
+								0x40, // fetched
+								true // carry bit set
+							};
 			}
 		}
 
