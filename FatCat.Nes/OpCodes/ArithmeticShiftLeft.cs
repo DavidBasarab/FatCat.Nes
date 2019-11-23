@@ -23,7 +23,7 @@ namespace FatCat.Nes.OpCodes
 			if (addressMode.Name == "Implied") cpu.Accumulator = shiftValue.ApplyLowMask();
 			else cpu.Write(cpu.AbsoluteAddress, shiftValue.ApplyLowMask());
 
-			return -1;
+			return 0;
 		}
 	}
 }

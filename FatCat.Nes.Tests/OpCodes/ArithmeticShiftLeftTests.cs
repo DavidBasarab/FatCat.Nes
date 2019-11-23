@@ -147,6 +147,14 @@ namespace FatCat.Nes.Tests.OpCodes
 		protected override string ExpectedName => "ASL";
 
 		public ArithmeticShiftLeftTests() => opCode = new ArithmeticShiftLeft(cpu, addressMode);
+		
+		[Fact]
+		public void WillTake0Cycles()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(0);
+		}
 
 		[Fact]
 		public void IfAddressModeIsImpliedTheShiftedValueIsWrittenToAccumulator()
