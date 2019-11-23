@@ -2,11 +2,11 @@ using FatCat.Nes.OpCodes.AddressingModes;
 
 namespace FatCat.Nes.OpCodes
 {
-	public class BranchIfCarrySet : OpCode
+	public class BranchIfCarry : OpCode
 	{
 		public override string Name => "BCS";
 
-		public BranchIfCarrySet(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
+		public BranchIfCarry(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 
 		public override int Execute()
 		{

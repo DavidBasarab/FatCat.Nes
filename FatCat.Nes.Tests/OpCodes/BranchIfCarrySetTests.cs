@@ -39,7 +39,7 @@ namespace FatCat.Nes.Tests.OpCodes
 
 		public BranchIfCarrySetTests()
 		{
-			opCode = new BranchIfCarrySet(cpu, addressMode);
+			opCode = new BranchIfCarry(cpu, addressMode);
 
 			cpu.AbsoluteAddress = AbsoluteAddress;
 			cpu.ProgramCounter = ProgramCounter;
