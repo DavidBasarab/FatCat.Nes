@@ -9,6 +9,62 @@ namespace FatCat.Nes.Tests.OpCodes
 {
 	public class BitOpCodeTests : OpCodeTest
 	{
+		public static IEnumerable<object[]> NegativeData
+		{
+			[UsedImplicitly]
+			get
+			{
+				yield return new object[]
+							{
+								0b_1000_1111, // accumulator
+								0b_1111_0001  // fetched
+							};
+
+				yield return new object[]
+							{
+								0b_1110_1111, // accumulator
+								0b_1111_0001  // fetched
+							};
+
+				yield return new object[]
+							{
+								0b_1111_1111, // accumulator
+								0b_1000_0000  // fetched
+							};
+			}
+		}
+
+		public static IEnumerable<object[]> NonNegativeData
+		{
+			[UsedImplicitly]
+			get
+			{
+				yield return new object[]
+							{
+								0b_0000_1111, // accumulator
+								0b_0111_0001  // fetched
+							};
+
+				yield return new object[]
+							{
+								0x0f, // accumulator
+								0x03  // fetched
+							};
+
+				yield return new object[]
+							{
+								0b_0110_1111, // accumulator
+								0b_0111_0001  // fetched
+							};
+
+				yield return new object[]
+							{
+								0b_1111_1111, // accumulator
+								0b_0000_0000  // fetched
+							};
+			}
+		}
+
 		public static IEnumerable<object[]> NonZeroData
 		{
 			[UsedImplicitly]
@@ -72,32 +128,20 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Theory]
+		[MemberData(nameof(NonNegativeData), MemberType = typeof(BitOpCodeTests))]
+		public void WillRemoveTheNegativeFlag(byte accumulator, byte fetched) => RunRemoveFlagTest(accumulator, fetched, CpuFlag.Negative);
+
+		[Theory]
 		[MemberData(nameof(NonZeroData), MemberType = typeof(BitOpCodeTests))]
-		public void WillRemoveTheZeroFlag(byte accumulator, byte fetched)
-		{
-			cpu.Accumulator = accumulator;
+		public void WillRemoveTheZeroFlag(byte accumulator, byte fetched) => RunRemoveFlagTest(accumulator, fetched, CpuFlag.Zero);
 
-			A.CallTo(() => addressMode.Fetch()).Returns(fetched);
-
-			opCode.Execute();
-
-			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Zero)).MustHaveHappened();
-			A.CallTo(() => cpu.SetFlag(CpuFlag.Zero)).MustNotHaveHappened();
-		}
+		[Theory]
+		[MemberData(nameof(NegativeData), MemberType = typeof(BitOpCodeTests))]
+		public void WillSetTheNegativeFlag(byte accumulator, byte fetched) => RunSetFlagTest(accumulator, fetched, CpuFlag.Negative);
 
 		[Theory]
 		[MemberData(nameof(ZeroData), MemberType = typeof(BitOpCodeTests))]
-		public void WillSetTheZeroFlag(byte accumulator, byte fetched)
-		{
-			cpu.Accumulator = accumulator;
-
-			A.CallTo(() => addressMode.Fetch()).Returns(fetched);
-
-			opCode.Execute();
-
-			A.CallTo(() => cpu.SetFlag(CpuFlag.Zero)).MustHaveHappened();
-			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Zero)).MustNotHaveHappened();
-		}
+		public void WillSetTheZeroFlag(byte accumulator, byte fetched) => RunSetFlagTest(accumulator, fetched, CpuFlag.Zero);
 
 		[Fact]
 		public void WillTakeNoCycles()
@@ -105,6 +149,30 @@ namespace FatCat.Nes.Tests.OpCodes
 			var cycles = opCode.Execute();
 
 			cycles.Should().Be(0);
+		}
+
+		private void RunRemoveFlagTest(byte accumulator, byte fetched, CpuFlag flag)
+		{
+			cpu.Accumulator = accumulator;
+
+			A.CallTo(() => addressMode.Fetch()).Returns(fetched);
+
+			opCode.Execute();
+
+			A.CallTo(() => cpu.RemoveFlag(flag)).MustHaveHappened();
+			A.CallTo(() => cpu.SetFlag(flag)).MustNotHaveHappened();
+		}
+
+		private void RunSetFlagTest(byte accumulator, byte fetched, CpuFlag flag)
+		{
+			cpu.Accumulator = accumulator;
+
+			A.CallTo(() => addressMode.Fetch()).Returns(fetched);
+
+			opCode.Execute();
+
+			A.CallTo(() => cpu.SetFlag(flag)).MustHaveHappened();
+			A.CallTo(() => cpu.RemoveFlag(flag)).MustNotHaveHappened();
 		}
 	}
 }

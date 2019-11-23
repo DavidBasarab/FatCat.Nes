@@ -1,4 +1,3 @@
-using System;
 using FatCat.Nes.OpCodes.AddressingModes;
 
 namespace FatCat.Nes.OpCodes
@@ -15,9 +14,9 @@ namespace FatCat.Nes.OpCodes
 
 			var value = (ushort)(cpu.Accumulator & fetched);
 
-			var binary = Convert.ToString(value, 2);
-
 			ApplyFlag(value.ApplyLowMask() == 0x00, CpuFlag.Zero);
+
+			ApplyFlag((fetched & (1 << 7)) > 0, CpuFlag.Negative);
 
 			return 0;
 		}
