@@ -11,7 +11,12 @@ namespace FatCat.Nes.OpCodes
 		public override int Execute()
 		{
 			Fetch();
-			
+
+			var shiftValue = (ushort)(fetched << 1);
+
+			if (shiftValue.HasCarried()) cpu.SetFlag(CpuFlag.CarryBit);
+			else cpu.RemoveFlag(CpuFlag.CarryBit);
+
 			return -1;
 		}
 	}
