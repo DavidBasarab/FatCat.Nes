@@ -24,6 +24,8 @@ namespace FatCat.Nes
 		public static bool IsNegative(this byte value) => (value & 0x80) > 0;
 
 		public static bool IsNegative(this int value) => (value & 0x80) > 0;
+		
+		public static bool IsNegative(this ushort value) => (value & 0x80) > 0;
 
 		public static bool IsZero(this byte value) => value == 0x00;
 

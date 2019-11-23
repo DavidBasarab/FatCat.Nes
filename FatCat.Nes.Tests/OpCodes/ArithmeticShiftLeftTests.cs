@@ -160,12 +160,20 @@ namespace FatCat.Nes.Tests.OpCodes
 		public void WillNotSetTheCarryFlag(byte fetched) => RunFlagNotSetTest(fetched, CpuFlag.CarryBit);
 
 		[Theory]
+		[MemberData(nameof(NonNegativeData), MemberType = typeof(ArithmeticShiftLeftTests))]
+		public void WillNotSetTheNegativeFlag(byte fetched) => RunFlagNotSetTest(fetched, CpuFlag.Negative);
+
+		[Theory]
 		[MemberData(nameof(NonZeroData), MemberType = typeof(ArithmeticShiftLeftTests))]
 		public void WillNotSetTheZeroFlag(byte fetched) => RunFlagNotSetTest(fetched, CpuFlag.Zero);
 
 		[Theory]
 		[MemberData(nameof(CarryData), MemberType = typeof(ArithmeticShiftLeftTests))]
 		public void WillSetTheCarryFlag(byte fetched) => RunFlagSetTest(fetched, CpuFlag.CarryBit);
+
+		[Theory]
+		[MemberData(nameof(NegativeData), MemberType = typeof(ArithmeticShiftLeftTests))]
+		public void WillSetTheNegativeFlag(byte fetched) => RunFlagSetTest(fetched, CpuFlag.Negative);
 
 		[Theory]
 		[MemberData(nameof(ZeroData), MemberType = typeof(ArithmeticShiftLeftTests))]
