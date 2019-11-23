@@ -15,31 +15,17 @@ namespace FatCat.Nes.OpCodes
 
 			total = cpu.Accumulator + fetched + (carryFlag ? 1 : 0);
 
-			SetCarryBit();
+			ApplyFlag(total.HasCarried(), CpuFlag.CarryBit);
 
-			SetZeroFlag();
+			ApplyFlag(total.IsNegative(), CpuFlag.Negative);
+
+			ApplyFlag(total.IsZero(), CpuFlag.Zero);
 
 			SetOverflowFlag();
-
-			SetNegativeFlag();
 
 			cpu.Accumulator = total.ApplyLowMask();
 
 			return 1;
-		}
-
-		private void SetCarryBit()
-		{
-			if (total > 255) cpu.SetFlag(CpuFlag.CarryBit);
-			else cpu.RemoveFlag(CpuFlag.CarryBit);
-		}
-
-		private void SetNegativeFlag()
-		{
-			var negativeFlag = (total & 0x80) > 0;
-
-			if (negativeFlag) cpu.SetFlag(CpuFlag.Negative);
-			else cpu.RemoveFlag(CpuFlag.Negative);
 		}
 
 		private void SetOverflowFlag()
@@ -52,12 +38,6 @@ namespace FatCat.Nes.OpCodes
 
 			if (shouldOverflow) cpu.SetFlag(CpuFlag.Overflow);
 			else cpu.RemoveFlag(CpuFlag.Overflow);
-		}
-
-		private void SetZeroFlag()
-		{
-			if (total.ApplyLowMask() == 0) cpu.SetFlag(CpuFlag.Zero);
-			else cpu.RemoveFlag(CpuFlag.Zero);
 		}
 	}
 }
