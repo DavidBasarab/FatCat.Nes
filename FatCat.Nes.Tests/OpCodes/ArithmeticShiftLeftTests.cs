@@ -179,6 +179,16 @@ namespace FatCat.Nes.Tests.OpCodes
 		[MemberData(nameof(ZeroData), MemberType = typeof(ArithmeticShiftLeftTests))]
 		public void WillSetTheZeroFlag(byte fetched) => RunFlagSetTest(fetched, CpuFlag.Zero);
 
+		[Fact]
+		public void WillWriteTheShiftedValueTheBus()
+		{
+			opCode.Execute();
+
+			byte expectedValue = (FetchedData << 1) & 0x00ff;
+
+			A.CallTo(() => cpu.Write(cpu.AbsoluteAddress, expectedValue)).MustHaveHappened();
+		}
+
 		private void RunFlagNotSetTest(byte fetched, CpuFlag flag)
 		{
 			A.CallTo(() => addressMode.Fetch()).Returns(fetched);
