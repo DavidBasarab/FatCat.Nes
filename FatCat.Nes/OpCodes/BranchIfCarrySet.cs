@@ -17,13 +17,17 @@ namespace FatCat.Nes.OpCodes
 			if (carrySet)
 			{
 				cycles++;
-				
+
 				cpu.AbsoluteAddress = (ushort)(cpu.ProgramCounter + cpu.RelativeAddress);
+
+				if (HasPaged()) cycles++;
 
 				cpu.ProgramCounter = cpu.AbsoluteAddress;
 			}
 
 			return cycles;
 		}
+
+		private bool HasPaged() => cpu.AbsoluteAddress.ApplyHighMask() != cpu.ProgramCounter.ApplyHighMask();
 	}
 }

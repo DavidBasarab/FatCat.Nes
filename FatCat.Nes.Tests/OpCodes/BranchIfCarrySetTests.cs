@@ -17,11 +17,20 @@ namespace FatCat.Nes.Tests.OpCodes
 			[UsedImplicitly]
 			get
 			{
+				// Will not move the page
 				yield return new object[]
 							{
 								0x1102, // Program Counter
-								0x1103, // Relative Address,
+								0x0003, // Relative Address,
 								1       // Cycles
+							};
+				
+				// Will move the page
+				yield return new object[]
+							{
+								0x17d2, // Program Counter
+								0x17FF, // Relative Address,
+								2       // Cycles
 							};
 			}
 		}

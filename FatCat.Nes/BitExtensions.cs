@@ -5,7 +5,7 @@ namespace FatCat.Nes
 		private const int HighMask = 0xff00;
 		private const int LowMask = 0x00ff;
 
-		public static byte ApplyHighMask(this ushort value) => (byte)(value & HighMask);
+		public static ushort ApplyHighMask(this ushort value) => (ushort)(value & HighMask);
 
 		public static byte ApplyHighMask(this byte value) => (byte)(value & HighMask);
 
