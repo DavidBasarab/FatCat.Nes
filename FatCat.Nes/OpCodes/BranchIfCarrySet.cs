@@ -10,10 +10,20 @@ namespace FatCat.Nes.OpCodes
 
 		public override int Execute()
 		{
+			var cycles = 0;
 
 			var carrySet = cpu.GetFlag(CpuFlag.CarryBit);
-			
-			return 0;
+
+			if (carrySet)
+			{
+				cycles++;
+				
+				cpu.AbsoluteAddress = (ushort)(cpu.ProgramCounter + cpu.RelativeAddress);
+
+				cpu.ProgramCounter = cpu.AbsoluteAddress;
+			}
+
+			return cycles;
 		}
 	}
 }

@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using FakeItEasy;
 using FatCat.Nes.OpCodes;
 using FluentAssertions;
+using JetBrains.Annotations;
 using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes
@@ -9,6 +11,20 @@ namespace FatCat.Nes.Tests.OpCodes
 	{
 		private const ushort AbsoluteAddress = 0x4907;
 		private const ushort ProgramCounter = 0x2019;
+
+		public static IEnumerable<object[]> BranchCarryData
+		{
+			[UsedImplicitly]
+			get
+			{
+				yield return new object[]
+							{
+								0x1102, // Program Counter
+								0x1103, // Relative Address,
+								1       // Cycles
+							};
+			}
+		}
 
 		protected override string ExpectedName => "BCS";
 
@@ -41,6 +57,23 @@ namespace FatCat.Nes.Tests.OpCodes
 
 			cpu.AbsoluteAddress.Should().Be(AbsoluteAddress);
 			cpu.ProgramCounter.Should().Be(ProgramCounter);
+		}
+
+		[Theory]
+		[MemberData(nameof(BranchCarryData), MemberType = typeof(BranchIfCarrySetTests))]
+		public void WillBranchBasedOnProvidedData(ushort programCounter, ushort relativeAddress, int expectedCycles)
+		{
+			cpu.ProgramCounter = programCounter;
+			cpu.RelativeAddress = relativeAddress;
+
+			var cycles = opCode.Execute();
+
+			var expectedAbsoluteAddress = (ushort)(programCounter + relativeAddress);
+
+			cpu.AbsoluteAddress.Should().Be(expectedAbsoluteAddress);
+			cpu.ProgramCounter.Should().Be(expectedAbsoluteAddress);
+
+			cycles.Should().Be(expectedCycles);
 		}
 
 		[Fact]
