@@ -18,6 +18,12 @@ namespace FatCat.Nes.OpCodes
 
 		public abstract int Execute();
 
+		protected void ApplyFlag(bool shouldSet, CpuFlag flag)
+		{
+			if (shouldSet) cpu.SetFlag(flag);
+			else cpu.RemoveFlag(flag);
+		}
+
 		protected void Fetch() => fetched = addressMode.Fetch();
 	}
 }

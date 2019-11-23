@@ -14,8 +14,9 @@ namespace FatCat.Nes.OpCodes
 
 			var shiftValue = (ushort)(fetched << 1);
 
-			if (shiftValue.HasCarried()) cpu.SetFlag(CpuFlag.CarryBit);
-			else cpu.RemoveFlag(CpuFlag.CarryBit);
+			ApplyFlag(shiftValue.HasCarried(), CpuFlag.CarryBit);
+
+			ApplyFlag(shiftValue.ApplyLowMask() == 0x00, CpuFlag.Zero);
 
 			return -1;
 		}

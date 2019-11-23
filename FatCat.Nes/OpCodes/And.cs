@@ -13,12 +13,10 @@ namespace FatCat.Nes.OpCodes
 			Fetch();
 
 			cpu.Accumulator = (byte)(cpu.Accumulator & fetched);
-
-			if (cpu.Accumulator.IsZero()) cpu.SetFlag(CpuFlag.Zero);
-			else cpu.RemoveFlag(CpuFlag.Zero);
-
-			if (cpu.Accumulator.IsNegative()) cpu.SetFlag(CpuFlag.Negative);
-			else cpu.RemoveFlag(CpuFlag.Negative);
+			
+			ApplyFlag(cpu.Accumulator.IsZero(), CpuFlag.Zero);
+			
+			ApplyFlag(cpu.Accumulator.IsNegative(), CpuFlag.Negative);
 
 			return 1;
 		}

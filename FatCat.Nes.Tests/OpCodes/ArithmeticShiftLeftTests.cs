@@ -157,26 +157,38 @@ namespace FatCat.Nes.Tests.OpCodes
 
 		[Theory]
 		[MemberData(nameof(NonCarryData), MemberType = typeof(ArithmeticShiftLeftTests))]
-		public void WillNotSetTheCarryData(byte fetched)
-		{
-			A.CallTo(() => addressMode.Fetch()).Returns(fetched);
+		public void WillNotSetTheCarryFlag(byte fetched) => RunFlagNotSetTest(fetched, CpuFlag.CarryBit);
 
-			opCode.Execute();
-
-			A.CallTo(() => cpu.RemoveFlag(CpuFlag.CarryBit)).MustHaveHappened();
-			A.CallTo(() => cpu.SetFlag(CpuFlag.CarryBit)).MustNotHaveHappened();
-		}
+		[Theory]
+		[MemberData(nameof(NonZeroData), MemberType = typeof(ArithmeticShiftLeftTests))]
+		public void WillNotSetTheZeroFlag(byte fetched) => RunFlagNotSetTest(fetched, CpuFlag.Zero);
 
 		[Theory]
 		[MemberData(nameof(CarryData), MemberType = typeof(ArithmeticShiftLeftTests))]
-		public void WillSetTheCarryFlag(byte fetched)
+		public void WillSetTheCarryFlag(byte fetched) => RunFlagSetTest(fetched, CpuFlag.CarryBit);
+
+		[Theory]
+		[MemberData(nameof(ZeroData), MemberType = typeof(ArithmeticShiftLeftTests))]
+		public void WillSetTheZeroFlag(byte fetched) => RunFlagSetTest(fetched, CpuFlag.Zero);
+
+		private void RunFlagNotSetTest(byte fetched, CpuFlag flag)
 		{
 			A.CallTo(() => addressMode.Fetch()).Returns(fetched);
 
 			opCode.Execute();
 
-			A.CallTo(() => cpu.SetFlag(CpuFlag.CarryBit)).MustHaveHappened();
-			A.CallTo(() => cpu.RemoveFlag(CpuFlag.CarryBit)).MustNotHaveHappened();
+			A.CallTo(() => cpu.RemoveFlag(flag)).MustHaveHappened();
+			A.CallTo(() => cpu.SetFlag(flag)).MustNotHaveHappened();
+		}
+
+		private void RunFlagSetTest(byte fetched, CpuFlag flag)
+		{
+			A.CallTo(() => addressMode.Fetch()).Returns(fetched);
+
+			opCode.Execute();
+
+			A.CallTo(() => cpu.SetFlag(flag)).MustHaveHappened();
+			A.CallTo(() => cpu.RemoveFlag(flag)).MustNotHaveHappened();
 		}
 	}
 }
