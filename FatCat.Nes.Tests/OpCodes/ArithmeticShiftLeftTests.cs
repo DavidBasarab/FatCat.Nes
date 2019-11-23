@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using FakeItEasy;
 using FatCat.Nes.OpCodes;
+using FluentAssertions;
 using JetBrains.Annotations;
 using Xunit;
 
@@ -148,6 +149,20 @@ namespace FatCat.Nes.Tests.OpCodes
 		public ArithmeticShiftLeftTests() => opCode = new ArithmeticShiftLeft(cpu, addressMode);
 
 		[Fact]
+		public void IfAddressModeIsImpliedTheShiftedValueIsWrittenToAccumulator()
+		{
+			A.CallTo(() => addressMode.Name).Returns("Implied");
+
+			opCode.Execute();
+
+			byte expectedValue = (FetchedData << 1) & 0x00ff;
+
+			cpu.Accumulator.Should().Be(expectedValue);
+			
+			A.CallTo(() => cpu.Write(cpu.AbsoluteAddress, expectedValue)).MustNotHaveHappened();
+		}
+
+		[Fact]
 		public void WillFetchTheDataFromTheAddressMode()
 		{
 			opCode.Execute();
@@ -187,6 +202,8 @@ namespace FatCat.Nes.Tests.OpCodes
 			byte expectedValue = (FetchedData << 1) & 0x00ff;
 
 			A.CallTo(() => cpu.Write(cpu.AbsoluteAddress, expectedValue)).MustHaveHappened();
+
+			cpu.Accumulator.Should().Be(Accumulator);
 		}
 
 		private void RunFlagNotSetTest(byte fetched, CpuFlag flag)
