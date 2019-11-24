@@ -17,6 +17,8 @@ namespace FatCat.Nes.OpCodes
 			WriteToStack((byte)((cpu.ProgramCounter >> 8) & 0x00ff));
 			WriteToStack((byte)(cpu.ProgramCounter & 0x00ff));
 
+			cpu.SetFlag(CpuFlag.Break);
+
 			return -1;
 		}
 

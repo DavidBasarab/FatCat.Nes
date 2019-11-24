@@ -20,6 +20,14 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Fact]
+		public void WillSetTheBreakFlag()
+		{
+			opCode.Execute();
+
+			A.CallTo(() => cpu.SetFlag(CpuFlag.Break)).MustHaveHappened();
+		}
+
+		[Fact]
 		public void WillSetTheInterruptFlag()
 		{
 			opCode.Execute();
@@ -40,7 +48,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Fact]
-		public void WIllWriteTheLowMemoryOfTheProgramCounter()
+		public void WillWriteTheLowMemoryOfTheProgramCounter()
 		{
 			opCode.Execute();
 
