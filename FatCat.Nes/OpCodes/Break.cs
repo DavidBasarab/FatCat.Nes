@@ -19,6 +19,8 @@ namespace FatCat.Nes.OpCodes
 
 			cpu.SetFlag(CpuFlag.Break);
 
+			WriteToStack((byte)cpu.StatusRegister);
+
 			return -1;
 		}
 

@@ -17,6 +17,8 @@ namespace FatCat.Nes.Tests.OpCodes
 
 			cpu.ProgramCounter = ProgramCounter;
 			cpu.StackPointer = StackPointer;
+
+			cpu.StatusRegister = CpuFlag.Break | CpuFlag.Zero | CpuFlag.DecimalMode | CpuFlag.DisableInterrupts;
 		}
 
 		[Fact]
@@ -57,6 +59,16 @@ namespace FatCat.Nes.Tests.OpCodes
 			ushort writeAddress = StackPointer - 1 + 0x0100;
 
 			A.CallTo(() => cpu.Write(writeAddress, expectedProgramCounter)).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillWriteTheStackFlagToTheStack()
+		{
+			opCode.Execute();
+
+			ushort expectedStackPointer = StackPointer - 2 + 0x0100;
+
+			A.CallTo(() => cpu.Write(expectedStackPointer, (byte)cpu.StatusRegister)).MustHaveHappened();
 		}
 	}
 }
