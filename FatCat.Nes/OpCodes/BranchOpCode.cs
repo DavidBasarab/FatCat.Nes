@@ -5,6 +5,8 @@ namespace FatCat.Nes.OpCodes
 	public abstract class BranchOpCode : OpCode
 	{
 		protected abstract CpuFlag Flag { get; }
+		
+		protected abstract bool FlagState { get; }
 
 		protected BranchOpCode(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 
@@ -14,7 +16,7 @@ namespace FatCat.Nes.OpCodes
 
 			var flagSet = cpu.GetFlag(Flag);
 
-			if (flagSet)
+			if (flagSet == FlagState)
 			{
 				cycles++;
 

@@ -8,6 +8,8 @@ namespace FatCat.Nes.OpCodes
 
 		protected override CpuFlag Flag => CpuFlag.CarryBit;
 
+		protected override bool FlagState => true;
+
 		public BranchIfCarry(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 	}
 }

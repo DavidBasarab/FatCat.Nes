@@ -8,6 +8,8 @@ namespace FatCat.Nes.OpCodes
 
 		protected override CpuFlag Flag => CpuFlag.Negative;
 
+		protected override bool FlagState => true;
+
 		public BranchIfNegative(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 	}
 }
