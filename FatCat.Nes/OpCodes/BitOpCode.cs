@@ -18,6 +18,8 @@ namespace FatCat.Nes.OpCodes
 
 			ApplyFlag((fetched & (1 << 7)) > 0, CpuFlag.Negative);
 
+			ApplyFlag((fetched & (1 << 6)) > 0, CpuFlag.Overflow);
+
 			return 0;
 		}
 	}

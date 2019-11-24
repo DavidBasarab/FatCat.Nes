@@ -60,6 +60,31 @@ namespace FatCat.Nes.Tests.OpCodes
 				yield return new object[]
 							{
 								0b_1111_1111, // accumulator
+								0b_0100_0000  // fetched
+							};
+			}
+		}
+
+		public static IEnumerable<object[]> NonOverflowData
+		{
+			[UsedImplicitly]
+			get
+			{
+				yield return new object[]
+							{
+								0b_0000_1111, // accumulator
+								0b_1011_0001  // fetched
+							};
+
+				yield return new object[]
+							{
+								0b_0110_1111, // accumulator
+								0b_1000_0000  // fetched
+							};
+
+				yield return new object[]
+							{
+								0b_1111_1111, // accumulator
 								0b_0000_0000  // fetched
 							};
 			}
@@ -86,6 +111,31 @@ namespace FatCat.Nes.Tests.OpCodes
 							{
 								0x03, // accumulator
 								0x11  // fetched
+							};
+			}
+		}
+
+		public static IEnumerable<object[]> OverflowData
+		{
+			[UsedImplicitly]
+			get
+			{
+				yield return new object[]
+							{
+								0b_1000_1111, // accumulator
+								0b_1111_0001  // fetched
+							};
+
+				yield return new object[]
+							{
+								0b_1110_1111, // accumulator
+								0b_0100_0000  // fetched
+							};
+
+				yield return new object[]
+							{
+								0b_1111_1111, // accumulator
+								0b_1111_1111  // fetched
 							};
 			}
 		}
@@ -132,12 +182,20 @@ namespace FatCat.Nes.Tests.OpCodes
 		public void WillRemoveTheNegativeFlag(byte accumulator, byte fetched) => RunRemoveFlagTest(accumulator, fetched, CpuFlag.Negative);
 
 		[Theory]
+		[MemberData(nameof(NonOverflowData), MemberType = typeof(BitOpCodeTests))]
+		public void WillRemoveTheOverflowFlag(byte accumulator, byte fetched) => RunRemoveFlagTest(accumulator, fetched, CpuFlag.Overflow);
+
+		[Theory]
 		[MemberData(nameof(NonZeroData), MemberType = typeof(BitOpCodeTests))]
 		public void WillRemoveTheZeroFlag(byte accumulator, byte fetched) => RunRemoveFlagTest(accumulator, fetched, CpuFlag.Zero);
 
 		[Theory]
 		[MemberData(nameof(NegativeData), MemberType = typeof(BitOpCodeTests))]
 		public void WillSetTheNegativeFlag(byte accumulator, byte fetched) => RunSetFlagTest(accumulator, fetched, CpuFlag.Negative);
+
+		[Theory]
+		[MemberData(nameof(OverflowData), MemberType = typeof(BitOpCodeTests))]
+		public void WillSetTheOverflowFlag(byte accumulator, byte fetched) => RunSetFlagTest(accumulator, fetched, CpuFlag.Overflow);
 
 		[Theory]
 		[MemberData(nameof(ZeroData), MemberType = typeof(BitOpCodeTests))]
