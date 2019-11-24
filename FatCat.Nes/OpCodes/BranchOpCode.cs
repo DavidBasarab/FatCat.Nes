@@ -10,9 +10,9 @@ namespace FatCat.Nes.OpCodes
 		{
 			var cycles = 0;
 
-			var carrySet = cpu.GetFlag(flag);
+			var flagSet = cpu.GetFlag(flag);
 
-			if (carrySet)
+			if (flagSet)
 			{
 				cycles++;
 
