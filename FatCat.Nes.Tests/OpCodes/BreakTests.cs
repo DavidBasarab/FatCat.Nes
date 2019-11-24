@@ -7,6 +7,9 @@ namespace FatCat.Nes.Tests.OpCodes
 	public class BreakTests : OpCodeTest
 	{
 		private const ushort ProgramCounter = 0x2817;
+
+		private const ushort ProgramCounterHighLocation = 0xfffe;
+		private const ushort ProgramCounterLowLocation = 0xffff;
 		private const byte StackPointer = 0x32;
 
 		protected override string ExpectedName => "BRK";
@@ -19,6 +22,22 @@ namespace FatCat.Nes.Tests.OpCodes
 			cpu.StackPointer = StackPointer;
 
 			cpu.StatusRegister = CpuFlag.Break | CpuFlag.Zero | CpuFlag.DecimalMode | CpuFlag.DisableInterrupts;
+		}
+
+		[Fact]
+		public void WillReadHighMemoryPointer()
+		{
+			opCode.Execute();
+
+			A.CallTo(() => cpu.Read(ProgramCounterHighLocation)).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillReadLowMemoryPointer()
+		{
+			opCode.Execute();
+
+			A.CallTo(() => cpu.Read(ProgramCounterLowLocation)).MustHaveHappened();
 		}
 
 		[Fact]

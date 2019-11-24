@@ -21,6 +21,9 @@ namespace FatCat.Nes.OpCodes
 
 			WriteToStack((byte)cpu.StatusRegister);
 
+			var lowCounter = cpu.Read(0xffff);
+			var highCounter = cpu.Read(0xfffe);
+
 			return -1;
 		}
 
