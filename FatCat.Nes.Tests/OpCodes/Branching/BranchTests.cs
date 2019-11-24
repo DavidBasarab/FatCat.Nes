@@ -1,18 +1,17 @@
 using System.Collections.Generic;
 using FakeItEasy;
-using FatCat.Nes.OpCodes;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Xunit;
 
-namespace FatCat.Nes.Tests.OpCodes
+namespace FatCat.Nes.Tests.OpCodes.Branching
 {
-	public class BranchIfEqualTests : OpCodeTest
+	public abstract class BranchTests : OpCodeTest
 	{
 		private const ushort AbsoluteAddress = 0x4907;
 		private const ushort ProgramCounter = 0x2019;
 
-		public static IEnumerable<object[]> BranchData
+		public static IEnumerable<object[]> BranchCarryData
 		{
 			[UsedImplicitly]
 			get
@@ -35,32 +34,20 @@ namespace FatCat.Nes.Tests.OpCodes
 			}
 		}
 
-		protected override string ExpectedName => "BEQ";
+		protected abstract CpuFlag Flag { get; }
 
-		public BranchIfEqualTests()
+		protected BranchTests()
 		{
-			opCode = new BranchIfEqual(cpu, addressMode);
-
 			cpu.AbsoluteAddress = AbsoluteAddress;
 			cpu.ProgramCounter = ProgramCounter;
 
-			A.CallTo(() => cpu.GetFlag(CpuFlag.Zero)).Returns(true);
+			A.CallTo(() => cpu.GetFlag(Flag)).Returns(true);
 		}
 
 		[Fact]
-		public void WhenCarryFlagIsNotSetCyclesIsZero()
+		public void WhenFlagIsNotSetNothingHappens()
 		{
-			SetZeroFlagToFalse();
-
-			var cycles = opCode.Execute();
-
-			cycles.Should().Be(0);
-		}
-
-		[Fact]
-		public void WhenCarryFlagIsNotSetNothingHappens()
-		{
-			SetZeroFlagToFalse();
+			SetFlagToFalse();
 
 			opCode.Execute();
 
@@ -68,8 +55,18 @@ namespace FatCat.Nes.Tests.OpCodes
 			cpu.ProgramCounter.Should().Be(ProgramCounter);
 		}
 
+		[Fact]
+		public void WhenFlagIsValidCyclesIsZero()
+		{
+			SetFlagToFalse();
+
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(0);
+		}
+
 		[Theory]
-		[MemberData(nameof(BranchData), MemberType = typeof(BranchIfEqualTests))]
+		[MemberData(nameof(BranchCarryData), MemberType = typeof(BranchTests))]
 		public void WillBranchBasedOnProvidedData(ushort programCounter, ushort relativeAddress, int expectedCycles)
 		{
 			cpu.ProgramCounter = programCounter;
@@ -86,13 +83,13 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Fact]
-		public void WillGetZeroFlag()
+		public void WillGetTheFlag()
 		{
 			opCode.Execute();
 
-			A.CallTo(() => cpu.GetFlag(CpuFlag.Zero)).MustHaveHappened();
+			A.CallTo(() => cpu.GetFlag(Flag)).MustHaveHappened();
 		}
 
-		private void SetZeroFlagToFalse() => A.CallTo(() => cpu.GetFlag(CpuFlag.Zero)).Returns(false);
+		private void SetFlagToFalse() => A.CallTo(() => cpu.GetFlag(Flag)).Returns(false);
 	}
 }
