@@ -21,12 +21,17 @@ namespace FatCat.Nes.OpCodes
 
 			WriteToStack((byte)cpu.StatusRegister);
 
+			SetNewProgramCounterLocation();
+
+			return 0;
+		}
+
+		private void SetNewProgramCounterLocation()
+		{
 			var lowCounter = cpu.Read(0xffff);
 			var highCounter = cpu.Read(0xfffe);
 
-			cpu.ProgramCounter = (ushort)(highCounter << 8 | lowCounter);
-
-			return -1;
+			cpu.ProgramCounter = (ushort)((highCounter << 8) | lowCounter);
 		}
 
 		private void WriteToStack(byte data)

@@ -103,5 +103,13 @@ namespace FatCat.Nes.Tests.OpCodes
 
 			A.CallTo(() => cpu.Write(expectedStackPointer, (byte)cpu.StatusRegister)).MustHaveHappened();
 		}
+		
+		[Fact]
+		public void BreakTakesNoCycles()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(0);
+		}
 	}
 }
