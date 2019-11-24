@@ -1,4 +1,5 @@
 using FatCat.Nes.OpCodes;
+using FatCat.Nes.OpCodes.ClearingFlags;
 using JetBrains.Annotations;
 
 namespace FatCat.Nes.Tests.OpCodes.ClearingFlags

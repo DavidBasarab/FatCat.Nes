@@ -1,7 +1,6 @@
-using System;
 using FatCat.Nes.OpCodes.AddressingModes;
 
-namespace FatCat.Nes.OpCodes
+namespace FatCat.Nes.OpCodes.Branching
 {
 	public class BranchIfOverFlowSet : BranchOpCode
 	{

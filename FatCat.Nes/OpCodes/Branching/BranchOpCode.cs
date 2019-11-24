@@ -1,6 +1,6 @@
 using FatCat.Nes.OpCodes.AddressingModes;
 
-namespace FatCat.Nes.OpCodes
+namespace FatCat.Nes.OpCodes.Branching
 {
 	public abstract class BranchOpCode : OpCode
 	{

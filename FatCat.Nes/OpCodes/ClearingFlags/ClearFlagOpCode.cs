@@ -1,6 +1,6 @@
 using FatCat.Nes.OpCodes.AddressingModes;
 
-namespace FatCat.Nes.OpCodes
+namespace FatCat.Nes.OpCodes.ClearingFlags
 {
 	public abstract class ClearFlagOpCode : OpCode
 	{
