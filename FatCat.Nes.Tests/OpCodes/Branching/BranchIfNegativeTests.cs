@@ -10,6 +10,8 @@ namespace FatCat.Nes.Tests.OpCodes.Branching
 
 		protected override CpuFlag Flag => CpuFlag.Negative;
 
+		protected override bool FlagState => true;
+
 		public BranchIfNegativeTests() => opCode = new BranchIfNegative(cpu, addressMode);
 	}
 }

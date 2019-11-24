@@ -36,18 +36,21 @@ namespace FatCat.Nes.Tests.OpCodes.Branching
 
 		protected abstract CpuFlag Flag { get; }
 
+		protected abstract bool FlagState { get; }
+
 		protected BranchTests()
 		{
 			cpu.AbsoluteAddress = AbsoluteAddress;
 			cpu.ProgramCounter = ProgramCounter;
 
-			A.CallTo(() => cpu.GetFlag(Flag)).Returns(true);
+			// ReSharper disable once VirtualMemberCallInConstructor
+			A.CallTo(() => cpu.GetFlag(Flag)).Returns(FlagState);
 		}
 
 		[Fact]
 		public void WhenFlagIsNotSetNothingHappens()
 		{
-			SetFlagToFalse();
+			SwitchFlagState();
 
 			opCode.Execute();
 
@@ -58,7 +61,7 @@ namespace FatCat.Nes.Tests.OpCodes.Branching
 		[Fact]
 		public void WhenFlagIsValidCyclesIsZero()
 		{
-			SetFlagToFalse();
+			SwitchFlagState();
 
 			var cycles = opCode.Execute();
 
@@ -90,6 +93,6 @@ namespace FatCat.Nes.Tests.OpCodes.Branching
 			A.CallTo(() => cpu.GetFlag(Flag)).MustHaveHappened();
 		}
 
-		private void SetFlagToFalse() => A.CallTo(() => cpu.GetFlag(Flag)).Returns(false);
+		private void SwitchFlagState() => A.CallTo(() => cpu.GetFlag(Flag)).Returns(!FlagState);
 	}
 }
