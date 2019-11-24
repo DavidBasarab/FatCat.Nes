@@ -6,8 +6,8 @@ namespace FatCat.Nes.OpCodes
 	{
 		public override string Name => "BEQ";
 
-		public BranchIfEqual(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
+		protected override CpuFlag Flag => CpuFlag.Zero;
 
-		public override int Execute() => PerformBranch(CpuFlag.Zero);
+		public BranchIfEqual(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 	}
 }

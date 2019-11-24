@@ -6,8 +6,8 @@ namespace FatCat.Nes.OpCodes
 	{
 		public override string Name => "BCS";
 
-		public BranchIfCarry(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
+		protected override CpuFlag Flag => CpuFlag.CarryBit;
 
-		public override int Execute() => PerformBranch(CpuFlag.CarryBit);
+		public BranchIfCarry(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 	}
 }

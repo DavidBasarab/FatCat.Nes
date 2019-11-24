@@ -6,8 +6,8 @@ namespace FatCat.Nes.OpCodes
 	{
 		public override string Name => "BMI";
 
-		public BranchIfNegative(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
+		protected override CpuFlag Flag => CpuFlag.Negative;
 
-		public override int Execute() => PerformBranch(CpuFlag.Negative);
+		public BranchIfNegative(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 	}
 }

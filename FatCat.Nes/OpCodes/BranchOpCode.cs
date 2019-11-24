@@ -4,13 +4,15 @@ namespace FatCat.Nes.OpCodes
 {
 	public abstract class BranchOpCode : OpCode
 	{
+		protected abstract CpuFlag Flag { get; }
+
 		protected BranchOpCode(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 
-		protected int PerformBranch(CpuFlag flag)
+		public override int Execute()
 		{
 			var cycles = 0;
 
-			var flagSet = cpu.GetFlag(flag);
+			var flagSet = cpu.GetFlag(Flag);
 
 			if (flagSet)
 			{
