@@ -1,13 +1,16 @@
 using FakeItEasy;
 using FatCat.Nes.OpCodes;
+using FluentAssertions;
 using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes
 {
 	public class BreakTests : OpCodeTest
 	{
+		private const ushort NewProgramCounter = 0x4215;
+		private const byte NewProgramCounterHigh = 0x42;
+		private const byte NewProgramCounterLow = 0x15;
 		private const ushort ProgramCounter = 0x2817;
-
 		private const ushort ProgramCounterHighLocation = 0xfffe;
 		private const ushort ProgramCounterLowLocation = 0xffff;
 		private const byte StackPointer = 0x32;
@@ -22,6 +25,9 @@ namespace FatCat.Nes.Tests.OpCodes
 			cpu.StackPointer = StackPointer;
 
 			cpu.StatusRegister = CpuFlag.Break | CpuFlag.Zero | CpuFlag.DecimalMode | CpuFlag.DisableInterrupts;
+
+			A.CallTo(() => cpu.Read(ProgramCounterLowLocation)).Returns(NewProgramCounterLow);
+			A.CallTo(() => cpu.Read(ProgramCounterHighLocation)).Returns(NewProgramCounterHigh);
 		}
 
 		[Fact]
@@ -54,6 +60,14 @@ namespace FatCat.Nes.Tests.OpCodes
 			opCode.Execute();
 
 			A.CallTo(() => cpu.SetFlag(CpuFlag.DisableInterrupts)).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillSetTheProgramCounterToTheNewValue()
+		{
+			opCode.Execute();
+
+			cpu.ProgramCounter.Should().Be(NewProgramCounter);
 		}
 
 		[Fact]
