@@ -24,5 +24,13 @@ namespace FatCat.Nes.Tests.OpCodes
 
 			cpu.ProgramCounter.Should().Be(AbsoluteAddress);
 		}
+
+		[Fact]
+		public void WillTake0Cycles()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(0);
+		}
 	}
 }

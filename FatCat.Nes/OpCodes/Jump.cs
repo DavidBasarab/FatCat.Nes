@@ -12,7 +12,7 @@ namespace FatCat.Nes.OpCodes
 		{
 			cpu.ProgramCounter = cpu.AbsoluteAddress;
 			
-			return -1;
+			return 0;
 		}
 	}
 }
