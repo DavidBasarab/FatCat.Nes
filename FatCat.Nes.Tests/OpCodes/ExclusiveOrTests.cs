@@ -1,5 +1,6 @@
 using FakeItEasy;
 using FatCat.Nes.OpCodes;
+using FluentAssertions;
 using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes
@@ -16,6 +17,16 @@ namespace FatCat.Nes.Tests.OpCodes
 			opCode.Execute();
 
 			A.CallTo(() => addressMode.Fetch()).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillDoXorOnAccumulator()
+		{
+			opCode.Execute();
+
+			byte expectedAccumulator = Accumulator ^ FetchedData;
+
+			cpu.Accumulator.Should().Be(expectedAccumulator);
 		}
 	}
 }
