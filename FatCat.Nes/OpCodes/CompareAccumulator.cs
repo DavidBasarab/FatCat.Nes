@@ -16,6 +16,8 @@ namespace FatCat.Nes.OpCodes
 
 			ApplyFlag(cpu.Accumulator >= fetched, CpuFlag.CarryBit);
 
+			ApplyFlag(value.ApplyLowMask() == 0x0000, CpuFlag.Zero);
+
 			return -1;
 		}
 	}

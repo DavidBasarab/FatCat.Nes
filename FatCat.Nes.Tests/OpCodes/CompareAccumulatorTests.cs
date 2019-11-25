@@ -40,19 +40,55 @@ namespace FatCat.Nes.Tests.OpCodes
 								0x01, // fetched
 								false // carry flag set
 							};
-				
+
 				yield return new object[]
 							{
 								0x01, // accumulator
 								0x01, // fetched
-								true // carry flag set
+								true  // carry flag set
 							};
-				
+
 				yield return new object[]
 							{
 								0x00, // accumulator
 								0x00, // fetched
 								true  // carry flag set
+							};
+			}
+		}
+
+		public static IEnumerable<object[]> ZeroFlag
+		{
+			[UsedImplicitly]
+			get
+			{
+				yield return new object[]
+							{
+								0b_0111_1111, // accumulator
+								0b_0111_1111, // fetched
+								true          // zero flag set
+							};
+
+				yield return new object[]
+							{
+								0b_1000_0000, // accumulator
+								0b_1000_0000, // fetched
+								true          // zero flag set
+							};
+
+				yield return new object[]
+							{
+								0b_0000_0001, // accumulator
+								0b_1111_1111, // fetched
+								false         // zero flag set
+							};
+
+				
+				yield return new object[]
+							{
+								0b_1111_1111, // accumulator
+								0b_0000_0001, // fetched
+								false         // zero flag set
 							};
 			}
 		}
@@ -63,9 +99,13 @@ namespace FatCat.Nes.Tests.OpCodes
 
 		[Theory]
 		[MemberData(nameof(CarryFlag), MemberType = typeof(CompareAccumulatorTests))]
-		public void WillApplyTheCarryFlagCorrectly(byte accumulator, byte fetched, bool carryFlagSet) => RunApplyFlagTest(accumulator, fetched, carryFlagSet);
+		public void WillApplyTheCarryFlagCorrectly(byte accumulator, byte fetched, bool carryFlagSet) => RunApplyFlagTest(accumulator, fetched, carryFlagSet, CpuFlag.CarryBit);
 
-		private void RunApplyFlagTest(byte accumulator, byte fetched, bool carryFlagSet)
+		[Theory]
+		[MemberData(nameof(ZeroFlag), MemberType = typeof(CompareAccumulatorTests))]
+		public void WillApplyTheZeroFlagCorrectly(byte accumulator, byte fetched, bool zeroFlagSet) => RunApplyFlagTest(accumulator, fetched, zeroFlagSet, CpuFlag.Zero);
+
+		private void RunApplyFlagTest(byte accumulator, byte fetched, bool carryFlagSet, CpuFlag flag)
 		{
 			cpu.Accumulator = accumulator;
 
@@ -73,7 +113,7 @@ namespace FatCat.Nes.Tests.OpCodes
 
 			opCode.Execute();
 
-			VerifyFlag(carryFlagSet, CpuFlag.CarryBit);
+			VerifyFlag(carryFlagSet, flag);
 		}
 
 		private void VerifyFlag(bool flagSet, CpuFlag flag)
