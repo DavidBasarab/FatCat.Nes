@@ -12,8 +12,6 @@ namespace FatCat.Nes.OpCodes
 		{
 			cpu.XRegister--;
 
-			cpu.Write(cpu.AbsoluteAddress, cpu.XRegister.ApplyLowMask());
-
 			ApplyFlag(cpu.XRegister.IsZero(), CpuFlag.Zero);
 			ApplyFlag(cpu.XRegister.IsNegative(), CpuFlag.Negative);
 
