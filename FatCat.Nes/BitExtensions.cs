@@ -24,10 +24,12 @@ namespace FatCat.Nes
 		public static bool IsNegative(this byte value) => (value & 0x80) > 0;
 
 		public static bool IsNegative(this int value) => (value & 0x80) > 0;
-		
+
 		public static bool IsNegative(this ushort value) => (value & 0x80) > 0;
 
 		public static bool IsZero(this byte value) => value == 0x00;
+
+		public static bool IsZero(this ushort value) => value.ApplyLowMask() == 0x00;
 
 		public static bool IsZero(this int value) => value == 0x00;
 	}
