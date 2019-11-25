@@ -183,6 +183,14 @@ namespace FatCat.Nes.Tests.OpCodes
 		[MemberData(nameof(ZeroData), MemberType = typeof(ExclusiveOrTests))]
 		public void WillSetTheZeroFlag(byte accumulator, byte fetched) => RunFlagSetTest(accumulator, fetched, CpuFlag.Zero);
 
+		[Fact]
+		public void WillTake1Cycle()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(1);
+		}
+
 		private void RunFlagRemoveTest(byte accumulator, byte fetched, CpuFlag flag)
 		{
 			cpu.Accumulator = accumulator;
