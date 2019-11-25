@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using FakeItEasy;
-using FatCat.Nes.OpCodes;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Xunit;
 
-namespace FatCat.Nes.Tests.OpCodes
+namespace FatCat.Nes.Tests.OpCodes.Comparing
 {
-	public class CompareAccumulatorTests : OpCodeTest
+	public abstract class CompareRegisterTests : OpCodeTest
 	{
 		public static IEnumerable<object[]> CarryFlag
 		{
@@ -16,42 +15,42 @@ namespace FatCat.Nes.Tests.OpCodes
 			{
 				yield return new object[]
 							{
-								0x15, // accumulator
+								0x15, // register
 								0x01, // fetched
 								true  // carry flag set
 							};
 
 				yield return new object[]
 							{
-								0xf5, // accumulator
+								0xf5, // register
 								0x00, // fetched
 								true  // carry flag set
 							};
 
 				yield return new object[]
 							{
-								0x15, // accumulator
+								0x15, // register
 								0xff, // fetched
 								false // carry flag set
 							};
 
 				yield return new object[]
 							{
-								0x00, // accumulator
+								0x00, // register
 								0x01, // fetched
 								false // carry flag set
 							};
 
 				yield return new object[]
 							{
-								0x01, // accumulator
+								0x01, // register
 								0x01, // fetched
 								true  // carry flag set
 							};
 
 				yield return new object[]
 							{
-								0x00, // accumulator
+								0x00, // register
 								0x00, // fetched
 								true  // carry flag set
 							};
@@ -65,35 +64,35 @@ namespace FatCat.Nes.Tests.OpCodes
 			{
 				yield return new object[]
 							{
-								0b_1111_1111, // accumulator
+								0b_1111_1111, // register
 								0b_0111_1111, // fetched
 								true          // negative flag set
 							};
 
 				yield return new object[]
 							{
-								0b_1000_0000, // accumulator
+								0b_1000_0000, // register
 								0b_0000_0000, // fetched
 								true          // negative flag set
 							};
 
 				yield return new object[]
 							{
-								0b_0000_0001, // accumulator
+								0b_0000_0001, // register
 								0b_1111_1111, // fetched
 								false         // negative flag set
 							};
 
 				yield return new object[]
 							{
-								0b_0000_0000, // accumulator
+								0b_0000_0000, // register
 								0b_0000_0000, // fetched
 								false         // negative flag set
 							};
 
 				yield return new object[]
 							{
-								0b_1111_1111, // accumulator
+								0b_1111_1111, // register
 								0b_0000_0001, // fetched
 								true          // negative flag set
 							};
@@ -107,49 +106,45 @@ namespace FatCat.Nes.Tests.OpCodes
 			{
 				yield return new object[]
 							{
-								0b_0111_1111, // accumulator
+								0b_0111_1111, // register
 								0b_0111_1111, // fetched
 								true          // zero flag set
 							};
 
 				yield return new object[]
 							{
-								0b_1000_0000, // accumulator
+								0b_1000_0000, // register
 								0b_1000_0000, // fetched
 								true          // zero flag set
 							};
 
 				yield return new object[]
 							{
-								0b_0000_0001, // accumulator
+								0b_0000_0001, // register
 								0b_1111_1111, // fetched
 								false         // zero flag set
 							};
 
 				yield return new object[]
 							{
-								0b_1111_1111, // accumulator
+								0b_1111_1111, // register
 								0b_0000_0001, // fetched
 								false         // zero flag set
 							};
 			}
 		}
 
-		protected override string ExpectedName => "CMP";
-
-		public CompareAccumulatorTests() => opCode = new CompareAccumulator(cpu, addressMode);
+		[Theory]
+		[MemberData(nameof(CarryFlag), MemberType = typeof(CompareRegisterTests))]
+		public void WillApplyTheCarryFlagCorrectly(byte register, byte fetched, bool carryFlagSet) => RunApplyFlagTest(register, fetched, carryFlagSet, CpuFlag.CarryBit);
 
 		[Theory]
-		[MemberData(nameof(CarryFlag), MemberType = typeof(CompareAccumulatorTests))]
-		public void WillApplyTheCarryFlagCorrectly(byte accumulator, byte fetched, bool carryFlagSet) => RunApplyFlagTest(accumulator, fetched, carryFlagSet, CpuFlag.CarryBit);
+		[MemberData(nameof(NegativeFlag), MemberType = typeof(CompareRegisterTests))]
+		public void WillApplyTheNegativeFlagCorrectly(byte register, byte fetched, bool zeroFlagSet) => RunApplyFlagTest(register, fetched, zeroFlagSet, CpuFlag.Negative);
 
 		[Theory]
-		[MemberData(nameof(NegativeFlag), MemberType = typeof(CompareAccumulatorTests))]
-		public void WillApplyTheNegativeFlagCorrectly(byte accumulator, byte fetched, bool zeroFlagSet) => RunApplyFlagTest(accumulator, fetched, zeroFlagSet, CpuFlag.Negative);
-
-		[Theory]
-		[MemberData(nameof(ZeroFlag), MemberType = typeof(CompareAccumulatorTests))]
-		public void WillApplyTheZeroFlagCorrectly(byte accumulator, byte fetched, bool zeroFlagSet) => RunApplyFlagTest(accumulator, fetched, zeroFlagSet, CpuFlag.Zero);
+		[MemberData(nameof(ZeroFlag), MemberType = typeof(CompareRegisterTests))]
+		public void WillApplyTheZeroFlagCorrectly(byte register, byte fetched, bool zeroFlagSet) => RunApplyFlagTest(register, fetched, zeroFlagSet, CpuFlag.Zero);
 
 		[Fact]
 		public void WillTake1Cycle()
@@ -159,9 +154,11 @@ namespace FatCat.Nes.Tests.OpCodes
 			cycles.Should().Be(1);
 		}
 
-		private void RunApplyFlagTest(byte accumulator, byte fetched, bool carryFlagSet, CpuFlag flag)
+		protected abstract void SetRegister(byte registerValue);
+
+		private void RunApplyFlagTest(byte registerValue, byte fetched, bool carryFlagSet, CpuFlag flag)
 		{
-			cpu.Accumulator = accumulator;
+			SetRegister(registerValue);
 
 			A.CallTo(() => addressMode.Fetch()).Returns(fetched);
 
