@@ -9,7 +9,7 @@ namespace FatCat.Nes.Tests.OpCodes
 	public abstract class OpCodeTest
 	{
 		protected const byte Accumulator = 0x65;
-		protected const byte FetchedData = 0x13;
+		protected const byte FetchedData = 0xff;
 
 		protected readonly IAddressMode addressMode;
 
