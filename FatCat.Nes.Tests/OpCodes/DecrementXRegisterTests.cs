@@ -9,6 +9,8 @@ namespace FatCat.Nes.Tests.OpCodes
 {
 	public class DecrementXRegisterTests : OpCodeTest
 	{
+		private const int XRegister = 0x12;
+
 		public static IEnumerable<object[]> NegativeData
 		{
 			[UsedImplicitly]
@@ -98,7 +100,15 @@ namespace FatCat.Nes.Tests.OpCodes
 		{
 			opCode = new DecrementXRegister(cpu, addressMode);
 
-			cpu.XRegister = 0x12;
+			cpu.XRegister = XRegister;
+		}
+
+		[Fact]
+		public void WillDecreaseXRegisterValue()
+		{
+			opCode.Execute();
+
+			cpu.XRegister.Should().Be(XRegister - 1);
 		}
 
 		[Theory]
