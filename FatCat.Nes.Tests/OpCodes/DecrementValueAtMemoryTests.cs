@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using FakeItEasy;
 using FatCat.Nes.OpCodes;
+using FluentAssertions;
 using JetBrains.Annotations;
 using Xunit;
 
@@ -117,6 +118,14 @@ namespace FatCat.Nes.Tests.OpCodes
 		[Theory]
 		[MemberData(nameof(ZeroData), MemberType = typeof(DecrementValueAtMemoryTests))]
 		public void WillSetTheZeroFlag(byte fetched) => RunFlagSetTest(fetched, CpuFlag.Zero);
+
+		[Fact]
+		public void WillTakeNoCycles()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(0);
+		}
 
 		[Theory]
 		[MemberData(nameof(NonNegativeData), MemberType = typeof(DecrementValueAtMemoryTests))]
