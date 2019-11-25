@@ -18,7 +18,9 @@ namespace FatCat.Nes.OpCodes
 
 			ApplyFlag(value.ApplyLowMask() == 0x0000, CpuFlag.Zero);
 
-			return -1;
+			ApplyFlag(value.IsNegative(), CpuFlag.Negative);
+
+			return 1;
 		}
 	}
 }
