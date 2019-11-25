@@ -4,10 +4,19 @@ namespace FatCat.Nes.OpCodes
 {
 	public class CompareAccumulator : OpCode
 	{
-		public CompareAccumulator(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
-
 		public override string Name => "CMP";
 
-		public override int Execute() => -1;
+		public CompareAccumulator(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
+
+		public override int Execute()
+		{
+			Fetch();
+
+			var value = (ushort)(cpu.Accumulator - fetched);
+
+			ApplyFlag(cpu.Accumulator >= fetched, CpuFlag.CarryBit);
+
+			return -1;
+		}
 	}
 }
