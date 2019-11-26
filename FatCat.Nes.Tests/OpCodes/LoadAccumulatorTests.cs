@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using FakeItEasy;
 using FatCat.Nes.OpCodes;
+using FluentAssertions;
 using JetBrains.Annotations;
 using Xunit;
 
@@ -76,11 +77,27 @@ namespace FatCat.Nes.Tests.OpCodes
 		public void ApplyingZeroFlag(byte fetched, bool flagSet) => RunFlagTest(fetched, flagSet, CpuFlag.Zero);
 
 		[Fact]
+		public void TheAccumulatorWillBeFetchedValue()
+		{
+			opCode.Execute();
+
+			cpu.Accumulator.Should().Be(FetchedData);
+		}
+
+		[Fact]
 		public void WillFetchFromTheAddressMode()
 		{
 			opCode.Execute();
 
 			A.CallTo(() => addressMode.Fetch()).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillTake1Cycle()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(1);
 		}
 
 		private void RunFlagTest(byte fetched, bool flagSet, CpuFlag flag)
