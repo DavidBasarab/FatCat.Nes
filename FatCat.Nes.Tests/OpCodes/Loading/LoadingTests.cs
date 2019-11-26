@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using FakeItEasy;
-using FatCat.Nes.OpCodes;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Xunit;
 
-namespace FatCat.Nes.Tests.OpCodes
+namespace FatCat.Nes.Tests.OpCodes.Loading
 {
-	public class LoadAccumulatorTests : OpCodeTest
+	public abstract class LoadingTests : OpCodeTest
 	{
 		public static IEnumerable<object[]> NegativeFlagData
 		{
@@ -64,10 +63,6 @@ namespace FatCat.Nes.Tests.OpCodes
 			}
 		}
 
-		protected override string ExpectedName => "LDA";
-
-		public LoadAccumulatorTests() => opCode = new LoadAccumulator(cpu, addressMode);
-
 		[Theory]
 		[MemberData(nameof(NegativeFlagData), MemberType = typeof(LoadAccumulatorTests))]
 		public void ApplyingNegativeFlag(byte fetched, bool flagSet) => RunFlagTest(fetched, flagSet, CpuFlag.Negative);
@@ -81,7 +76,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		{
 			opCode.Execute();
 
-			cpu.Accumulator.Should().Be(FetchedData);
+			VerifyCpuValueSet();
 		}
 
 		[Fact]
@@ -99,6 +94,8 @@ namespace FatCat.Nes.Tests.OpCodes
 
 			cycles.Should().Be(1);
 		}
+
+		protected abstract void VerifyCpuValueSet();
 
 		private void RunFlagTest(byte fetched, bool flagSet, CpuFlag flag)
 		{
