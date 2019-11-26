@@ -1,5 +1,6 @@
 using FakeItEasy;
 using FatCat.Nes.OpCodes;
+using FluentAssertions;
 using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes
@@ -29,6 +30,14 @@ namespace FatCat.Nes.Tests.OpCodes
 			const byte expectedWriteValue = (ProgramCounter - 1) & 0x00ff;
 
 			A.CallTo(() => cpu.Write(0x0100 + StackPointer - 1, expectedWriteValue)).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillDecreaseStackPointer()
+		{
+			opCode.Execute();
+
+			cpu.StackPointer.Should().Be(StackPointer - 2);
 		}
 
 		[Fact]
