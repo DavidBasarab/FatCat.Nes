@@ -39,6 +39,14 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Fact]
+		public void WillTakeNoCycles()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(0);
+		}
+
+		[Fact]
 		public void WillWriteToTheStackTheLowerMemoryPointer()
 		{
 			opCode.Execute();
