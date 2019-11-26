@@ -23,6 +23,22 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Fact]
+		public void WillDecreaseStackPointer()
+		{
+			opCode.Execute();
+
+			cpu.StackPointer.Should().Be(StackPointer - 2);
+		}
+
+		[Fact]
+		public void WillSetTheProgramCounterToTheAbsoluteAddress()
+		{
+			opCode.Execute();
+
+			cpu.ProgramCounter.Should().Be(AbsoluteAddress);
+		}
+
+		[Fact]
 		public void WillWriteToTheStackTheLowerMemoryPointer()
 		{
 			opCode.Execute();
@@ -30,14 +46,6 @@ namespace FatCat.Nes.Tests.OpCodes
 			const byte expectedWriteValue = (ProgramCounter - 1) & 0x00ff;
 
 			A.CallTo(() => cpu.Write(0x0100 + StackPointer - 1, expectedWriteValue)).MustHaveHappened();
-		}
-
-		[Fact]
-		public void WillDecreaseStackPointer()
-		{
-			opCode.Execute();
-
-			cpu.StackPointer.Should().Be(StackPointer - 2);
 		}
 
 		[Fact]

@@ -15,6 +15,8 @@ namespace FatCat.Nes.OpCodes
 			WriteToStack((cpu.ProgramCounter >> 8).ApplyLowMask());
 			WriteToStack(cpu.ProgramCounter.ApplyLowMask());
 
+			cpu.ProgramCounter = cpu.AbsoluteAddress;
+
 			return -1;
 		}
 	}
