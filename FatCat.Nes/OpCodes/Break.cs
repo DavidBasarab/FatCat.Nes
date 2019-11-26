@@ -33,12 +33,5 @@ namespace FatCat.Nes.OpCodes
 
 			cpu.ProgramCounter = (ushort)((highCounter << 8) | lowCounter);
 		}
-
-		private void WriteToStack(byte data)
-		{
-			cpu.Write((ushort)(0x0100 + cpu.StackPointer), data);
-
-			cpu.StackPointer--;
-		}
 	}
 }

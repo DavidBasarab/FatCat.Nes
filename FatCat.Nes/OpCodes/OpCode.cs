@@ -25,5 +25,12 @@ namespace FatCat.Nes.OpCodes
 		}
 
 		protected void Fetch() => fetched = addressMode.Fetch();
+
+		protected void WriteToStack(byte data)
+		{
+			cpu.Write((ushort)(0x0100 + cpu.StackPointer), data);
+
+			cpu.StackPointer--;
+		}
 	}
 }
