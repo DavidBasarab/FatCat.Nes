@@ -1,4 +1,3 @@
-using System;
 using FatCat.Nes.OpCodes.AddressingModes;
 
 namespace FatCat.Nes.OpCodes
@@ -9,6 +8,15 @@ namespace FatCat.Nes.OpCodes
 
 		public LoadAccumulator(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 
-		public override int Execute() => throw new NotImplementedException();
+		public override int Execute()
+		{
+			Fetch();
+
+			cpu.Accumulator = fetched;
+
+			ApplyFlag(cpu.Accumulator.IsZero(), CpuFlag.Zero);
+
+			return -1;
+		}
 	}
 }
