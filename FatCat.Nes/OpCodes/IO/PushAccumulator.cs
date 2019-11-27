@@ -12,7 +12,7 @@ namespace FatCat.Nes.OpCodes.IO
 		{
 			PushToStack(cpu.Accumulator);
 
-			return -1;
+			return 0;
 		}
 	}
 }

@@ -28,6 +28,14 @@ namespace FatCat.Nes.Tests.OpCodes.IO
 		}
 
 		[Fact]
+		public void WillTake0Cycles()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(0);
+		}
+
+		[Fact]
 		public void WillWriteToTheStackTheValueOfTheAccumulator()
 		{
 			opCode.Execute();
