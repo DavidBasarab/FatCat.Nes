@@ -29,12 +29,6 @@ namespace FatCat.Nes.Tests.OpCodes.Loading
 								0b_1000_0000, // fetched
 								true          // flag set
 							};
-
-				yield return new object[]
-							{
-								0b_1000_0000, // fetched
-								true          // flag set
-							};
 			}
 		}
 

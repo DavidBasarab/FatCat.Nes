@@ -1,4 +1,3 @@
-using FatCat.Nes.OpCodes;
 using FatCat.Nes.OpCodes.Loading;
 using FluentAssertions;
 
