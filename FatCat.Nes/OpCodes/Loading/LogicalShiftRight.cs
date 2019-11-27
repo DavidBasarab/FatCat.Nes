@@ -18,8 +18,9 @@ namespace FatCat.Nes.OpCodes.Loading
 
 			ApplyFlag(value.ApplyLowMask().IsZero(), CpuFlag.Zero);
 			ApplyFlag(value.IsNegative(), CpuFlag.Negative);
-			
-			cpu.Write(cpu.AbsoluteAddress, value.ApplyLowMask());
+
+			if (addressMode.Name == "Implied") cpu.Accumulator = value.ApplyLowMask();
+			else cpu.Write(cpu.AbsoluteAddress, value.ApplyLowMask());
 
 			return -1;
 		}

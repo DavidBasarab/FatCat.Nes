@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using FakeItEasy;
 using FatCat.Nes.OpCodes.Loading;
+using FluentAssertions;
 using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes
@@ -100,6 +101,20 @@ namespace FatCat.Nes.Tests.OpCodes
 			opCode = new LogicalShiftRight(cpu, addressMode);
 
 			cpu.AbsoluteAddress = AbsoluteAddress;
+		}
+
+		[Fact]
+		public void IfAddressModeIsImpliedThenItIsWrittenToTheAccumulator()
+		{
+			A.CallTo(() => addressMode.Name).Returns("Implied");
+
+			opCode.Execute();
+
+			var expectedValue = FetchedData >> 1;
+
+			A.CallTo(() => cpu.Write(A<ushort>.Ignored, A<byte>.Ignored)).MustNotHaveHappened();
+
+			cpu.Accumulator.Should().Be((byte)(expectedValue & 0x00ff));
 		}
 
 		[Theory]
