@@ -7,6 +7,8 @@ namespace FatCat.Nes.Tests.OpCodes
 {
 	public class LogicalShiftRightTests : OpCodeTest
 	{
+		private const int AbsoluteAddress = 0x89b1;
+
 		public static IEnumerable<object[]> CarryData
 		{
 			get
@@ -93,7 +95,12 @@ namespace FatCat.Nes.Tests.OpCodes
 
 		protected override string ExpectedName => "LSR";
 
-		public LogicalShiftRightTests() => opCode = new LogicalShiftRight(cpu, addressMode);
+		public LogicalShiftRightTests()
+		{
+			opCode = new LogicalShiftRight(cpu, addressMode);
+
+			cpu.AbsoluteAddress = AbsoluteAddress;
+		}
 
 		[Theory]
 		[MemberData(nameof(CarryData), MemberType = typeof(LogicalShiftRightTests))]
@@ -113,6 +120,16 @@ namespace FatCat.Nes.Tests.OpCodes
 			opCode.Execute();
 
 			A.CallTo(() => addressMode.Fetch()).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillWriteTheDataToAbsoluteAddress()
+		{
+			opCode.Execute();
+
+			ushort expectedWriteData = FetchedData >> 1;
+
+			A.CallTo(() => cpu.Write(AbsoluteAddress, (byte)(expectedWriteData & 0x00ff))).MustHaveHappened();
 		}
 
 		private void RunApplyFlagTest(byte fetched, bool flagSet, CpuFlag carryBit)
