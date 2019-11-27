@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using FakeItEasy;
 using FatCat.Nes.OpCodes.Loading;
-using FatCat.Nes.Tests.OpCodes.Repository;
 using FluentAssertions;
 using Xunit;
 

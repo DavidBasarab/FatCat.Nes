@@ -4,7 +4,7 @@ using FatCat.Nes.OpCodes.AddressingModes;
 using FluentAssertions;
 using Xunit;
 
-namespace FatCat.Nes.Tests.OpCodes.Repository
+namespace FatCat.Nes.Tests.OpCodes
 {
 	public abstract class OpCodeTest
 	{
