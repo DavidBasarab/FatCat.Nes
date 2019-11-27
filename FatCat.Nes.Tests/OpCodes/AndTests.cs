@@ -108,6 +108,14 @@ namespace FatCat.Nes.Tests.OpCodes
 		public AndTests() => opCode = new And(cpu, addressMode);
 
 		[Fact]
+		public void AndWillTake1Cycle()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(1);
+		}
+
+		[Fact]
 		public void WillFetchTheData()
 		{
 			opCode.Execute();
@@ -151,14 +159,6 @@ namespace FatCat.Nes.Tests.OpCodes
 			byte expectedValue = Accumulator & FetchedData;
 
 			cpu.Accumulator.Should().Be(expectedValue);
-		}
-		
-		[Fact]
-		public void AndWillTake1Cycle()
-		{
-			var cycles = opCode.Execute();
-
-			cycles.Should().Be(1);
 		}
 
 		[Theory]

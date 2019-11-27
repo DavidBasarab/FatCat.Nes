@@ -3,7 +3,7 @@ using FatCat.Nes.OpCodes.AddressingModes;
 namespace FatCat.Nes.OpCodes
 {
 	// TODO NOP Code
-	
+
 	public abstract class OpCode
 	{
 		protected readonly IAddressMode addressMode;

@@ -1,4 +1,3 @@
-using FatCat.Nes.OpCodes;
 using FatCat.Nes.OpCodes.ClearingFlags;
 using JetBrains.Annotations;
 

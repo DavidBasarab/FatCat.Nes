@@ -31,6 +31,14 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Fact]
+		public void BreakTakesNoCycles()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(0);
+		}
+
+		[Fact]
 		public void WillReadHighMemoryPointer()
 		{
 			opCode.Execute();
@@ -102,14 +110,6 @@ namespace FatCat.Nes.Tests.OpCodes
 			ushort expectedStackPointer = StackPointer - 2 + 0x0100;
 
 			A.CallTo(() => cpu.Write(expectedStackPointer, (byte)cpu.StatusRegister)).MustHaveHappened();
-		}
-		
-		[Fact]
-		public void BreakTakesNoCycles()
-		{
-			var cycles = opCode.Execute();
-
-			cycles.Should().Be(0);
 		}
 	}
 }

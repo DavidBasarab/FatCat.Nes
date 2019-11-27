@@ -99,6 +99,14 @@ namespace FatCat.Nes.Tests.OpCodes
 			cpu.Accumulator.Should().Be(expectedValue);
 		}
 
+		[Fact]
+		public void WillTake1Cycle()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(1);
+		}
+
 		private void RunApplyFlagTest(byte accumulator, byte fetched, bool flagSet, CpuFlag flag)
 		{
 			cpu.Accumulator = accumulator;

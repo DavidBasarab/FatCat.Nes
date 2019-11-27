@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using FatCat.Nes.OpCodes;
 using FatCat.Nes.OpCodes.AddressingModes;
 using FatCat.Nes.OpCodes.Repository;
 using FluentAssertions;

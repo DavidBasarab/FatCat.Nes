@@ -147,14 +147,6 @@ namespace FatCat.Nes.Tests.OpCodes
 		protected override string ExpectedName => "ASL";
 
 		public ArithmeticShiftLeftTests() => opCode = new ArithmeticShiftLeft(cpu, addressMode);
-		
-		[Fact]
-		public void WillTake0Cycles()
-		{
-			var cycles = opCode.Execute();
-
-			cycles.Should().Be(0);
-		}
 
 		[Fact]
 		public void IfAddressModeIsImpliedTheShiftedValueIsWrittenToAccumulator()
@@ -166,7 +158,7 @@ namespace FatCat.Nes.Tests.OpCodes
 			byte expectedValue = (FetchedData << 1) & 0x00ff;
 
 			cpu.Accumulator.Should().Be(expectedValue);
-			
+
 			A.CallTo(() => cpu.Write(cpu.AbsoluteAddress, expectedValue)).MustNotHaveHappened();
 		}
 
@@ -201,6 +193,14 @@ namespace FatCat.Nes.Tests.OpCodes
 		[Theory]
 		[MemberData(nameof(ZeroData), MemberType = typeof(ArithmeticShiftLeftTests))]
 		public void WillSetTheZeroFlag(byte fetched) => RunFlagSetTest(fetched, CpuFlag.Zero);
+
+		[Fact]
+		public void WillTake0Cycles()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(0);
+		}
 
 		[Fact]
 		public void WillWriteTheShiftedValueTheBus()

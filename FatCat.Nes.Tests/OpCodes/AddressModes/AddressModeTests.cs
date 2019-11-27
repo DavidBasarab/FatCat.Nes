@@ -40,25 +40,6 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		}
 
 		[Fact]
-		public void OnFetchWillSetTheCpuFetchValue()
-		{
-			ushort absoluteAddress = 0x1944;
-
-			cpu.AbsoluteAddress = absoluteAddress;
-
-			byte fetchedValue = 0x52;
-			byte startingFetchedValue = 0xd1;
-
-			cpu.Fetched = startingFetchedValue;
-
-			A.CallTo(() => cpu.Read(absoluteAddress)).Returns(fetchedValue);
-
-			addressMode.Fetch();
-
-			VerifyFetchedValue(fetchedValue, startingFetchedValue);
-		}
-		
-		[Fact]
 		public void OnFetchWillReturnFetchedValue()
 		{
 			ushort absoluteAddress = 0x1944;
@@ -77,7 +58,24 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 			VerifyFetchResult(fetchResult, fetchedValue, startingFetchedValue);
 		}
 
-		protected virtual void VerifyFetchResult(byte fetchResult, byte fetchedValue, byte startingFetchedValue) => fetchResult.Should().Be(fetchedValue);
+		[Fact]
+		public void OnFetchWillSetTheCpuFetchValue()
+		{
+			ushort absoluteAddress = 0x1944;
+
+			cpu.AbsoluteAddress = absoluteAddress;
+
+			byte fetchedValue = 0x52;
+			byte startingFetchedValue = 0xd1;
+
+			cpu.Fetched = startingFetchedValue;
+
+			A.CallTo(() => cpu.Read(absoluteAddress)).Returns(fetchedValue);
+
+			addressMode.Fetch();
+
+			VerifyFetchedValue(fetchedValue, startingFetchedValue);
+		}
 
 		[Fact]
 		public void RunWillTakeCycles()
@@ -91,6 +89,8 @@ namespace FatCat.Nes.Tests.OpCodes.AddressModes
 		public void WillHaveCorrectAddressModeName() => addressMode.Name.Should().Be(ExpectedName);
 
 		protected virtual void VerifyFetchedValue(byte fetchedValue, byte startingFetchedValue) => cpu.Fetched.Should().Be(fetchedValue);
+
+		protected virtual void VerifyFetchResult(byte fetchResult, byte fetchedValue, byte startingFetchedValue) => fetchResult.Should().Be(fetchedValue);
 
 		protected virtual void VerifyReadFromAbsoluteAddress(ushort absoluteAddress) => A.CallTo(() => cpu.Read(absoluteAddress)).MustHaveHappened();
 	}

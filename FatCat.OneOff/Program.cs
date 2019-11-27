@@ -44,7 +44,7 @@ namespace FatCat.OneOff
 			// }
 
 			var number = 1;
-			
+
 			PrintAddress(number);
 
 			var bitNegative = ~number;

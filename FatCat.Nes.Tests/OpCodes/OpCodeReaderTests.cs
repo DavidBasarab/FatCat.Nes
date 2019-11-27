@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
-using FatCat.Nes.OpCodes;
 using FatCat.Nes.OpCodes.Repository;
 using FluentAssertions;
 using Xunit;

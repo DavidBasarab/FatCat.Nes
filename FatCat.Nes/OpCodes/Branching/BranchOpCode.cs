@@ -5,7 +5,7 @@ namespace FatCat.Nes.OpCodes.Branching
 	public abstract class BranchOpCode : OpCode
 	{
 		protected abstract CpuFlag Flag { get; }
-		
+
 		protected abstract bool FlagState { get; }
 
 		protected BranchOpCode(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
