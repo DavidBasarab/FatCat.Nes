@@ -8,6 +8,11 @@ namespace FatCat.Nes.OpCodes.IO
 
 		public PopStatusOffStack(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 
-		public override int Execute() => -1;
+		public override int Execute()
+		{
+			var temp = ReadFromStack();
+			
+			return -1;
+		}
 	}
 }

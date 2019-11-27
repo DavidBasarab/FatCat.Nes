@@ -10,10 +10,8 @@ namespace FatCat.Nes.OpCodes.IO
 
 		public override int Execute()
 		{
-			cpu.StackPointer++;
+			cpu.Accumulator = ReadFromStack();
 
-			cpu.Accumulator = cpu.Read((ushort)(0x0100 + cpu.StackPointer));
-			
 			ApplyFlag(CpuFlag.Zero, cpu.Accumulator.IsZero());
 			ApplyFlag(CpuFlag.Negative, cpu.Accumulator.IsNegative());
 

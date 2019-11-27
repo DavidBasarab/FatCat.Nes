@@ -34,5 +34,12 @@ namespace FatCat.Nes.OpCodes
 
 			cpu.StackPointer--;
 		}
+
+		protected byte ReadFromStack()
+		{
+			cpu.StackPointer++;
+
+			return cpu.Read((ushort)(0x0100 + cpu.StackPointer));
+		}
 	}
 }
