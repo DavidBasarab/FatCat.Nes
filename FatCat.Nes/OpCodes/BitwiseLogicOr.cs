@@ -11,6 +11,8 @@ namespace FatCat.Nes.OpCodes
 		public override int Execute()
 		{
 			Fetch();
+
+			cpu.Accumulator = (byte)(cpu.Accumulator | fetched);
 			
 			return -1;
 		}
