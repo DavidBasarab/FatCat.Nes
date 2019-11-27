@@ -1,5 +1,6 @@
 using FakeItEasy;
 using FatCat.Nes.OpCodes.IO;
+using FluentAssertions;
 using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes.IO
@@ -17,6 +18,38 @@ namespace FatCat.Nes.Tests.OpCodes.IO
 
 			cpu.StatusRegister = StartingStatusRegister;
 			cpu.StackPointer = StackPointer;
+		}
+
+		[Fact]
+		public void WillReduceTheStackPointerBy1()
+		{
+			opCode.Execute();
+
+			cpu.StackPointer.Should().Be(StackPointer - 1);
+		}
+
+		[Fact]
+		public void WillRemoveBreakFlag()
+		{
+			opCode.Execute();
+
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Break)).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillRemoveUnusedFlag()
+		{
+			opCode.Execute();
+
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Unused)).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillTake0Cycles()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(0);
 		}
 
 		[Fact]
