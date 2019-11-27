@@ -16,9 +16,8 @@ namespace FatCat.Nes.OpCodes.Loading
 
 			var value = (ushort)(fetched >> 1);
 
-			var lowMask = value.ApplyLowMask();
-
 			ApplyFlag(value.ApplyLowMask().IsZero(), CpuFlag.Zero);
+			ApplyFlag(value.IsNegative(), CpuFlag.Negative);
 
 			return -1;
 		}

@@ -30,7 +30,37 @@ namespace FatCat.Nes.Tests.OpCodes
 							};
 			}
 		}
-		
+
+		public static IEnumerable<object[]> NegativeData
+		{
+			get
+			{
+				yield return new object[]
+							{
+								0b_1111_1111, // fetched
+								false         // flag set
+							};
+
+				yield return new object[]
+							{
+								0b_0000_0000, // fetched
+								false         // flag set
+							};
+
+				yield return new object[]
+							{
+								0b_0000_0001, // fetched
+								false         // flag set
+							};
+
+				yield return new object[]
+							{
+								0b_1111_1110, // fetched
+								false         // flag set
+							};
+			}
+		}
+
 		public static IEnumerable<object[]> ZeroData
 		{
 			get
@@ -38,7 +68,7 @@ namespace FatCat.Nes.Tests.OpCodes
 				yield return new object[]
 							{
 								0b_1111_1111, // fetched
-								false          // flag set
+								false         // flag set
 							};
 
 				yield return new object[]
@@ -46,7 +76,7 @@ namespace FatCat.Nes.Tests.OpCodes
 								0b_0000_0000, // fetched
 								true          // flag set
 							};
-				
+
 				yield return new object[]
 							{
 								0b_0000_0001, // fetched
@@ -68,7 +98,11 @@ namespace FatCat.Nes.Tests.OpCodes
 		[Theory]
 		[MemberData(nameof(CarryData), MemberType = typeof(LogicalShiftRightTests))]
 		public void WillApplyTheCarryFlag(byte fetched, bool flagSet) => RunApplyFlagTest(fetched, flagSet, CpuFlag.CarryBit);
-		
+
+		[Theory]
+		[MemberData(nameof(NegativeData), MemberType = typeof(LogicalShiftRightTests))]
+		public void WillApplyTheNegativeFlag(byte fetched, bool flagSet) => RunApplyFlagTest(fetched, flagSet, CpuFlag.Negative);
+
 		[Theory]
 		[MemberData(nameof(ZeroData), MemberType = typeof(LogicalShiftRightTests))]
 		public void WillApplyTheZeroFlag(byte fetched, bool flagSet) => RunApplyFlagTest(fetched, flagSet, CpuFlag.Zero);
