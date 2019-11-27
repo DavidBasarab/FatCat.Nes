@@ -12,6 +12,8 @@ namespace FatCat.Nes.OpCodes
 
 		public abstract string Name { get; }
 
+		protected bool ImpliedAddressMode => addressMode.Name == "Implied";
+
 		protected OpCode(ICpu cpu, IAddressMode addressMode)
 		{
 			this.cpu = cpu;

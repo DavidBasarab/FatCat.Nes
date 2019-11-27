@@ -20,10 +20,12 @@ namespace FatCat.Nes.OpCodes.Arithmetic
 
 			ApplyFlag(CpuFlag.Negative, shiftValue.IsNegative());
 
-			if (addressMode.Name == "Implied") cpu.Accumulator = shiftValue.ApplyLowMask();
+			if (ImpliedAddressMode) cpu.Accumulator = shiftValue.ApplyLowMask();
 			else cpu.Write(cpu.AbsoluteAddress, shiftValue.ApplyLowMask());
 
 			return 0;
 		}
+
+		
 	}
 }
