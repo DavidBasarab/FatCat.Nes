@@ -8,6 +8,40 @@ namespace FatCat.Nes.Tests.OpCodes
 {
 	public class BitwiseLogicOrTests : OpCodeTest
 	{
+		public static IEnumerable<object[]> NegativeData
+		{
+			get
+			{
+				yield return new object[]
+							{
+								0b_1111_1111, // accumulator
+								0b_1111_1111, // fetched
+								true          // flag set
+							};
+
+				yield return new object[]
+							{
+								0b_0000_0000, // accumulator
+								0b_0000_0000, // fetched
+								false         // flag set
+							};
+
+				yield return new object[]
+							{
+								0b_1010_1010, // accumulator
+								0b_0111_0101, // fetched
+								true          // flag set
+							};
+
+				yield return new object[]
+							{
+								0b_0010_1010, // accumulator
+								0b_1111_0101, // fetched
+								true          // flag set
+							};
+			}
+		}
+
 		public static IEnumerable<object[]> ZeroData
 		{
 			get
@@ -38,6 +72,10 @@ namespace FatCat.Nes.Tests.OpCodes
 		protected override string ExpectedName => "ORA";
 
 		public BitwiseLogicOrTests() => opCode = new BitwiseLogicOr(cpu, addressMode);
+
+		[Theory]
+		[MemberData(nameof(NegativeData), MemberType = typeof(BitwiseLogicOrTests))]
+		public void WillApplyNegativeFlag(byte accumulator, byte fetched, bool flagSet) => RunApplyFlagTest(accumulator, fetched, flagSet, CpuFlag.Negative);
 
 		[Theory]
 		[MemberData(nameof(ZeroData), MemberType = typeof(BitwiseLogicOrTests))]
