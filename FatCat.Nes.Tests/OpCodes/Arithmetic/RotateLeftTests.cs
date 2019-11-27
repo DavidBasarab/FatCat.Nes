@@ -20,30 +20,64 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 								true,         // carry flag set before fetch
 								false         // flag set
 							};
-				
+
 				yield return new object[]
 							{
 								0b_0000_0000, // fetched
 								true,         // carry flag set before fetch
 								false         // flag set
 							};
-				
+
 				yield return new object[]
 							{
 								0b_1111_1111, // fetched
-								false,         // carry flag set before fetch
+								false,        // carry flag set before fetch
 								false         // flag set
 							};
-				
+
 				yield return new object[]
 							{
 								0b_0000_0000, // fetched
-								false,         // carry flag set before fetch
+								false,        // carry flag set before fetch
 								false         // flag set
 							};
 			}
 		}
-		
+
+		public static IEnumerable<object[]> NegativeFlagData
+		{
+			get
+			{
+				yield return new object[]
+							{
+								0b_1111_1111, // fetched
+								true,         // carry flag set before fetch
+								true         // flag set
+							};
+
+				yield return new object[]
+							{
+								0b_0000_0000, // fetched
+								true,         // carry flag set before fetch
+								false         // flag set
+							};
+
+				yield return new object[]
+							{
+								0b_1111_1111, // fetched
+								false,        // carry flag set before fetch
+								true         // flag set
+							};
+
+				yield return new object[]
+							{
+								0b_0000_0000, // fetched
+								false,        // carry flag set before fetch
+								false         // flag set
+							};
+			}
+		}
+
 		public static IEnumerable<object[]> ZeroFlagData
 		{
 			get
@@ -54,26 +88,26 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 								true,         // carry flag set before fetch
 								false         // flag set
 							};
-				
+
 				yield return new object[]
 							{
 								0b_0000_0000, // fetched
 								true,         // carry flag set before fetch
 								false         // flag set
 							};
-				
+
 				yield return new object[]
 							{
 								0b_1111_1111, // fetched
 								false,        // carry flag set before fetch
 								false         // flag set
 							};
-				
+
 				yield return new object[]
 							{
 								0b_0000_0000, // fetched
 								false,        // carry flag set before fetch
-								true         // flag set
+								true          // flag set
 							};
 			}
 		}
@@ -118,7 +152,11 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 		[Theory]
 		[MemberData(nameof(CarryFlagData), MemberType = typeof(RotateLeftTests))]
 		public void WillApplyTheCarryFlag(byte fetchValue, bool carrySet, bool flagSet) => RunApplyFlagTest(fetchValue, carrySet, flagSet, CpuFlag.CarryBit);
-		
+
+		[Theory]
+		[MemberData(nameof(NegativeFlagData), MemberType = typeof(RotateLeftTests))]
+		public void WillApplyTheNegativeFlag(byte fetchValue, bool carrySet, bool flagSet) => RunApplyFlagTest(fetchValue, carrySet, flagSet, CpuFlag.Negative);
+
 		[Theory]
 		[MemberData(nameof(ZeroFlagData), MemberType = typeof(RotateLeftTests))]
 		public void WillApplyTheZeroFlag(byte fetchValue, bool carrySet, bool flagSet) => RunApplyFlagTest(fetchValue, carrySet, flagSet, CpuFlag.Zero);
