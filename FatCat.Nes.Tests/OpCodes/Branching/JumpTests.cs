@@ -1,4 +1,5 @@
 using FatCat.Nes.OpCodes.Branching;
+using FatCat.Nes.Tests.OpCodes.Repository;
 using FluentAssertions;
 using Xunit;
 

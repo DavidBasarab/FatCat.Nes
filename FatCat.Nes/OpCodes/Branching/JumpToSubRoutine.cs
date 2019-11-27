@@ -12,8 +12,8 @@ namespace FatCat.Nes.OpCodes.Branching
 		{
 			cpu.ProgramCounter--;
 
-			WriteToStack((cpu.ProgramCounter >> 8).ApplyLowMask());
-			WriteToStack(cpu.ProgramCounter.ApplyLowMask());
+			PushToStack((cpu.ProgramCounter >> 8).ApplyLowMask());
+			PushToStack(cpu.ProgramCounter.ApplyLowMask());
 
 			cpu.ProgramCounter = cpu.AbsoluteAddress;
 

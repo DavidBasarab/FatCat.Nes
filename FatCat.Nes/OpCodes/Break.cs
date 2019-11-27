@@ -14,12 +14,12 @@ namespace FatCat.Nes.OpCodes
 
 			cpu.SetFlag(CpuFlag.DisableInterrupts);
 
-			WriteToStack((byte)((cpu.ProgramCounter >> 8) & 0x00ff));
-			WriteToStack((byte)(cpu.ProgramCounter & 0x00ff));
+			PushToStack((byte)((cpu.ProgramCounter >> 8) & 0x00ff));
+			PushToStack((byte)(cpu.ProgramCounter & 0x00ff));
 
 			cpu.SetFlag(CpuFlag.Break);
 
-			WriteToStack((byte)cpu.StatusRegister);
+			PushToStack((byte)cpu.StatusRegister);
 
 			SetNewProgramCounterLocation();
 

@@ -5,7 +5,7 @@ using FatCat.Nes.OpCodes.Repository;
 using FluentAssertions;
 using Xunit;
 
-namespace FatCat.Nes.Tests.OpCodes
+namespace FatCat.Nes.Tests.OpCodes.Repository
 {
 	public class OpCodeReaderTests
 	{

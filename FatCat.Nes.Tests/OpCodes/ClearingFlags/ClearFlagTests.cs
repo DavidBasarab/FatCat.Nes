@@ -1,4 +1,5 @@
 using FakeItEasy;
+using FatCat.Nes.Tests.OpCodes.Repository;
 using FluentAssertions;
 using Xunit;
 
