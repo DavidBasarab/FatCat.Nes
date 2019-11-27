@@ -12,17 +12,17 @@ namespace FatCat.Nes.OpCodes.Loading
 		{
 			Fetch();
 
-			ApplyFlag((fetched & 0x0001) > 0, CpuFlag.CarryBit);
+			ApplyFlag(CpuFlag.CarryBit, (fetched & 0x0001) > 0);
 
 			var value = (ushort)(fetched >> 1);
 
-			ApplyFlag(value.ApplyLowMask().IsZero(), CpuFlag.Zero);
-			ApplyFlag(value.IsNegative(), CpuFlag.Negative);
+			ApplyFlag(CpuFlag.Zero, value.ApplyLowMask().IsZero());
+			ApplyFlag(CpuFlag.Negative, value.IsNegative());
 
 			if (addressMode.Name == "Implied") cpu.Accumulator = value.ApplyLowMask();
 			else cpu.Write(cpu.AbsoluteAddress, value.ApplyLowMask());
 
-			return -1;
+			return 0;
 		}
 	}
 }

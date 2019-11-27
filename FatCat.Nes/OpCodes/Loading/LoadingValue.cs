@@ -12,8 +12,8 @@ namespace FatCat.Nes.OpCodes.Loading
 
 			SetFetchedValue();
 
-			ApplyFlag(fetched.IsZero(), CpuFlag.Zero);
-			ApplyFlag(fetched.IsNegative(), CpuFlag.Negative);
+			ApplyFlag(CpuFlag.Zero, fetched.IsZero());
+			ApplyFlag(CpuFlag.Negative, fetched.IsNegative());
 
 			return 1;
 		}

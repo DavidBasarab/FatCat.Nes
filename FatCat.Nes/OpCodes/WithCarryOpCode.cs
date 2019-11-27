@@ -15,11 +15,11 @@ namespace FatCat.Nes.OpCodes
 
 			total = cpu.Accumulator + fetched + (carryFlag ? 1 : 0);
 
-			ApplyFlag(total.HasCarried(), CpuFlag.CarryBit);
+			ApplyFlag(CpuFlag.CarryBit, total.HasCarried());
 
-			ApplyFlag(total.IsNegative(), CpuFlag.Negative);
+			ApplyFlag(CpuFlag.Negative, total.IsNegative());
 
-			ApplyFlag(total.IsZero(), CpuFlag.Zero);
+			ApplyFlag(CpuFlag.Zero, total.IsZero());
 
 			SetOverflowFlag();
 

@@ -14,11 +14,11 @@ namespace FatCat.Nes.OpCodes
 
 			var shiftValue = (ushort)(fetched << 1);
 
-			ApplyFlag(shiftValue.HasCarried(), CpuFlag.CarryBit);
+			ApplyFlag(CpuFlag.CarryBit, shiftValue.HasCarried());
 
-			ApplyFlag(shiftValue.ApplyLowMask() == 0x00, CpuFlag.Zero);
+			ApplyFlag(CpuFlag.Zero, shiftValue.ApplyLowMask() == 0x00);
 
-			ApplyFlag(shiftValue.IsNegative(), CpuFlag.Negative);
+			ApplyFlag(CpuFlag.Negative, shiftValue.IsNegative());
 
 			if (addressMode.Name == "Implied") cpu.Accumulator = shiftValue.ApplyLowMask();
 			else cpu.Write(cpu.AbsoluteAddress, shiftValue.ApplyLowMask());

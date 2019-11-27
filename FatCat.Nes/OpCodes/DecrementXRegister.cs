@@ -12,8 +12,8 @@ namespace FatCat.Nes.OpCodes
 		{
 			cpu.XRegister--;
 
-			ApplyFlag(cpu.XRegister.IsZero(), CpuFlag.Zero);
-			ApplyFlag(cpu.XRegister.IsNegative(), CpuFlag.Negative);
+			ApplyFlag(CpuFlag.Zero, cpu.XRegister.IsZero());
+			ApplyFlag(CpuFlag.Negative, cpu.XRegister.IsNegative());
 
 			return 0;
 		}

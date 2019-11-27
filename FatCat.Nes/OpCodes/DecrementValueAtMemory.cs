@@ -16,8 +16,8 @@ namespace FatCat.Nes.OpCodes
 
 			cpu.Write(cpu.AbsoluteAddress, value.ApplyLowMask());
 
-			ApplyFlag(value.IsZero(), CpuFlag.Zero);
-			ApplyFlag(value.IsNegative(), CpuFlag.Negative);
+			ApplyFlag(CpuFlag.Zero, value.IsZero());
+			ApplyFlag(CpuFlag.Negative, value.IsNegative());
 
 			return 0;
 		}

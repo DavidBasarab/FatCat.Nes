@@ -14,11 +14,11 @@ namespace FatCat.Nes.OpCodes
 
 			var value = (ushort)(cpu.Accumulator & fetched);
 
-			ApplyFlag(value.ApplyLowMask() == 0x00, CpuFlag.Zero);
+			ApplyFlag(CpuFlag.Zero, value.ApplyLowMask() == 0x00);
 
-			ApplyFlag((fetched & (1 << 7)) > 0, CpuFlag.Negative);
+			ApplyFlag(CpuFlag.Negative, (fetched & (1 << 7)) > 0);
 
-			ApplyFlag((fetched & (1 << 6)) > 0, CpuFlag.Overflow);
+			ApplyFlag(CpuFlag.Overflow, (fetched & (1 << 6)) > 0);
 
 			return 0;
 		}

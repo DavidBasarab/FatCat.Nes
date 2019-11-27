@@ -14,11 +14,11 @@ namespace FatCat.Nes.OpCodes.Comparing
 
 			var value = (ushort)(RegisterValue - fetched);
 
-			ApplyFlag(RegisterValue >= fetched, CpuFlag.CarryBit);
+			ApplyFlag(CpuFlag.CarryBit, RegisterValue >= fetched);
 
-			ApplyFlag(value.ApplyLowMask() == 0x0000, CpuFlag.Zero);
+			ApplyFlag(CpuFlag.Zero, value.ApplyLowMask() == 0x0000);
 
-			ApplyFlag(value.IsNegative(), CpuFlag.Negative);
+			ApplyFlag(CpuFlag.Negative, value.IsNegative());
 
 			return 1;
 		}

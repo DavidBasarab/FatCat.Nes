@@ -138,6 +138,14 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Fact]
+		public void WillTake0Cycles()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(0);
+		}
+
+		[Fact]
 		public void WillWriteTheDataToAbsoluteAddress()
 		{
 			opCode.Execute();

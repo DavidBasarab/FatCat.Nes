@@ -2,6 +2,8 @@ using FatCat.Nes.OpCodes.AddressingModes;
 
 namespace FatCat.Nes.OpCodes
 {
+	// TODO NOP Code
+	
 	public abstract class OpCode
 	{
 		protected readonly IAddressMode addressMode;
@@ -18,7 +20,7 @@ namespace FatCat.Nes.OpCodes
 
 		public abstract int Execute();
 
-		protected void ApplyFlag(bool shouldSet, CpuFlag flag)
+		protected void ApplyFlag(CpuFlag flag, bool shouldSet)
 		{
 			if (shouldSet) cpu.SetFlag(flag);
 			else cpu.RemoveFlag(flag);
