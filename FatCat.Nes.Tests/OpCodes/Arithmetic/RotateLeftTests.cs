@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using FakeItEasy;
 using FatCat.Nes.OpCodes.Arithmetic;
 using FluentAssertions;
@@ -8,6 +9,40 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 	public class RotateLeftTests : OpCodeTest
 	{
 		private const int AbsoluteAddress = 0xe1c1;
+
+		public static IEnumerable<object[]> CarryFlagData
+		{
+			get
+			{
+				yield return new object[]
+							{
+								0b_1111_1111, // fetched
+								true,         // carry flag set before fetch
+								false         // flag set
+							};
+				
+				yield return new object[]
+							{
+								0b_0000_0000, // fetched
+								true,         // carry flag set before fetch
+								false         // flag set
+							};
+				
+				yield return new object[]
+							{
+								0b_1111_1111, // fetched
+								false,         // carry flag set before fetch
+								false         // flag set
+							};
+				
+				yield return new object[]
+							{
+								0b_0000_0000, // fetched
+								false,         // carry flag set before fetch
+								false         // flag set
+							};
+			}
+		}
 
 		protected override string ExpectedName => "ROL";
 
@@ -46,6 +81,10 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 			cpu.Accumulator.Should().Be(Accumulator);
 		}
 
+		[Theory]
+		[MemberData(nameof(CarryFlagData), MemberType = typeof(RotateLeftTests))]
+		public void WillApplyTheCarryFlag(byte fetchValue, bool carrySet, bool flagSet) => RunApplyFlagTest(fetchValue, carrySet, flagSet, CpuFlag.CarryBit);
+
 		[Fact]
 		public void WillFetchFromTheAddressMode()
 		{
@@ -64,6 +103,26 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 			A.CallTo(() => cpu.Write(AbsoluteAddress, valueToWrite)).MustHaveHappened();
 
 			cpu.Accumulator.Should().Be(Accumulator);
+		}
+
+		private void RunApplyFlagTest(byte fetchValue, bool carrySet, bool flagSet, CpuFlag flag)
+		{
+			A.CallTo(() => cpu.GetFlag(CpuFlag.CarryBit)).Returns(carrySet);
+
+			A.CallTo(() => addressMode.Fetch()).Returns(fetchValue);
+
+			opCode.Execute();
+
+			if (flagSet)
+			{
+				A.CallTo(() => cpu.SetFlag(flag)).MustHaveHappened();
+				A.CallTo(() => cpu.RemoveFlag(flag)).MustNotHaveHappened();
+			}
+			else
+			{
+				A.CallTo(() => cpu.RemoveFlag(flag)).MustHaveHappened();
+				A.CallTo(() => cpu.SetFlag(flag)).MustNotHaveHappened();
+			}
 		}
 	}
 }
