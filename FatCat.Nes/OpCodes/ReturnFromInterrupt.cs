@@ -13,6 +13,10 @@ namespace FatCat.Nes.OpCodes
 			cpu.StatusRegister = (CpuFlag)ReadFromStack();
 			
 			cpu.RemoveFlag(CpuFlag.Break);
+			cpu.RemoveFlag(CpuFlag.Unused);
+
+			var lowCounter = ReadFromStack();
+			var highCounter = ReadFromStack();
 
 			return -1;
 		}

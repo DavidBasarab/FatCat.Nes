@@ -7,7 +7,14 @@ namespace FatCat.Nes.Tests.OpCodes
 {
 	public class ReturnFromInterruptTests : OpCodeTest
 	{
+		private const byte HighProgramCounter = 0x3e;
+
+		private const byte LowProgramCounter = 0x4f;
+
+		private const ushort ProgramCounter = 0x3e4f;
+		
 		private const int StackPointer = 0xd3;
+
 		private const CpuFlag StatusToReturn = CpuFlag.Negative | CpuFlag.Break | CpuFlag.CarryBit | CpuFlag.Overflow;
 
 		protected override string ExpectedName => "RTI";
@@ -24,15 +31,23 @@ namespace FatCat.Nes.Tests.OpCodes
 		{
 			opCode.Execute();
 
-			cpu.StackPointer.Should().Be(StackPointer + 1);
+			cpu.StackPointer.Should().Be(StackPointer + 3);
 		}
 
 		[Fact]
-		public void WillTheyRemoveTheBreakFlag()
+		public void WillReadLowMemoryFromStack()
 		{
 			opCode.Execute();
 
-			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Break)).MustHaveHappened();
+			A.CallTo(() => cpu.Read(0x0100 + StackPointer + 2)).MustHaveHappened();
+		}
+		
+		[Fact]
+		public void WillReadHighMemoryFromStack()
+		{
+			opCode.Execute();
+
+			A.CallTo(() => cpu.Read(0x0100 + StackPointer + 3)).MustHaveHappened();
 		}
 
 		[Fact]
@@ -44,6 +59,14 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Fact]
+		public void WillRemoveTheUnusedFlag()
+		{
+			opCode.Execute();
+
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Unused)).MustHaveHappened();
+		}
+
+		[Fact]
 		public void WillSetTheCpuStatusToStatusFoundOnStack()
 		{
 			A.CallTo(() => cpu.Read(0x0100 + StackPointer + 1)).Returns((byte)StatusToReturn);
@@ -51,6 +74,14 @@ namespace FatCat.Nes.Tests.OpCodes
 			opCode.Execute();
 
 			cpu.StatusRegister.Should().Be(StatusToReturn);
+		}
+
+		[Fact]
+		public void WillTheyRemoveTheBreakFlag()
+		{
+			opCode.Execute();
+
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Break)).MustHaveHappened();
 		}
 	}
 }
