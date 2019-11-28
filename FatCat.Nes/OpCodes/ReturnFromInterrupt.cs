@@ -20,7 +20,7 @@ namespace FatCat.Nes.OpCodes
 
 			cpu.ProgramCounter = (ushort)(lowCounter | (highCounter << 8));
 
-			return -1;
+			return 0;
 		}
 	}
 }
