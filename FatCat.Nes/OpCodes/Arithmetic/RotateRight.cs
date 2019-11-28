@@ -12,7 +12,7 @@ namespace FatCat.Nes.OpCodes.Arithmetic
 		{
 			Fetch();
 
-			ushort value = (ushort)((GetCarryFlagValue() << 7) | (fetched >> 1));
+			var value = (ushort)((GetCarryFlagValue() << 7) | (fetched >> 1));
 
 			ApplyFlag(CpuFlag.CarryBit, (fetched & 0x01) > 0);
 			ApplyFlag(CpuFlag.Zero, value.ApplyLowMask().IsZero());
@@ -21,7 +21,7 @@ namespace FatCat.Nes.OpCodes.Arithmetic
 			if (ImpliedAddressMode) cpu.Accumulator = value.ApplyLowMask();
 			else cpu.Write(cpu.AbsoluteAddress, value.ApplyLowMask());
 
-			return -1;
+			return 0;
 		}
 	}
 }

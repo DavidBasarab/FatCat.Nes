@@ -59,14 +59,14 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 							{
 								0b_0000_0000, // fetched
 								true,         // carry flag set before fetch
-								true         // flag set
+								true          // flag set
 							};
 
 				yield return new object[]
 							{
 								0b_1111_1111, // fetched
 								false,        // carry flag set before fetch
-								false          // flag set
+								false         // flag set
 							};
 
 				yield return new object[]
@@ -181,6 +181,14 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 			byte expectedValue = (1 << 7) | ((FetchedData >> 1) & 0x00ff);
 
 			A.CallTo(() => cpu.Write(AbsoluteAddress, expectedValue)).MustHaveHappened();
+		}
+
+		[Fact]
+		public void WillTake0Cycles()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(0);
 		}
 
 		[Fact]
