@@ -1,4 +1,3 @@
-using System;
 using FatCat.Nes.OpCodes.AddressingModes;
 
 namespace FatCat.Nes.OpCodes.Arithmetic
@@ -12,7 +11,11 @@ namespace FatCat.Nes.OpCodes.Arithmetic
 		public override int Execute()
 		{
 			Fetch();
-			
+
+			var value = (GetCarryFlagValue() << 7) | fetched >> 1;
+
+			cpu.Write(cpu.AbsoluteAddress, value.ApplyLowMask());
+
 			return -1;
 		}
 	}

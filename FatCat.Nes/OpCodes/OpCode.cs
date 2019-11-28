@@ -30,6 +30,8 @@ namespace FatCat.Nes.OpCodes
 
 		protected void Fetch() => fetched = addressMode.Fetch();
 
+		protected int GetCarryFlagValue() => cpu.GetFlag(CpuFlag.CarryBit) ? 1 : 0;
+
 		protected void PushToStack(byte data)
 		{
 			cpu.Write((ushort)(0x0100 + cpu.StackPointer), data);

@@ -23,7 +23,5 @@ namespace FatCat.Nes.OpCodes.Arithmetic
 
 			return -1;
 		}
-
-		private int GetCarryFlagValue() => cpu.GetFlag(CpuFlag.CarryBit) ? 1 : 0;
 	}
 }
