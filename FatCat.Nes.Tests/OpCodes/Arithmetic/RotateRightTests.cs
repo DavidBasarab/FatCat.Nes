@@ -18,7 +18,7 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 							{
 								0b_1111_1111, // fetched
 								true,         // carry flag set before fetch
-								false         // flag set
+								true          // flag set
 							};
 
 				yield return new object[]
@@ -32,7 +32,7 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 							{
 								0b_1111_1111, // fetched
 								false,        // carry flag set before fetch
-								false         // flag set
+								true          // flag set
 							};
 
 				yield return new object[]
@@ -151,6 +151,10 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 			A.CallTo(() => cpu.Write(AbsoluteAddress, expectedValue)).MustNotHaveHappened();
 		}
 
+		[Theory]
+		[MemberData(nameof(CarryFlagData), MemberType = typeof(RotateRightTests))]
+		public void WillApplyCarryFlag(byte fetchValue, bool carrySet, bool flagSet) => RunApplyFlagTest(fetchValue, carrySet, flagSet, CpuFlag.CarryBit);
+
 		[Fact]
 		public void WillFetchFromTheAddressMode()
 		{
@@ -179,6 +183,26 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 			byte expectedValue = (FetchedData >> 1) & 0x00ff;
 
 			A.CallTo(() => cpu.Write(AbsoluteAddress, expectedValue)).MustHaveHappened();
+		}
+
+		private void RunApplyFlagTest(byte fetchValue, bool carrySet, bool flagSet, CpuFlag flag)
+		{
+			A.CallTo(() => cpu.GetFlag(CpuFlag.CarryBit)).Returns(carrySet);
+
+			A.CallTo(() => addressMode.Fetch()).Returns(fetchValue);
+
+			opCode.Execute();
+
+			if (flagSet)
+			{
+				A.CallTo(() => cpu.SetFlag(flag)).MustHaveHappened();
+				A.CallTo(() => cpu.RemoveFlag(flag)).MustNotHaveHappened();
+			}
+			else
+			{
+				A.CallTo(() => cpu.RemoveFlag(flag)).MustHaveHappened();
+				A.CallTo(() => cpu.SetFlag(flag)).MustNotHaveHappened();
+			}
 		}
 	}
 }
