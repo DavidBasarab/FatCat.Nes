@@ -28,6 +28,14 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Fact]
+		public void WillTheyRemoveTheBreakFlag()
+		{
+			opCode.Execute();
+
+			A.CallTo(() => cpu.RemoveFlag(CpuFlag.Break)).MustHaveHappened();
+		}
+
+		[Fact]
 		public void WillReadFromTheStackPointer()
 		{
 			opCode.Execute();

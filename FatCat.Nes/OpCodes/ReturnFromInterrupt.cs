@@ -11,6 +11,8 @@ namespace FatCat.Nes.OpCodes
 		public override int Execute()
 		{
 			cpu.StatusRegister = (CpuFlag)ReadFromStack();
+			
+			cpu.RemoveFlag(CpuFlag.Break);
 
 			return -1;
 		}
