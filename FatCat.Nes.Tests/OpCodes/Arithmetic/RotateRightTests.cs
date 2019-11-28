@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using FakeItEasy;
 using FatCat.Nes.OpCodes.Arithmetic;
+using FluentAssertions;
 using Xunit;
 
 namespace FatCat.Nes.Tests.OpCodes.Arithmetic
@@ -121,6 +122,36 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 		}
 
 		[Fact]
+		public void ForImpliedAddressWillSaveToAccumulator()
+		{
+			A.CallTo(() => addressMode.Name).Returns("Implied");
+
+			opCode.Execute();
+
+			byte expectedValue = (FetchedData >> 1) & 0x00ff;
+
+			cpu.Accumulator.Should().Be(expectedValue);
+
+			A.CallTo(() => cpu.Write(AbsoluteAddress, expectedValue)).MustNotHaveHappened();
+		}
+
+		[Fact]
+		public void ForImpliedAddressWillSaveToAccumulatorWithCarryValue()
+		{
+			A.CallTo(() => addressMode.Name).Returns("Implied");
+
+			A.CallTo(() => cpu.GetFlag(CpuFlag.CarryBit)).Returns(true);
+
+			opCode.Execute();
+
+			byte expectedValue = (1 << 7) | ((FetchedData >> 1) & 0x00ff);
+
+			cpu.Accumulator.Should().Be(expectedValue);
+
+			A.CallTo(() => cpu.Write(AbsoluteAddress, expectedValue)).MustNotHaveHappened();
+		}
+
+		[Fact]
 		public void WillFetchFromTheAddressMode()
 		{
 			opCode.Execute();
@@ -129,23 +160,23 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 		}
 
 		[Fact]
-		public void WillWriteTheShiftedMemoryValue()
+		public void WillOrWithCarryValue()
 		{
+			A.CallTo(() => cpu.GetFlag(CpuFlag.CarryBit)).Returns(true);
+
 			opCode.Execute();
 
-			byte expectedValue = (FetchedData >> 1) & 0x00ff;
+			byte expectedValue = (1 << 7) | ((FetchedData >> 1) & 0x00ff);
 
 			A.CallTo(() => cpu.Write(AbsoluteAddress, expectedValue)).MustHaveHappened();
 		}
 
 		[Fact]
-		public void WillOrWithCarryValue()
+		public void WillWriteTheShiftedMemoryValue()
 		{
-			A.CallTo(() => cpu.GetFlag(CpuFlag.CarryBit)).Returns(true);
-			
 			opCode.Execute();
 
-			byte expectedValue = (1 << 7) | (FetchedData >> 1) & 0x00ff;
+			byte expectedValue = (FetchedData >> 1) & 0x00ff;
 
 			A.CallTo(() => cpu.Write(AbsoluteAddress, expectedValue)).MustHaveHappened();
 		}
