@@ -155,6 +155,10 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 		[MemberData(nameof(CarryFlagData), MemberType = typeof(RotateRightTests))]
 		public void WillApplyCarryFlag(byte fetchValue, bool carrySet, bool flagSet) => RunApplyFlagTest(fetchValue, carrySet, flagSet, CpuFlag.CarryBit);
 
+		[Theory]
+		[MemberData(nameof(ZeroFlagData), MemberType = typeof(RotateRightTests))]
+		public void WillApplyZeroFlag(byte fetchValue, bool carrySet, bool flagSet) => RunApplyFlagTest(fetchValue, carrySet, flagSet, CpuFlag.Zero);
+
 		[Fact]
 		public void WillFetchFromTheAddressMode()
 		{
