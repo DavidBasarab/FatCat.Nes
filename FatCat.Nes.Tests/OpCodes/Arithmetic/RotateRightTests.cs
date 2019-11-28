@@ -59,14 +59,14 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 							{
 								0b_0000_0000, // fetched
 								true,         // carry flag set before fetch
-								false         // flag set
+								true         // flag set
 							};
 
 				yield return new object[]
 							{
 								0b_1111_1111, // fetched
 								false,        // carry flag set before fetch
-								true          // flag set
+								false          // flag set
 							};
 
 				yield return new object[]
@@ -154,6 +154,10 @@ namespace FatCat.Nes.Tests.OpCodes.Arithmetic
 		[Theory]
 		[MemberData(nameof(CarryFlagData), MemberType = typeof(RotateRightTests))]
 		public void WillApplyCarryFlag(byte fetchValue, bool carrySet, bool flagSet) => RunApplyFlagTest(fetchValue, carrySet, flagSet, CpuFlag.CarryBit);
+
+		[Theory]
+		[MemberData(nameof(NegativeFlagData), MemberType = typeof(RotateRightTests))]
+		public void WillApplyNegativeFlag(byte fetchValue, bool carrySet, bool flagSet) => RunApplyFlagTest(fetchValue, carrySet, flagSet, CpuFlag.Negative);
 
 		[Theory]
 		[MemberData(nameof(ZeroFlagData), MemberType = typeof(RotateRightTests))]
