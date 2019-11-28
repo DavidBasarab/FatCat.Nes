@@ -10,7 +10,7 @@ namespace FatCat.Nes.OpCodes
 
 		public override int Execute()
 		{
-			_ = ReadFromStack();
+			cpu.StatusRegister = (CpuFlag)ReadFromStack();
 
 			return -1;
 		}
