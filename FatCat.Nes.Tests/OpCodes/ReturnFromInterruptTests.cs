@@ -12,7 +12,7 @@ namespace FatCat.Nes.Tests.OpCodes
 		private const byte LowProgramCounter = 0x4f;
 
 		private const ushort ProgramCounter = 0x3e4f;
-		
+
 		private const int StackPointer = 0xd3;
 
 		private const CpuFlag StatusToReturn = CpuFlag.Negative | CpuFlag.Break | CpuFlag.CarryBit | CpuFlag.Overflow;
@@ -35,13 +35,13 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Fact]
-		public void WillReadLowMemoryFromStack()
+		public void WillReadFromTheStackPointer()
 		{
 			opCode.Execute();
 
-			A.CallTo(() => cpu.Read(0x0100 + StackPointer + 2)).MustHaveHappened();
+			A.CallTo(() => cpu.Read(0x0100 + StackPointer + 1)).MustHaveHappened();
 		}
-		
+
 		[Fact]
 		public void WillReadHighMemoryFromStack()
 		{
@@ -51,11 +51,11 @@ namespace FatCat.Nes.Tests.OpCodes
 		}
 
 		[Fact]
-		public void WillReadFromTheStackPointer()
+		public void WillReadLowMemoryFromStack()
 		{
 			opCode.Execute();
 
-			A.CallTo(() => cpu.Read(0x0100 + StackPointer + 1)).MustHaveHappened();
+			A.CallTo(() => cpu.Read(0x0100 + StackPointer + 2)).MustHaveHappened();
 		}
 
 		[Fact]
@@ -74,6 +74,17 @@ namespace FatCat.Nes.Tests.OpCodes
 			opCode.Execute();
 
 			cpu.StatusRegister.Should().Be(StatusToReturn);
+		}
+
+		[Fact]
+		public void WillSetTheProgramCounter()
+		{
+			A.CallTo(() => cpu.Read(0x0100 + StackPointer + 2)).Returns(LowProgramCounter);
+			A.CallTo(() => cpu.Read(0x0100 + StackPointer + 3)).Returns(HighProgramCounter);
+
+			opCode.Execute();
+
+			cpu.ProgramCounter.Should().Be(ProgramCounter);
 		}
 
 		[Fact]
