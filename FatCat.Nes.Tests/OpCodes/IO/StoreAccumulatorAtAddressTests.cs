@@ -1,37 +1,17 @@
-using FakeItEasy;
 using FatCat.Nes.OpCodes.IO;
-using FluentAssertions;
-using Xunit;
+using JetBrains.Annotations;
 
 namespace FatCat.Nes.Tests.OpCodes.IO
 {
-	public class StoreAccumulatorAtAddressTests : OpCodeTest
+	[UsedImplicitly]
+	public class StoreAccumulatorAtAddressTests : StoreItemAtAddressTests
 	{
-		private const int AbsoluteAddress = 0x1915;
-
 		protected override string ExpectedName => "STA";
 
-		public StoreAccumulatorAtAddressTests()
-		{
-			opCode = new StoreAccumulatorAtAddress(cpu, addressMode);
+		protected override byte StoreData => Accumulator;
 
-			cpu.AbsoluteAddress = AbsoluteAddress;
-		}
+		public StoreAccumulatorAtAddressTests() => opCode = new StoreAccumulatorAtAddress(cpu, addressMode);
 
-		[Fact]
-		public void Takes0Cycles()
-		{
-			var cycles = opCode.Execute();
-
-			cycles.Should().Be(0);
-		}
-
-		[Fact]
-		public void WillWriteAccumulatorToAbsoluteAddress()
-		{
-			opCode.Execute();
-
-			A.CallTo(() => cpu.Write(AbsoluteAddress, Accumulator)).MustHaveHappened();
-		}
+		protected override void SetDataOnCpu() => cpu.Accumulator = Accumulator;
 	}
 }
