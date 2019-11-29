@@ -12,8 +12,10 @@ namespace FatCat.Nes.OpCodes
 		{
 			var lowCounter = ReadFromStack();
 			var highCounter = ReadFromStack();
+
+			cpu.ProgramCounter = (ushort)((lowCounter | (highCounter << 8)) + 1);
 			
-			return -1;
+			return 0;
 		}
 	}
 }

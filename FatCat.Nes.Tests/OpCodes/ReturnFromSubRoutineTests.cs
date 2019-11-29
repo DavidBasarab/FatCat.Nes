@@ -47,5 +47,24 @@ namespace FatCat.Nes.Tests.OpCodes
 
 			A.CallTo(() => cpu.Read(0x0100 + StackPointer + 1)).MustHaveHappened();
 		}
+
+		[Fact]
+		public void WillSetTheProgramCounter()
+		{
+			A.CallTo(() => cpu.Read(0x0100 + StackPointer + 1)).Returns(LowProgramCounter);
+			A.CallTo(() => cpu.Read(0x0100 + StackPointer + 2)).Returns(HighProgramCounter);
+
+			opCode.Execute();
+
+			cpu.ProgramCounter.Should().Be(ProgramCounter + 1);
+		}
+
+		[Fact]
+		public void WillTake0Cycles()
+		{
+			var cycles = opCode.Execute();
+
+			cycles.Should().Be(0);
+		}
 	}
 }
