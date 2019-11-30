@@ -13,8 +13,9 @@ namespace FatCat.Nes.OpCodes.Loading
 			cpu.XRegister = cpu.Accumulator;
 
 			ApplyFlag(CpuFlag.Zero, cpu.XRegister.IsZero());
+			ApplyFlag(CpuFlag.Negative, cpu.XRegister.IsNegative());
 
-			return -1;
+			return 0;
 		}
 	}
 }
