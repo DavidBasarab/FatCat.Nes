@@ -2,20 +2,18 @@ using FatCat.Nes.OpCodes.AddressingModes;
 
 namespace FatCat.Nes.OpCodes.Loading
 {
-	public class TransferAccumulatorToXRegister : OpCode
+	public class TransferAccumulatorToXRegister : TransferOpCode
 	{
 		public override string Name => "TAX";
 
-		public TransferAccumulatorToXRegister(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
+		protected override byte TransferFromItem => cpu.Accumulator;
 
-		public override int Execute()
+		protected override byte TransferTooItem
 		{
-			cpu.XRegister = cpu.Accumulator;
-
-			ApplyFlag(CpuFlag.Zero, cpu.XRegister.IsZero());
-			ApplyFlag(CpuFlag.Negative, cpu.XRegister.IsNegative());
-
-			return 0;
+			get => cpu.XRegister;
+			set => cpu.XRegister = value;
 		}
+
+		public TransferAccumulatorToXRegister(ICpu cpu, IAddressMode addressMode) : base(cpu, addressMode) { }
 	}
 }

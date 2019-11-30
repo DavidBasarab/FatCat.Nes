@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace FatCat.Nes.Tests.OpCodes.Loading
 {
 	[UsedImplicitly]
-	public class TransferAccumulatorToXRegisterTests : TransferTests
+	public class TransferAccumulatorToYRegisterTests : TransferTests
 	{
 		protected override byte CpuTransferFromItem
 		{
@@ -12,12 +12,12 @@ namespace FatCat.Nes.Tests.OpCodes.Loading
 			set => cpu.Accumulator = value;
 		}
 
-		protected override string ExpectedName => "TAX";
+		protected override string ExpectedName => "TAY";
 
 		protected override byte ExpectedValue => Accumulator;
 
-		protected override byte CpuTransferItem => cpu.XRegister;
+		protected override byte CpuTransferItem => cpu.YRegister;
 
-		public TransferAccumulatorToXRegisterTests() => opCode = new TransferAccumulatorToXRegister(cpu, addressMode);
+		public TransferAccumulatorToYRegisterTests() => opCode = new TransferAccumulatorToYRegister(cpu, addressMode);
 	}
 }

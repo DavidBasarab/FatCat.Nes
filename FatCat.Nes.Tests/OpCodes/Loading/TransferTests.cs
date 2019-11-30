@@ -66,9 +66,9 @@ namespace FatCat.Nes.Tests.OpCodes.Loading
 
 		protected abstract byte CpuTransferFromItem { get; set; }
 
-		protected abstract byte ExpectedValue { get; }
+		protected abstract byte CpuTransferItem { get; }
 
-		private byte CpuTransferItem => cpu.XRegister;
+		protected abstract byte ExpectedValue { get; }
 
 		[Theory]
 		[MemberData(nameof(NegativeFlagData), MemberType = typeof(TransferTests))]
@@ -79,7 +79,7 @@ namespace FatCat.Nes.Tests.OpCodes.Loading
 		public void ApplyingTheZeroFlag(byte transferFromValue, bool flagSet) => RunApplyFlagTest(transferFromValue, flagSet, CpuFlag.Zero);
 
 		[Fact]
-		public void WillSetTheXRegisterToAccumulatorValue()
+		public void WillSetTheTransferTooToAccumulatorValue()
 		{
 			SetUpCpuInitialValues();
 
@@ -98,8 +98,6 @@ namespace FatCat.Nes.Tests.OpCodes.Loading
 			cycles.Should().Be(0);
 		}
 
-		protected abstract void SetUpCpuInitialValues();
-
 		private void RunApplyFlagTest(byte accumulator, bool flagSet, CpuFlag flag)
 		{
 			CpuTransferFromItem = accumulator;
@@ -117,5 +115,7 @@ namespace FatCat.Nes.Tests.OpCodes.Loading
 				A.CallTo(() => cpu.SetFlag(flag)).MustNotHaveHappened();
 			}
 		}
+
+		private void SetUpCpuInitialValues() => CpuTransferFromItem = ExpectedValue;
 	}
 }
