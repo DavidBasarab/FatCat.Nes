@@ -11,7 +11,9 @@ namespace FatCat.Nes.OpCodes.Loading
 		public override int Execute()
 		{
 			cpu.XRegister = cpu.Accumulator;
-			
+
+			ApplyFlag(CpuFlag.Zero, cpu.XRegister.IsZero());
+
 			return -1;
 		}
 	}
