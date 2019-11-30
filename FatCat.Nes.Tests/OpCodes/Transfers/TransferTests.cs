@@ -4,7 +4,7 @@ using FluentAssertions;
 using JetBrains.Annotations;
 using Xunit;
 
-namespace FatCat.Nes.Tests.OpCodes.Loading
+namespace FatCat.Nes.Tests.OpCodes.Transfers
 {
 	public abstract class TransferTests : OpCodeTest
 	{

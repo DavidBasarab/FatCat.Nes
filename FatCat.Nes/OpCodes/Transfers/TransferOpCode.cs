@@ -1,6 +1,6 @@
 using FatCat.Nes.OpCodes.AddressingModes;
 
-namespace FatCat.Nes.OpCodes.Loading
+namespace FatCat.Nes.OpCodes.Transfers
 {
 	public abstract class TransferOpCode : OpCode
 	{

@@ -1,7 +1,7 @@
-using FatCat.Nes.OpCodes.Loading;
+using FatCat.Nes.OpCodes.Transfers;
 using JetBrains.Annotations;
 
-namespace FatCat.Nes.Tests.OpCodes.Loading
+namespace FatCat.Nes.Tests.OpCodes.Transfers
 {
 	[UsedImplicitly]
 	public class TransferAccumulatorToXRegisterTests : TransferTests
